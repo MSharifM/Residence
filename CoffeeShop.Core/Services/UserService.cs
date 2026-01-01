@@ -111,7 +111,7 @@ namespace CoffeeShop.Core.Services
                                 این لینک تا ۱ ساعت معتبر است.
                             </p>
 
-                            <a href='{confirmationLink}' 
+                            <a href='{confirmationLink}'
                                style='display:inline-block; padding:15px 30px; background-color:#6f4e37; color:#fff; text-decoration:none; border-radius:5px; font-size:16px; font-weight:bold;'>
                                 فعال‌سازی حساب
                             </a>
@@ -142,7 +142,7 @@ namespace CoffeeShop.Core.Services
 </body>
 </html>");
 
-            #endregion
+            #endregion Send email
         }
 
         public async Task<IdentityResult> ConfirmEmailAsync(User user, string token)
@@ -203,13 +203,13 @@ namespace CoffeeShop.Core.Services
                         <td style='padding: 40px 30px; text-align: center;'>
                             <h2 style='color: #333333; margin: 0 0 20px 0; font-size: 20px;'>برای بازیابی رمز عبور، روی دکمه زیر کلیک کنید:</h2>
                             <p style='color: #666666; margin: 0 0 30px 0; font-size: 16px; line-height: 1.5;'>لطفاً برای تنظیم رمز عبور جدید، روی دکمه زیر کلیک کنید. این لینک تا ۱ ساعت معتبر است.</p>
-                            
+
                             <!-- دکمه لینک -->
-                            <a href='{resetLink}' 
+                            <a href='{resetLink}'
                                style='display: inline-block; padding: 15px 30px; background-color: #e94e77; color: #ffffff; text-decoration: none; border-radius: 5px; font-size: 16px; font-weight: bold;'>
                                 بازیابی رمز عبور
                             </a>
-                            
+
                             <p style='color: #666666; margin: 30px 0 0 0; font-size: 14px; font-style: italic;'>
                                 اگر دکمه کار نکرد، لینک زیر را کپی کنید: <br>
                                 <a href='{resetLink}' style='color: #e94e77; text-decoration: underline;'>{resetLink}</a>
@@ -243,7 +243,7 @@ namespace CoffeeShop.Core.Services
             return await _userManager.ResetPasswordAsync(user, token, newPassword);
         }
 
-        #endregion
+        #endregion Account
 
         #region User common methods
 
@@ -262,7 +262,7 @@ namespace CoffeeShop.Core.Services
             return await _userManager.FindByEmailAsync(email);
         }
 
-        #endregion
+        #endregion User common methods
 
         #region UserPanel
 
@@ -309,6 +309,6 @@ namespace CoffeeShop.Core.Services
             return model;
         }
 
-        #endregion
+        #endregion UserPanel
     }
 }

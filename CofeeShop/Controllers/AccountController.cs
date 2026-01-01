@@ -64,7 +64,7 @@ namespace CoffeeShop.Controllers
                 return View("Authentication", viewModel);
 
             var isUserExist = await _userService.GetUserByUserNameAsync(model.Email);
-            if(isUserExist == null)
+            if (isUserExist == null)
             {
                 ViewData["LoginError"] = "رمزعبور یا نام کاربری اشتباه است";
                 return View("Authentication", viewModel);
@@ -178,7 +178,7 @@ namespace CoffeeShop.Controllers
             }
             var result = await _userService.ConfirmEmailAsync(user, token);
 
-            //Confirm is success 
+            //Confirm is success
             if (result.Succeeded)
             {
                 ViewData["ConfirmStatus"] = "Success";
@@ -198,7 +198,6 @@ namespace CoffeeShop.Controllers
 
             return View();
         }
-
 
         [HttpGet]
         public IActionResult ForgotPassword()

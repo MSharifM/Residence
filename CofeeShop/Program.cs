@@ -15,18 +15,18 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(option =>
 {
     option.UseMySql(
-        builder.Configuration.GetConnectionString("CoffeeShopConnection"),
+        builder.Configuration.GetConnectionString("ResidenceConnection"),
         new MySqlServerVersion(new Version(8, 0, 41))
     );
 });
 
-#endregion
+#endregion DataBase Context
 
 #region IoC
 
 builder.Services.AddTransient<IUserService, UserService>();
 
-#endregion
+#endregion IoC
 
 builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
@@ -61,6 +61,5 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
-
 
 app.Run();
