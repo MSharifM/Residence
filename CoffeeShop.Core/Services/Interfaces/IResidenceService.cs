@@ -1,0 +1,9 @@
+﻿using CoffeeShop.Core.DTOs.Residence;
+
+namespace CoffeeShop.Core.Services.Interfaces
+{
+    public interface IResidenceService
+    {
+        Task<HomePageViewModel> GetHomePageViewModelsAsync();
+    }
+}

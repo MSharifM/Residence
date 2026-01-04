@@ -4,15 +4,9 @@ namespace CoffeeShop.DataLayer.Entities;
 
 public partial class User : IdentityUser
 {
-    public DateOnly BirthDate { get; set; }
+    public DateTime CreateDate { get; set; } = DateTime.Now;
 
-    public DateOnly CreateDate { get; set; }
-
-    public string FirstName { get; set; } = null!;
-
-    public string LastName { get; set; } = null!;
-
-    public string PhoneNumber2 { get; set; } = null!;
+    public string? PhoneNumber2 { get; set; }
 
     public bool? Sex { get; set; }
 

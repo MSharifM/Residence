@@ -1,4 +1,6 @@
 using System.Diagnostics;
+using CoffeeShop.Core.DTOs.Residence;
+using CoffeeShop.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using CoffeeShop.Models;
 
@@ -7,15 +9,19 @@ namespace CoffeeShop.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
+    private readonly IResidenceService _residenceService;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ILogger<HomeController> logger, IResidenceService residenceService)
     {
         _logger = logger;
+        _residenceService = residenceService;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
+        HomePageViewModel model = await _residenceService.GetHomePageViewModelsAsync();
+
+        return View(model);
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

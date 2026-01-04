@@ -1,9 +1,11 @@
 ﻿using CoffeeShop.DataLayer.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace CoffeeShop.DataLayer.Context;
 
-public partial class AppDbContext : DbContext
+public partial class AppDbContext : IdentityDbContext<User, IdentityRole, string>
 {
     public AppDbContext()
     {
@@ -37,8 +39,6 @@ public partial class AppDbContext : DbContext
     public virtual DbSet<Reservation> Reservations { get; set; }
 
     public virtual DbSet<Residence> Residences { get; set; }
-
-    public virtual DbSet<Room> Rooms { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -84,7 +84,7 @@ public partial class AppDbContext : DbContext
                     });
         });
 
-        modelBuilder.Entity<Entities.User>(entity =>
+        modelBuilder.Entity<User>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
@@ -94,15 +94,8 @@ public partial class AppDbContext : DbContext
 
             entity.HasIndex(e => e.NormalizedUserName, "UserNameIndex").IsUnique();
 
-            entity.Property(e => e.BirthDate).HasDefaultValueSql("'0001-01-01'");
             entity.Property(e => e.CreateDate).HasDefaultValueSql("'0001-01-01'");
             entity.Property<string>(e => e.Email).HasMaxLength(256);
-            entity.Property(e => e.FirstName)
-                .HasMaxLength(30)
-                .HasDefaultValueSql("''");
-            entity.Property(e => e.LastName)
-                .HasMaxLength(30)
-                .HasDefaultValueSql("''");
             entity.Property(e => e.LockoutEnd).HasMaxLength(6);
             entity.Property<string>(e => e.NormalizedEmail).HasMaxLength(256);
             entity.Property<string>(e => e.NormalizedUserName).HasMaxLength(256);
@@ -186,18 +179,17 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<DeactiveTime>(entity =>
         {
-            entity.HasKey(e => new { e.RoomId, e.ResidenceId, e.StartTime })
+            entity.HasKey(e => new { e.ResidenceId, e.StartTime })
                 .HasName("PRIMARY")
-                .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0, 0 });
+                .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
 
             entity.ToTable("deactive_time");
 
-            entity.Property(e => e.RoomId).HasColumnName("RoomID");
-            entity.Property(e => e.StartTime).HasDefaultValueSql("curdate()");
+            entity.Property(e => e.StartTime);
             entity.Property(e => e.DisableDescription).HasMaxLength(500);
 
-            entity.HasOne(d => d.Room).WithMany(p => p.DeactiveTimes)
-                .HasForeignKey(d => new { d.RoomId, d.ResidenceId })
+            entity.HasOne(d => d.Residence).WithMany(p => p.DeactiveTimes)
+                .HasForeignKey(d => new { d.ResidenceId })
                 .HasConstraintName("deactive_time_ibfk_1");
         });
 
@@ -295,12 +287,15 @@ public partial class AppDbContext : DbContext
 
             entity.HasIndex(e => e.UserId, "UserId");
 
-            entity.Property(e => e.ResidenceDate).HasDefaultValueSql("curdate()");
+            entity.Property(e => e.CreateDate).HasDefaultValueSql("curdate()");
             entity.Property(e => e.ResidenceName).HasMaxLength(50);
-            entity.Property(e => e.ResidenceType).HasMaxLength(50);
+            entity.Property(e => e.ResidenceType).HasColumnType("enum('single','double','suite','vip')");
             entity.Property(e => e.Situation).HasColumnType("enum('active','inactive')");
             entity.Property(e => e.Star).HasColumnType("enum('1','2','3','4','5')");
             entity.Property(e => e.Street).HasMaxLength(50);
+            entity.Property(e => e.MainImage).HasMaxLength(70);
+            entity.Property(e => e.Price).HasPrecision(7, 2);
+            entity.Property(e => e.Description).HasMaxLength(200);
 
             entity.HasOne(d => d.City).WithMany(p => p.Residences)
                 .HasForeignKey(d => d.CityId)
@@ -330,27 +325,6 @@ public partial class AppDbContext : DbContext
                             .HasMaxLength(20)
                             .HasColumnName("Option_Name");
                     });
-        });
-
-        modelBuilder.Entity<Room>(entity =>
-        {
-            entity.HasKey(e => new { e.RoomId, e.ResidenceId })
-                .HasName("PRIMARY")
-                .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
-
-            entity.ToTable("rooms");
-
-            entity.HasIndex(e => e.ResidenceId, "ResidenceId");
-
-            entity.Property(e => e.Price).HasPrecision(7, 2);
-            entity.Property(e => e.RoomDescription).HasMaxLength(500);
-            entity.Property(e => e.RoomKind)
-                .HasColumnType("enum('single','double','suite','vip')")
-                .HasColumnName("Room_Kind");
-
-            entity.HasOne(d => d.Residence).WithMany(p => p.Rooms)
-                .HasForeignKey(d => d.ResidenceId)
-                .HasConstraintName("rooms_ibfk_1");
         });
     }
 }

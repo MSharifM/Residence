@@ -20,20 +20,7 @@ namespace CoffeeShop.Controllers
             if (_userService.IsUserSignIn(User))
                 return RedirectToAction("Index", "Home");
 
-            var model = new AuthenticationViewModel
-            {
-                Login = new LoginViewModel()
-                {
-                    Email = string.Empty,
-                    Password = string.Empty
-                },
-                Register = new RegisterViewModel()
-                {
-                    Email = string.Empty,
-                    Password = string.Empty,
-                    ConfirmPassword = string.Empty,
-                }
-            };
+            var model = new AuthenticationViewModel();
 
             ViewData["ResetPassword"] = resetPassword;
 
@@ -47,37 +34,29 @@ namespace CoffeeShop.Controllers
             if (_userService.IsUserSignIn(User))
                 return RedirectToAction("Index", "Home");
 
-            var viewModel = new AuthenticationViewModel()
-            {
-                Login = model,
-                Register = new RegisterViewModel()
-                {
-                    Email = string.Empty,
-                    Password = string.Empty,
-                    ConfirmPassword = string.Empty,
-                }
-            };
+            var viewModel = new AuthenticationViewModel();
+            viewModel.Login = model;
 
             ViewData["returnUrl"] = returnUrl;
 
             if (!ModelState.IsValid)
                 return View("Authentication", viewModel);
 
-            var isUserExist = await _userService.GetUserByUserNameAsync(model.Email);
-            if (isUserExist == null)
+            var user = await _userService.GetUserByEmailAsync(model.Email);
+            if (user == null)
             {
-                ViewData["LoginError"] = "رمزعبور یا نام کاربری اشتباه است";
+                ViewData["LoginError"] = "رمزعبور یا ایمیل اشتباه است";
                 return View("Authentication", viewModel);
             }
 
-            var isConfirmed = await _userService.IsEmailConfirmedAsync(model.Email, null);
+            var isConfirmed = user.EmailConfirmed;
             if (!isConfirmed)
             {
                 ViewData["isConfirmed"] = false;
                 return View("Authentication", viewModel);
             }
 
-            var result = await _userService.SignInAsync(model);
+            var result = await _userService.SignInAsync(user.UserName, model.Password); // Login by username, password
             if (result.Succeeded)
             {
                 if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
@@ -103,15 +82,8 @@ namespace CoffeeShop.Controllers
             if (_userService.IsUserSignIn(User))
                 return RedirectToAction("Index", "Home");
 
-            var viewModel = new AuthenticationViewModel()
-            {
-                Login = new LoginViewModel()
-                {
-                    Email = string.Empty,
-                    Password = string.Empty
-                },
-                Register = model
-            };
+            var viewModel = new AuthenticationViewModel();
+            viewModel.Register = model;
 
             if (!ModelState.IsValid)
                 return View("Authentication", viewModel);
@@ -223,7 +195,7 @@ namespace CoffeeShop.Controllers
             {
                 model.ResultMessage = "حساب کاربری شما تایید نشده است. ابتدا حساب کاربری خود را فعال کنید.";
                 model.Status = "Error";
-                //ToDo send confirm email again
+                //ToDo send confirm userName again
                 return View(model);
             }
 
@@ -292,6 +264,17 @@ namespace CoffeeShop.Controllers
                 return Json(true);
 
             return Json("ایمیل تکراری است.");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> IsUserNameInUse(string userName)
+        {
+            var user = await _userService.IsExistUserNameAsync(userName);
+            if (user is false)
+                return Json(true);
+
+            return Json("نام کاربری تکراری است.");
         }
     }
 }

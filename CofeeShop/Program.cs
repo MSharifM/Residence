@@ -25,6 +25,7 @@ builder.Services.AddDbContext<AppDbContext>(option =>
 #region IoC
 
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IResidenceService, ResidenceService>();
 
 #endregion IoC
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace CoffeeShop.DataLayer.Entities;
 
@@ -25,7 +26,19 @@ public partial class Residence
 
     public string Situation { get; set; } = null!;
 
-    public DateOnly? ResidenceDate { get; set; }
+    [MaxLength(70)]
+    public string MainImage { get; set; }
+
+    public decimal Price { get; set; }
+
+    public int RemainingCapacity { get; set; }
+
+    [MaxLength(200)]
+    public string? Description { get; set; }
+
+    public DateTime CreateDate { get; set; } = DateTime.Now;
+
+    #region Relations
 
     public virtual City City { get; set; } = null!;
 
@@ -33,9 +46,11 @@ public partial class Residence
 
     public virtual ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
 
-    public virtual ICollection<Room> Rooms { get; set; } = new List<Room>();
-
     public virtual HHost User { get; set; } = null!;
 
     public virtual ICollection<HOption> OptionNames { get; set; } = new List<HOption>();
+
+    public virtual ICollection<DeactiveTime> DeactiveTimes { get; set; } = new List<DeactiveTime>();
+
+    #endregion Relations
 }

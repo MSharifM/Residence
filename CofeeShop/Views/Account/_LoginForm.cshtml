@@ -9,15 +9,17 @@
         //ToDo link to send email again
     }
 }
+
 <form asp-action="Login" method="post" asp-route-returnUrl="@ViewData["returnUrl"]" class="form login-form active">
     <span class="alert-text">@ViewData["LoginError"]</span>
-
+    
     <div class="input-box">
         <input type="text"
                asp-for="Email"
                autocomplete="off"
                class="form-input"
-               placeholder="Email Address" />
+               id="login-email-input"
+               placeholder="آدرس ایمیل" />
         <!-- alert text -->
         <span asp-validation-for="Email" class="alert-text" id="login-email-alert"></span>
     </div>
@@ -26,7 +28,8 @@
             <input type="password"
                    asp-for="Password"
                    class="form-input password-input"
-                   placeholder="Password" />
+                   id="login-password-input"
+                   placeholder="رمز عبور" />
             <!-- eye button -->
             <span class="eye-btn">
                 <i class="fa fa-eye"></i>
@@ -38,13 +41,13 @@
     </div>
 
     <!-- forgot password -->
-    <a href="/Account/ForgotPassword" class="forgot-pass-text">Forgot Password?</a>
+    <a asp-action="ForgotPassword" class="forgot-pass-text">رمز عبور را فراموش کرده‌اید؟</a>
 
-    <button type="submit" class="form-btn">Login</button>
+    <button type="submit" class="form-btn">ورود</button>
 
     <!-- NAVIGAGTE TO SIGNUP FORM -->
     <div class="navigate-link-wrapper">
-        Not Registered?
-        <a href="#" class="navigate-link" data-link="register">Signup</a>
+        حساب کاربری ندارید؟
+        <a href="#" class="navigate-link" data-link="register">ثبت‌نام کنید</a>
     </div>
 </form>

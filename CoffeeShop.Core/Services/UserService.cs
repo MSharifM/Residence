@@ -34,20 +34,35 @@ namespace CoffeeShop.Core.Services
             return false;
         }
 
+        public async Task<bool> IsExistUserNameAsync(string userName)
+        {
+            var user = await _userManager.FindByNameAsync(userName);
+            if (user is not null)
+                return true;
+
+            return false;
+        }
+
         public async Task<IdentityResult> RegisterAsync(RegisterViewModel model, string baseUrl)
         {
             var user = new User()
             {
+                UserName = model.UserName,
                 Email = model.Email,
-                UserName = model.Email,
+                PhoneNumber = model.PhoneNumber1,
+                PhoneNumber2 = model.PhoneNumber2,
+                Sex = model.IsMan,
             };
 
-            if (await IsExistEmailAsync(model.Email))
-                return IdentityResult.Failed(new IdentityError { Description = "ایمیل تکراری است" });
+            if (await IsExistEmailAsync(model.Email) || await IsExistUserNameAsync(model.UserName))
+                return IdentityResult.Failed(new IdentityError { Description = "ایمیل یا نام کاربری تکراری است" });
 
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(user, "User"); //TODO: role management
                 await SendEmailConfirmationMessageAsync(user, baseUrl);
+            }
 
             return result;
         }
@@ -57,10 +72,10 @@ namespace CoffeeShop.Core.Services
             return _signInManager.IsSignedIn(user);
         }
 
-        public async Task<SignInResult> SignInAsync(LoginViewModel model)
+        public async Task<SignInResult> SignInAsync(string userName, string password)
         {
-            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, true, true);
-
+            var result = await _signInManager.PasswordSignInAsync(userName, password, true, true);
+            //TODO: role management
             return result;
         }
 
@@ -80,67 +95,346 @@ namespace CoffeeShop.Core.Services
 
             SendEmail.Send(
             to: user.Email,
-            subject: "فعالسازی حساب کاربری - Coffee Shop",
-            body: $@"
-<!DOCTYPE html>
-<html lang='fa' dir='rtl'>
+            subject: "فعالسازی حساب کاربری - ResidenceYab",
+            body: $@"<!DOCTYPE html>
+<html lang=""fa"" dir=""rtl"">
 <head>
-    <meta charset='UTF-8'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-    <title>فعالسازی حساب کاربری</title>
+    <meta charset=""UTF-8"">
+    <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+    <title>تأیید ایمیل - اقامتگاه</title>
+    <link rel=""stylesheet"" href=""https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"">
+    <style>
+        * {{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }}
+        body {{
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            background-image: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }}
+
+        .email-container {{
+            max-width: 600px;
+            width: 100%;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid #eaeaea;
+        }}
+
+        .header {{
+            background: linear-gradient(to right, #2d7d7a, #1a5f5c);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }}
+
+        .header::before {{
+            content: """";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.3;
+        }}
+
+        .logo {{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 2;
+        }}
+
+        .logo-icon {{
+            font-size: 32px;
+            margin-left: 10px;
+        }}
+
+        .logo-text {{
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }}
+
+        .header h1 {{
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 2;
+        }}
+
+        .header p {{
+            font-size: 16px;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+        }}
+
+        .content {{
+            padding: 40px;
+        }}
+
+        .welcome-text {{
+            font-size: 18px;
+            margin-bottom: 25px;
+            color: #2d7d7a;
+            font-weight: 600;
+            text-align: center;
+        }}
+
+        .message {{
+            background-color: #f8fafc;
+            border-right: 4px solid #2d7d7a;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            font-size: 16px;
+            color: #444;
+        }}
+
+        .activation-box {{
+            background-color: #f0f9f8;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            margin: 30px 0;
+            border: 1px dashed #2d7d7a;
+        }}
+
+        .activation-title {{
+            font-size: 18px;
+            color: #1a5f5c;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }}
+
+        .activation-button {{
+            display: inline-block;
+            background: linear-gradient(to right, #2d7d7a, #1a5f5c);
+            color: white;
+            text-decoration: none;
+            padding: 16px 40px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(42, 124, 121, 0.2);
+        }}
+
+        .activation-button:hover {{
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(42, 124, 121, 0.3);
+            background: linear-gradient(to right, #1a5f5c, #2d7d7a);
+        }}
+
+        .activation-link {{
+            display: block;
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            word-break: break-all;
+            font-size: 14px;
+            color: #555;
+            border: 1px solid #e0e0e0;
+            direction: ltr;
+            text-align: center;
+        }}
+
+        .instructions {{
+            background-color: #f8fafc;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            border-right: 3px solid #e2e8f0;
+        }}
+
+        .instructions h3 {{
+            color: #1a5f5c;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }}
+
+        .instructions ol {{
+            padding-right: 20px;
+            margin-bottom: 0;
+        }}
+
+        .instructions li {{
+            margin-bottom: 10px;
+        }}
+
+        .footer {{
+            background-color: #f8f9fa;
+            padding: 25px;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #eaeaea;
+        }}
+
+        .footer-links {{
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }}
+
+        .footer-link {{
+            color: #2d7d7a;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 14px;
+            transition: color 0.2s;
+        }}
+
+        .footer-link:hover {{
+            color: #1a5f5c;
+            text-decoration: underline;
+        }}
+
+        .social-icons {{
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }}
+
+        .social-icon {{
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #e8f0ee;
+            color: #2d7d7a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 8px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }}
+
+        .social-icon:hover {{
+            background-color: #2d7d7a;
+            color: white;
+            transform: translateY(-3px);
+        }}
+
+        .note {{
+            font-size: 14px;
+            color: #888;
+            margin-top: 20px;
+            line-height: 1.5;
+            padding: 15px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border-right: 3px solid #ffd166;
+        }}
+
+        @media (max-width: 640px) {{
+            .content, .header, .footer {{
+                padding: 25px 20px;
+            }}
+
+            .activation-button {{
+                padding: 14px 30px;
+                font-size: 16px;
+            }}
+
+            .header h1 {{
+                font-size: 22px;
+            }}
+        }}
+    </style>
 </head>
-<body style='margin:0; padding:0; font-family: Tahoma, Arial, sans-serif; background-color:#f6f0e6; direction:rtl;'>
-    <table role='presentation' width='100%' cellspacing='0' cellpadding='0' style='background-color:#f6f0e6; padding:20px;'>
-        <tr>
-            <td align='center'>
-                <table role='presentation' width='600' cellspacing='0' cellpadding='0' style='background-color:#ffffff; border-radius:10px; box-shadow:0 2px 10px rgba(0,0,0,0.1); max-width:600px;'>
-                    <!-- Header -->
-                    <tr>
-                        <td style='padding:30px; text-align:center; background-color:#6f4e37; border-radius:10px 10px 0 0;'>
-                            <h1 style='color:#fff; margin:0; font-size:24px;'>خوش آمدید به Coffee Shop!</h1>
-                            <p style='color:#fff; margin:10px 0 0 0; font-size:14px;'>حساب کاربری شما با موفقیت ایجاد شد.</p>
-                        </td>
-                    </tr>
+<body>
+    <div class=""email-container"">
+        <div class=""header"">
+            <div class=""logo"">
+                <div class=""logo-icon""><i class=""fas fa-home""></i></div>
+                <div class=""logo-text"">اقامتگاه</div>
+            </div>
+            <h1>تأیید آدرس ایمیل شما</h1>
+            <p>لطفاً ایمیل خود را برای فعال‌سازی حساب کاربری تأیید کنید</p>
+        </div>
 
-                    <!-- Body -->
-                    <tr>
-                        <td style='padding:40px 30px; text-align:center;'>
-                            <h2 style='color:#333; margin:0 0 20px 0; font-size:20px;'>برای فعالسازی حساب خود روی دکمه زیر کلیک کنید:</h2>
-                            <p style='color:#555; margin:0 0 30px 0; font-size:16px; line-height:1.5;'>
-                                با فعالسازی حساب، می‌توانید سفارش‌های خوشمزه خود را سریع‌تر ثبت کنید و از پیشنهادات ویژه کافی‌شاپ بهره‌مند شوید.
-                                این لینک تا ۱ ساعت معتبر است.
-                            </p>
+        <div class=""content"">
+            <div class=""welcome-text"">سلام کاربر عزیز، به خانواده اقامتگاه خوش آمدید!</div>
 
-                            <a href='{confirmationLink}'
-                               style='display:inline-block; padding:15px 30px; background-color:#6f4e37; color:#fff; text-decoration:none; border-radius:5px; font-size:16px; font-weight:bold;'>
-                                فعال‌سازی حساب
-                            </a>
+            <div class=""message"">
+                از اینکه در سایت رزرو اقامتگاه ما ثبت‌نام کردید متشکریم. برای تکمیل فرآیند ثبت‌نام و فعال‌سازی حساب کاربری خود، لطفاً آدرس ایمیل خود را تأیید کنید.
+            </div>
 
-                            <p style='color:#555; margin:30px 0 0 0; font-size:14px; font-style:italic;'>
-                                اگر دکمه کار نکرد، لینک زیر را کپی کنید: <br>
-                                <a href='{confirmationLink}' style='color:#6f4e37; text-decoration:underline;'>{confirmationLink}</a>
-                            </p>
-                        </td>
-                    </tr>
+            <div class=""activation-box"">
+                <div class=""activation-title"">برای فعال‌سازی حساب کاربری خود، روی دکمه زیر کلیک کنید:</div>
 
-                    <!-- Footer -->
-                    <tr>
-                        <td style='padding:20px 30px; background-color:#f2ede7; border-radius:0 0 10px 10px; text-align:center;'>
-                            <p style='color:#999; margin:0; font-size:12px; line-height:1.4;'>
-                                سوالی دارید؟ با ما تماس بگیرید: <br>
-                                ایمیل: support@coffeeshop.com | تلفن: ۰۲۱-۱۲۳۴۵۶۷۸
-                            </p>
-                            <p style='color:#999; margin:10px 0 0 0; font-size:12px;'>
-                                © ۲۰۲۵ Coffee Shop. تمامی حقوق محفوظ است.
-                            </p>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
+                <a href=""{confirmationLink}"" class=""activation-button"">
+                    <i class=""fas fa-check-circle""></i> تأیید ایمیل
+                </a>
+
+                <div style=""margin: 15px 0; color: #666; font-size: 15px;"">یا لینک زیر را در مرورگر خود کپی کنید:</div>
+
+                <div class=""activation-link"">
+                    {confirmationLink}
+                </div>
+            </div>
+
+            <div class=""note"">
+                <i class=""fas fa-info-circle""></i> توجه: این لینک تنها به مدت 24 ساعت معتبر است. اگر پس از 24 ساعت اقدامی نکرده‌اید، می‌توانید در صفحه ورود به سایت، درخواست ارسال مجدد ایمیل تأیید را بدهید.
+            </div>
+
+            <div class=""instructions"">
+                <h3>راهنمای تأیید ایمیل:</h3>
+                <ol>
+                    <li>روی دکمه ""تأیید ایمیل"" در بالا کلیک کنید</li>
+                    <li>صفحه جدیدی باز می‌شود که تأیید موفقیت‌آمیز را نشان می‌دهد</li>
+                    <li>می‌توانید بلافاصله به حساب کاربری خود وارد شوید</li>
+                    <li>پس از تأیید ایمیل، می‌توانید رزرو اقامتگاه مورد نظر خود را انجام دهید</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class=""footer"">
+            <p>اگر شما در سایت اقامتگاه ثبت‌نام نکرده‌اید، این ایمیل را نادیده بگیرید.</p>
+
+            <p style=""margin-top: 20px; font-size: 14px; color: #888;"">© 2023 اقامتگاه. تمامی حقوق محفوظ است.</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {{
+            const verifyButton = document.querySelector('.activation-button');
+
+            verifyButton.addEventListener('mouseenter', function() {{
+                this.style.transform = 'translateY(-3px)';
+            }});
+
+            verifyButton.addEventListener('mouseleave', function() {{
+                this.style.transform = 'translateY(0)';
+            }});
+        }});
+    </script>
 </body>
-</html>");
+</html>
+");
 
             #endregion Send email
         }
@@ -260,6 +554,11 @@ namespace CoffeeShop.Core.Services
         public async Task<User?> GetUserByEmailAsync(string email)
         {
             return await _userManager.FindByEmailAsync(email);
+        }
+
+        public async Task<bool> SendEmailConfirmAgain()
+        {
+            return true;
         }
 
         #endregion User common methods

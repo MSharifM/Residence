@@ -18,20 +18,43 @@
 
     <div class="input-box">
         <input type="text"
+               asp-for="UserName"
+               autocomplete="off"
+               class="form-input"
+               id="username-input"
+               placeholder="نام کاربری"/>
+        <span asp-validation-for="UserName" class="alert-text" id="register-email-alert"></span>
+
+    </div>
+    <div class="input-box">
+        <input type="text"
                asp-for="Email"
                autocomplete="off"
                class="form-input"
-               placeholder="Email Address" />
+               id="register-email-input"
+               placeholder="آدرس ایمیل"/>
 
         <!-- alert text -->
         <span asp-validation-for="Email" class="alert-text" id="register-email-alert"></span>
+    </div>
+    <div class="input-box">
+        <input type="text"
+               asp-for="PhoneNumber1"
+               autocomplete="off"
+               class="form-input"
+               id="phone-input"
+               placeholder="شماره تماس"/>
+
+        <!-- alert text -->
+        <span asp-validation-for="PhoneNumber1" class="alert-text" id="phone"></span>
     </div>
     <div class="input-box">
         <div class="password-box-inner">
             <input type="password"
                    asp-for="Password"
                    class="form-input password-input"
-                   placeholder="Password" />
+                   id="register-password-input"
+                   placeholder="رمز عبور"/>
             <!-- eye button -->
             <span class="eye-btn">
                 <i class="fa fa-eye"></i>
@@ -46,21 +69,46 @@
             <input type="password"
                    asp-for="ConfirmPassword"
                    class="form-input password-input"
-                   placeholder="Confirm Password" />
+                   id="register-confirm-password-input"
+                   placeholder="تکرار رمز عبور"/>
             <!-- eye button -->
             <span class="eye-btn">
                 <i class="fa fa-eye"></i>
             </span>
         </div>
         <!-- alert text -->
-        <span asp-validation-for="ConfirmPassword" class="alert-text" id="register-confirm-password-alert"></span>
+        <span asp-validation-for="ConfirmPassword" class="alert-text"
+              id="register-confirm-password-alert"></span>
     </div>
 
-    <button type="submit" class="form-btn">Sign Up</button>
+    <!-- اضافه کردن چک‌باکس میزبان -->
+    <div class="checkbox-box">
+        <input type="checkbox"
+               name="is_host"
+               id="is-host-checkbox"
+               class="host-checkbox"/>
+        <label for="is-host-checkbox" class="checkbox-label">میزبان هستم</label>
+    </div>
+
+    <!-- اضافه کردن فیلد شماره حساب که ابتدا مخفی است -->
+    <div class="input-box account-number-box"
+         id="account-number-box"
+         style="display: none">
+        <input type="text"
+               name="account_number"
+               autocomplete="off"
+               class="form-input"
+               id="account-number-input"
+               placeholder="شماره حساب"/>
+        <!-- alert text -->
+        <span class="alert-text" id="account-number-alert"></span>
+    </div>
+
+    <button type="submit" class="form-btn">ثبت‌نام</button>
 
     <!-- NAVIGAGTE TO LOGIN FORM -->
     <div class="navigate-link-wrapper">
-        Have An Account?
-        <a href="#" class="navigate-link" data-link="login">Login</a>
+        حساب کاربری دارید؟
+        <a href="#" class="navigate-link" data-link="login">وارد شوید</a>
     </div>
 </form>

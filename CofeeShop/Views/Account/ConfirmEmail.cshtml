@@ -5,13 +5,13 @@
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/auth.css" />
+    <link rel="stylesheet" href="/css/auth.css" />
 }
 
 <div class="auth-container">
     <div class="auth-card">
         <div class="auth-image-side">
-            <img class="auth-image" src="~/images/@((status == "Success" || status == "AlreadyConfirmed") ? "email-confirmation-bg.jpg" : "email-error-bg.jpg")" alt="تایید ایمیل">
+            <img class="auth-image" src="/images/@((status == "Success" || status == "AlreadyConfirmed") ? "email-confirmation-bg.jpg" : "email-error-bg.jpg")" alt="تایید ایمیل">
             <div class="auth-image-overlay">
                 @Html.Raw(ViewData["Message"])
             </div>

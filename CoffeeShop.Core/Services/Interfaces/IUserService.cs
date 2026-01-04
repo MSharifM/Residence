@@ -12,13 +12,15 @@ namespace CoffeeShop.Core.Services.Interfaces
 
         Task<IdentityResult> RegisterAsync(RegisterViewModel user, string baseUrl);
 
-        Task<SignInResult> SignInAsync(LoginViewModel model);
+        Task<SignInResult> SignInAsync(string userName, string password);
 
         Task LogOutAsync();
 
         bool IsUserSignIn(ClaimsPrincipal user);
 
         Task<bool> IsExistEmailAsync(string email);
+
+        Task<bool> IsExistUserNameAsync(string userName);
 
         Task<IdentityResult> ConfirmEmailAsync(User user, string token);
 
@@ -27,6 +29,8 @@ namespace CoffeeShop.Core.Services.Interfaces
         Task SendResetPasswordEmailAsync(User user, string baseUrl);
 
         Task<IdentityResult> ResetPasswordAsync(User user, string token, string newPassword);
+
+        Task<bool> SendEmailConfirmAgain();
 
         #endregion Account
 

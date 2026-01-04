@@ -6,33 +6,29 @@
 }
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"]</title>
-    <link rel="stylesheet" href="~/css/login/login.css" />
-    <link rel="stylesheet" href="~/css/login/all-fonts.min.css" />
+    <title>ورود و ثبت‌نام | اقامت یاب</title>
+    <link rel="stylesheet" href="~/css/login-style.css" />
+    <link rel="stylesheet" href="~/fontawesome/css/all-fonts.min.css" />
 </head>
 
 <body>
-
+    <!-- BACK TO HOME -->
+    <a asp-controller="Home" asp-action="Index" class="back-btn" title="بازگشت به صفحه اصلی">
+        <i class="fas fa-arrow-right"></i>
+        <span>بازگشت به صفحه اصلی</span>
+    </a>
     <!-- FORM CONTAINER -->
     <div class="form-container">
-        @{
-            if (ViewData["ResetPassword"] is bool resetPassword && resetPassword)
-            {
-                <div class="" role="alert">
-                    رمز شما با موفقیت تغییر یافت.
-                </div>
-            }
-        }
-        <h2 class="form-title">Login Form</h2>
+        <h2 class="form-title">فرم ورود</h2>
         <!-- buttons -->
         <div class="header-buttons">
-            <button type="button" class="header-btn login-btn active">Login</button>
-            <button type="button" class="header-btn register-btn">Register</button>
+            <button type="button" class="header-btn login-btn active">ورود</button>
+            <button type="button" class="header-btn register-btn">ثبت‌نام</button>
         </div>
         <!-- forms -->
         <div class="form-wrapper">
@@ -41,12 +37,11 @@
 
             <!--------- REGISTER FORM --------->
             <partial name="_RegisterForm" model="Model.Register" />
+
         </div>
     </div>
 
     <!-- SCRIPT -->
-    <script src="~/js/main.js"></script>
-    @await Html.PartialAsync("_ValidationScriptsPartial")
-
+    <script src="~/js/login-script.js"></script>
 </body>
 </html>
