@@ -1,12 +1,21 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CoffeeShop.Core.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CoffeeShop.Controllers
 {
     public class ResidenceController : Controller
     {
-        public IActionResult Detail(int id)
+        private readonly IResidenceService _residenceService;
+
+        public ResidenceController(IResidenceService residenceService)
         {
-            return View();
+            _residenceService = residenceService;
+        }
+
+        public async Task<IActionResult> Detail(int id)
+        {
+            var model = await _residenceService.GetResidenceDetailById(id);
+            return View(model);
         }
     }
 }

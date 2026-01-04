@@ -1,16 +1,19 @@
-﻿@model IEnumerable<ResidenceBoxDetailViewModel>;
+﻿@model (IEnumerable<ResidenceBoxDetailViewModel> Residences, string Category)
 
-@foreach (var item in Model)
+@foreach (var item in Model.Residences)
 {
-    <div class="popular-card">
-        <img src="~/residence_images/@item.MainImage" alt="@item.Name" class="card-image">
-        <div class="card-content">
-            <h3 class="card-title">@item.Name</h3>
-            <p class="card-location">@item.City</p>
-            <div class="card-footer">
-                <div class="card-price">@item.Price <span>تومان / شب</span></div>
-                <div class="card-rating">⭐ @item.Stars</div>
+    <div class="@Model.Category-card">
+        <a asp-controller="Residence" asp-action="Detail" asp-route-id="@item.ResidenceId" class="card-link">
+
+            <img src="~/residence_images/@item.MainImage" alt="@item.Name" class="card-image">
+            <div class="card-content">
+                <h3 class="card-title">@item.Name</h3>
+                <p class="card-location">@item.City</p>
+                <div class="card-footer">
+                    <div class="card-price">@item.Price <span>تومان / شب</span></div>
+                    <div class="card-rating">⭐ @item.Stars</div>
+                </div>
             </div>
-        </div>
+        </a>
     </div>
 }

@@ -5,5 +5,7 @@ namespace CoffeeShop.Core.Services.Interfaces
     public interface IResidenceService
     {
         Task<HomePageViewModel> GetHomePageViewModelsAsync();
+
+        Task<ResidenceDetailViewModel> GetResidenceDetailById(int id);
     }
 }

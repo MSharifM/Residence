@@ -1,4 +1,4 @@
-/* Reset and Base Styles */
+﻿/* Reset and Base Styles */
 * {
     margin: 0;
     padding: 0;
@@ -778,4 +778,10 @@ body {
     .features-grid {
         grid-template-columns: 1fr;
     }
+}
+
+.card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
 }

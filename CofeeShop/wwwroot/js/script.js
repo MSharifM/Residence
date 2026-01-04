@@ -1,193 +1,19 @@
-// Dummy Data for Accommodations
-const accommodationsData = [
-    {
-        id: 1,
-        title: "ویلا لوکس شمال",
-        location: "رامسر، مازندران",
-        price: "۳,۵۰۰,۰۰۰",
-        rating: "۴.۸",
-        image: "/images/luxury-villa-north-iran.jpg",
-    },
-    {
-        id: 2,
-        title: "کلبه جنگلی",
-        location: "نوشهر، مازندران",
-        price: "۲,۲۰۰,۰۰۰",
-        rating: "۴.۶",
-        image: "/images/forest-cabin-iran.jpg",
-    },
-    {
-        id: 3,
-        title: "اقامتگاه سنتی",
-        location: "یزد، یزد",
-        price: "۱,۸۰۰,۰۰۰",
-        rating: "۴.۹",
-        image: "/images/traditional-house-yazd.jpg",
-    },
-    {
-        id: 4,
-        title: "ویلا ساحلی",
-        location: "کیش، هرمزگان",
-        price: "۴,۰۰۰,۰۰۰",
-        rating: "۴.۷",
-        image: "/images/beach-villa-kish.jpg",
-    },
-    {
-        id: 5,
-        title: "کلبه کوهستانی",
-        location: "دیزین، البرز",
-        price: "۲,۸۰۰,۰۰۰",
-        rating: "۴.۵",
-        image: "/images/mountain-cabin-dizin.jpg",
-    },
-    {
-        id: 6,
-        title: "اقامتگاه باغ",
-        location: "شیراز، فارس",
-        price: "۲,۵۰۰,۰۰۰",
-        rating: "۴.۸",
-        image: "/images/garden-house-shiraz.jpg",
-    },
-];
-
-const popularData = [
-    {
-        id: 8,
-        title: "ویلا استخردار",
-        location: "چالوس، مازندران",
-        price: "۴,۲۰۰,۰۰۰",
-        rating: "۴.۹",
-        image: "/images/villa-with-pool-chalus.jpg",
-    },
-    {
-        id: 7,
-        title: "پنت‌هاوس لوکس",
-        location: "تهران، تهران",
-        price: "۵,۵۰۰,۰۰۰",
-        rating: "۵.۰",
-        image: "/images/luxury-penthouse-tehran.jpg",
-    },
-    {
-        id: 8,
-        title: "ویلا استخردار",
-        location: "چالوس، مازندران",
-        price: "۴,۲۰۰,۰۰۰",
-        rating: "۴.۹",
-        image: "/images/villa-with-pool-chalus.jpg",
-    },
-    {
-        id: 9,
-        title: "بوم‌گردی سنتی",
-        location: "اصفهان، اصفهان",
-        price: "۱,۵۰۰,۰۰۰",
-        rating: "۴.۷",
-        image: "/images/traditional-eco-lodge-isfahan.jpg",
-    },
-    {
-        id: 8,
-        title: "ویلا استخردار",
-        location: "چالوس، مازندران",
-        price: "۴,۲۰۰,۰۰۰",
-        rating: "۴.۹",
-        image: "/images/villa-with-pool-chalus.jpg",
-    },
-];
-
-const recommendedData = [
-    {
-        id: 10,
-        title: "ویلا مدرن",
-        location: "لواسان، تهران",
-        price: "۳,۰۰۰,۰۰۰",
-        rating: "۴.۶",
-        image: "/images/modern-villa-lavasan.jpg",
-    },
-    {
-        id: 11,
-        title: "سوئیت دربستی",
-        location: "کرج، البرز",
-        price: "۲,۰۰۰,۰۰۰",
-        rating: "۴.۴",
-        image: "/images/private-suite-karaj.jpg",
-    },
-    {
-        id: 12,
-        title: "کلبه رویایی",
-        location: "ماسال، گیلان",
-        price: "۲,۷۰۰,۰۰۰",
-        rating: "۴.۸",
-        image: "/images/dream-cottage-masal.jpg",
-    },
-    {
-        id: 13,
-        title: "اقامتگاه تاریخی",
-        location: "کاشان، اصفهان",
-        price: "۲,۳۰۰,۰۰۰",
-        rating: "۴.۹",
-        image: "/images/historical-house-kashan.jpg",
-    },
-];
-
-const exclusiveData = [
-    {
-        id: 14,
-        title: "ویلا پنج ستاره",
-        location: "رامسر، مازندران",
-        price: "۸,۰۰۰,۰۰۰",
-        rating: "۵.۰",
-        image: "/images/five-star-villa-ramsar.jpg",
-    },
-    {
-        id: 15,
-        title: "قصر شاهانه",
-        location: "شمیرانات، تهران",
-        price: "۱۰,۰۰۰,۰۰۰",
-        rating: "۵.۰",
-        image: "/images/royal-palace-shemiranat.jpg",
-    },
-    {
-        id: 16,
-        title: "ویلا ساحلی لوکس",
-        location: "نوشهر، مازندران",
-        price: "۷,۵۰۰,۰۰۰",
-        rating: "۴.۹",
-        image: "/images/villa-with-pool-chalus.jpg",
-    },
-];
-
 // Function to create accommodation card
-function createAccommodationCard(data) {
-    return `
-        <div class="accommodation-card">
-            <img src="${data.image}" alt="${data.title}" class="card-image">
-            <div class="card-content">
-                <h3 class="card-title">${data.title}</h3>
-                <p class="card-location">${data.location}</p>
-                <div class="card-footer">
-                    <div class="card-price">${data.price} <span>تومان / شب</span></div>
-                    <div class="card-rating">⭐ ${data.rating}</div>
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-// Function to create exclusive card
-function createExclusiveCard(data) {
-    return `
-        <div class="exclusive-card">
-            <img src="${data.image}" alt="${data.title}" class="card-image">
-            <div class="card-content">
-                <h3 class="card-title">${data.title}</h3>
-                <p class="card-location">${data.location}</p>
-                <div class="card-footer">
-                    <div class="card-price">${data.price} <span>تومان / شب</span></div>
-                    <div class="card-rating">⭐ ${data.rating}</div>
-                </div>
-            </div>
-        </div>
-    `;
-}
+//function createAccommodationCard(data) {
+//    return `
+//        <div class="accommodation-card">
+//            <img src="${data.image}" alt="${data.title}" class="card-image">
+//            <div class="card-content">
+//                <h3 class="card-title">${data.title}</h3>
+//                <p class="card-location">${data.location}</p>
+//                <div class="card-footer">
+//                    <div class="card-price">${data.price} <span>تومان / شب</span></div>
+//                    <div class="card-rating">⭐ ${data.rating}</div>
+//                </div>
+//            </div>
+//        </div>
+//    `;
+//}
 
 // Render all accommodations
 function renderAccommodations() {
@@ -197,27 +23,11 @@ function renderAccommodations() {
         .join("");
 }
 
-// Render popular accommodations
-function renderPopular() {
-    const popularGrid = document.getElementById("popularGrid");
-    popularGrid.innerHTML = popularData
-        .map((item) => createPopularCard(item))
-        .join("");
-}
-
 // Render recommended accommodations
 function renderRecommended() {
     const recommendedGrid = document.getElementById("recommendedGrid");
     recommendedGrid.innerHTML = recommendedData
         .map((item) => createAccommodationCard(item))
-        .join("");
-}
-
-// Render exclusive accommodations
-function renderExclusive() {
-    const exclusiveGrid = document.getElementById("exclusiveGrid");
-    exclusiveGrid.innerHTML = exclusiveData
-        .map((item) => createExclusiveCard(item))
         .join("");
 }
 
