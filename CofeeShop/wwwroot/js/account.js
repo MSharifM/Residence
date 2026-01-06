@@ -10,6 +10,7 @@ const accordionItems = document.querySelectorAll(".accordion-item");
 const contentPanel = document.getElementById("dynamic-content-panel");
 const reviewModal = document.getElementById("review-modal");
 const ratingSpans = document.querySelectorAll(".rating-selector span");
+let accommodationId = document.getElementById("accommodation-select").value;
 
 // Initialization
 function init() {
@@ -102,10 +103,16 @@ function showHostView() {
 function loadHostContent(type) {
     let html = "";
 
+    //ToDo: Manage data
     switch (type) {
         case "upcoming-res":
+            fetch('/UserPanel/Home/GetFutureReservesForHost?ResidenceId=' + accommodationId)
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                });
             html = `
-
+                <h2>رزروهای پیش رو</h2>
                 <div class="data-row">
                     <div>
                         <strong>آپارتمان لوکس</strong><br>
@@ -117,6 +124,11 @@ function loadHostContent(type) {
             break;
 
         case "completed-res":
+            fetch('/UserPanel/Home/GetCompletedReservesForHost?ResidenceId=' + accommodationId)
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                });
             html = `
                 <h2>رزروهای تکمیل شده</h2>
                 <div class="data-row">
@@ -171,6 +183,11 @@ function loadHostContent(type) {
             break;
 
         case "reviews":
+            fetch('/UserPanel/Home/GetResidenceCommentsForHost?ResidenceId=' + accommodationId)
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                });
             html = `
                 <h2>نظرات کاربران</h2>
                 <div class="review-item">

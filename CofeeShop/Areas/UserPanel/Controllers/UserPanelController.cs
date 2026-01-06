@@ -29,7 +29,6 @@ namespace CoffeeShop.Areas.UserPanel.Controllers
             model.FutureReserves = await _userService.GetFutureUserReserves(User.Identity.Name);
             model.LastReserve = await _userService.GetLastUserReserve(User.Identity.Name);
             model.HostListResidences = await _userService.GetListResidencesNameForHostAsync(User.Identity.Name);
-            model.FutureReservesForHost = await _userService.GetFutureReservesForHostByResidenceIdAsync(residenceId);
 
             ViewData["UserId"] = user.Id;
             ViewData["ResidenceId"] = residenceId;
@@ -46,6 +45,28 @@ namespace CoffeeShop.Areas.UserPanel.Controllers
             await _userService.EditProfileAsync(id, model);
 
             return Redirect($"/Home/Index");
+        }
+
+        //ToDo: Manage security
+        [HttpGet]
+        public async Task<IActionResult> GetFutureReservesForHost(int residenceId)
+        {
+            var reserves = await _userService.GetFutureReservesForHostByResidenceIdAsync(residenceId);
+            return Json(reserves);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetCompletedReservesForHost(int residenceId)
+        {
+            var reserves = await _userService.GetCompletedReservesForHostByResidenceIdAsync(residenceId);
+            return Json(reserves);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetResidenceCommentsForHost(int residenceId)
+        {
+            var reserves = await _userService.GetResidenceCommentsForHostByResidenceIdAsync(residenceId);
+            return Json(reserves);
         }
 
         [HttpGet]

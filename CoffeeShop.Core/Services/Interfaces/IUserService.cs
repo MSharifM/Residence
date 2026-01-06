@@ -60,7 +60,11 @@ namespace CoffeeShop.Core.Services.Interfaces
 
         Task<IEnumerable<HostListResidencesViewModel>> GetListResidencesNameForHostAsync(string hostUserName);
 
-        Task<IEnumerable<FutureReservesForHostViewModel>> GetFutureReservesForHostByResidenceIdAsync(int residenceId);
+        Task<IEnumerable<ListFutureReservesForHostViewModel>> GetFutureReservesForHostByResidenceIdAsync(int residenceId);
+
+        Task<IEnumerable<ListCompletedReservesForHostViewModel>> GetCompletedReservesForHostByResidenceIdAsync(int residenceId);
+
+        Task<IEnumerable<ListResidenceCommentsForHostViewModel>> GetResidenceCommentsForHostByResidenceIdAsync(int residenceId);
 
         #endregion HostPanel
     }

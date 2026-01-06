@@ -11,8 +11,6 @@ namespace CoffeeShop.Core.DTOs.UserPanel
         public ReservesViewModel LastReserve { get; set; }
 
         public IEnumerable<HostListResidencesViewModel>? HostListResidences { get; set; }
-
-        public IEnumerable<FutureReservesForHostViewModel>? FutureReservesForHost { get; set; }
     }
 
     public class UserInformationViewModel
@@ -75,6 +73,8 @@ namespace CoffeeShop.Core.DTOs.UserPanel
         InStay,
     }
 
+    #region HostPanel
+
     public class HostListResidencesViewModel
     {
         public string Name { get; set; }
@@ -82,7 +82,7 @@ namespace CoffeeShop.Core.DTOs.UserPanel
         public int ResidenceId { get; set; }
     }
 
-    public class FutureReservesForHostViewModel
+    public class ListFutureReservesForHostViewModel
     {
         public string ResidenceName { get; set; }
 
@@ -90,4 +90,24 @@ namespace CoffeeShop.Core.DTOs.UserPanel
 
         public string PhoneNumber { get; set; }
     }
+
+    public class ListCompletedReservesForHostViewModel
+    {
+        public string ResidenceName { get; set; }
+
+        public DateTime EndDate { get; set; }
+
+        public decimal Price { get; set; }
+    }
+
+    public class ListResidenceCommentsForHostViewModel
+    {
+        public string UserName { get; set; }
+
+        public string Description { get; set; }
+
+        public int Rate { get; set; }
+    }
+
+    #endregion HostPanel
 }

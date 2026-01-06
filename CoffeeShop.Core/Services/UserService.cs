@@ -659,7 +659,7 @@ namespace CoffeeShop.Core.Services
             return result;
         }
 
-        public async Task<IEnumerable<FutureReservesForHostViewModel>> GetFutureReservesForHostByResidenceIdAsync(
+        public async Task<IEnumerable<ListFutureReservesForHostViewModel>> GetFutureReservesForHostByResidenceIdAsync(
             int residenceId)
         {
             string query = $"""
@@ -669,7 +669,32 @@ namespace CoffeeShop.Core.Services
                             join client_reserve_comment as crc on r.reservationid = crc.reservationid
                             join aspnetusers as aspu on aspu.id=crc.userid
                             """;
-            var result = await _dbContextDapper.QueryAsync<FutureReservesForHostViewModel>(query);
+            var result = await _dbContextDapper.QueryAsync<ListFutureReservesForHostViewModel>(query);
+            return result;
+        }
+
+        public async Task<IEnumerable<ListCompletedReservesForHostViewModel>> GetCompletedReservesForHostByResidenceIdAsync(
+            int residenceId)
+        {
+            string query = $"""
+                            select re.ResidenceName , r.DateOfEnd as EndDate ,r.AmountPaid as Price
+                            from (select * from reservation where residenceid = '{residenceId}' and DateOfEnd < current_date()) as r
+                            join residence as re on r.residenceid = re.residenceid
+                            """;
+            var result = await _dbContextDapper.QueryAsync<ListCompletedReservesForHostViewModel>(query);
+            return result;
+        }
+
+        public async Task<IEnumerable<ListResidenceCommentsForHostViewModel>> GetResidenceCommentsForHostByResidenceIdAsync(
+            int residenceId)
+        {
+            string query = $"""
+                            select aspu.UserName , c.CommentDescription as Description , c.Rate
+                            from (select * from comments where ResidenceId = '{residenceId}') as c
+                            join client_reserve_comment as crc on c.commentid = crc.CommentId
+                            join aspnetusers as aspu on crc.UserID = aspu.id
+                            """;
+            var result = await _dbContextDapper.QueryAsync<ListResidenceCommentsForHostViewModel>(query);
             return result;
         }
 

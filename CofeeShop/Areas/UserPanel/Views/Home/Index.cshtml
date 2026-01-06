@@ -112,7 +112,7 @@
             <div class="host-header">
                 <div class="host-selector-group">
                     <form asp-area="UserPanel" asp-controller="Home" asp-action="Index" method="get">
-                        <select name="residenceId" onchange="this.form.submit()">
+                        <select name="residenceId" id="accommodation-select" onchange="this.form.submit()">
                             @foreach (var item in Model.HostListResidences)
                             {
                                 if (item.ResidenceId == (int)ViewData["ResidenceId"])
