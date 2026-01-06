@@ -50,6 +50,18 @@ namespace CoffeeShop.Core.Services.Interfaces
 
         Task EditProfileAsync(string userId, UserInformationViewModel model);
 
+        Task<IEnumerable<ReservesViewModel>> GetFutureUserReserves(string userName);
+
+        Task<ReservesViewModel> GetLastUserReserve(string userName);
+
         #endregion UserPanel
+
+        #region HostPanel
+
+        Task<IEnumerable<HostListResidencesViewModel>> GetListResidencesNameForHostAsync(string hostUserName);
+
+        Task<IEnumerable<FutureReservesForHostViewModel>> GetFutureReservesForHostByResidenceIdAsync(int residenceId);
+
+        #endregion HostPanel
     }
 }

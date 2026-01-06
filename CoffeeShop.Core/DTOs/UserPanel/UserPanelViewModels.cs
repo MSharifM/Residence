@@ -5,6 +5,14 @@ namespace CoffeeShop.Core.DTOs.UserPanel
     public class UserPanelViewModel
     {
         public UserInformationViewModel InformationViewModel { get; set; }
+
+        public IEnumerable<ReservesViewModel> FutureReserves { get; set; }
+
+        public ReservesViewModel LastReserve { get; set; }
+
+        public IEnumerable<HostListResidencesViewModel>? HostListResidences { get; set; }
+
+        public IEnumerable<FutureReservesForHostViewModel>? FutureReservesForHost { get; set; }
     }
 
     public class UserInformationViewModel
@@ -41,5 +49,45 @@ namespace CoffeeShop.Core.DTOs.UserPanel
         [DataType(DataType.Password)]
         [Compare("NewPassword", ErrorMessage = "کلمه عبور  با تکرار آن برابر نیست")]
         public string RePassword { get; set; }
+    }
+
+    public class ReservesViewModel
+    {
+        public string ResidenceName { get; set; }
+
+        public string ResidenceCity { get; set; }
+
+        public decimal Price { get; set; }
+
+        public DateTime StartDate { get; set; }
+
+        public DateTime EndDate { get; set; }
+
+        public ReserveStatus ReserveStatus { get; set; }
+    }
+
+    public enum ReserveStatus
+    {
+        Unpaid,
+        PendingApproval,
+        Approved,
+        Cancelled,
+        InStay,
+    }
+
+    public class HostListResidencesViewModel
+    {
+        public string Name { get; set; }
+
+        public int ResidenceId { get; set; }
+    }
+
+    public class FutureReservesForHostViewModel
+    {
+        public string ResidenceName { get; set; }
+
+        public DateTime StartDate { get; set; }
+
+        public string PhoneNumber { get; set; }
     }
 }

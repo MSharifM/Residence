@@ -386,3 +386,10 @@ textarea {
     margin-top: 3rem;
     margin-bottom: 3rem;
 }
+
+select[data-asp-for] {
+    all: unset;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}

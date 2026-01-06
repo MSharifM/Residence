@@ -14,7 +14,7 @@ namespace CoffeeShop.Areas.UserPanel.Controllers
             _userService = userService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int residenceId)
         {
             var user = await _userService.GetUserByUserNameAsync(User.Identity.Name);
             UserPanelViewModel model = new UserPanelViewModel();
@@ -26,7 +26,13 @@ namespace CoffeeShop.Areas.UserPanel.Controllers
                 LastName = user.LastName,
             };
 
+            model.FutureReserves = await _userService.GetFutureUserReserves(User.Identity.Name);
+            model.LastReserve = await _userService.GetLastUserReserve(User.Identity.Name);
+            model.HostListResidences = await _userService.GetListResidencesNameForHostAsync(User.Identity.Name);
+            model.FutureReservesForHost = await _userService.GetFutureReservesForHostByResidenceIdAsync(residenceId);
+
             ViewData["UserId"] = user.Id;
+            ViewData["ResidenceId"] = residenceId;
             return View(model);
         }
 

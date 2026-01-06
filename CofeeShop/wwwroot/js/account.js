@@ -105,14 +105,7 @@ function loadHostContent(type) {
     switch (type) {
         case "upcoming-res":
             html = `
-                <h2>رزروهای پیش رو</h2>
-                <div class="data-row">
-                    <div>
-                        <strong>آپارتمان لوکس</strong><br>
-                        <small>۳ دی ۱۴۰۴</small>
-                    </div>
-                    <div>+۹۸ ۹۱۲ ۰۰۰ ۰۰۰۰</div>
-                </div>
+
                 <div class="data-row">
                     <div>
                         <strong>آپارتمان لوکس</strong><br>

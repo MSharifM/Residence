@@ -15,162 +15,176 @@
     <link rel="stylesheet" href="~/css/account.css" />
 </head>
 <body>
-<main class="account-container">
-    <!-- Guest Section -->
-    <section id="guest-section" class="section">
-        <div class="grid-layout">
-            <!-- Right Box: User Info -->
-            <div class="info-box">
-                <div class="card">
-                    <h2>اطلاعات کاربری</h2>
+    <main class="account-container">
+        <!-- Guest Section -->
+        <section id="guest-section" class="section">
+            <div class="grid-layout">
+                <!-- Right Box: User Info -->
+                <div class="info-box">
+                    <div class="card">
+                        <h2>اطلاعات کاربری</h2>
                         <form asp-area="UserPanel" asp-controller="Home" asp-action="EditProfile" asp-route-id="@ViewData["UserId"]" method="post" id="user-info-form">
-                        <div class="form-group">
-                            <label>نام کاربری</label>
-                            <input type="text" name="username" value="@Model.InformationViewModel.UserName"/>
-                        </div>
-                        <div class="form-row">
                             <div class="form-group">
-                                <label>نام</label>
-                                <input type="text" name="firstname" value="@Model.InformationViewModel.FirstName"/>
+                                <label>نام کاربری</label>
+                                <input type="text" name="username" value="@Model.InformationViewModel.UserName" />
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>نام</label>
+                                    <input type="text" name="firstname" value="@Model.InformationViewModel.FirstName" />
+                                </div>
+                                <div class="form-group">
+                                    <label>نام خانوادگی</label>
+                                    <input type="text" name="lastname" value="@Model.InformationViewModel.LastName" />
+                                </div>
                             </div>
                             <div class="form-group">
-                                <label>نام خانوادگی</label>
-                                <input type="text" name="lastname" value="@Model.InformationViewModel.LastName"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>شماره موبایل</label>
-                            <input type="tel" name="phone" value="@Model.InformationViewModel.Phone"/>
-                        </div>
-                        <div class="form-group">
-                            <label>رمز عبور فعلی</label>
-                            <input type="password" name="password"/>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>رمز عبور جدید</label>
-                                <input type="password" name="password"/>
+                                <label>شماره موبایل</label>
+                                <input type="tel" name="phone" value="@Model.InformationViewModel.Phone" />
                             </div>
                             <div class="form-group">
-                                <label>تایید رمز عبور</label>
-                                <input type="password" name="confirm_password"/>
+                                <label>رمز عبور فعلی</label>
+                                <input type="password" name="password" />
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>رمز عبور جدید</label>
+                                    <input type="password" name="password" />
+                                </div>
+                                <div class="form-group">
+                                    <label>تایید رمز عبور</label>
+                                    <input type="password" name="confirm_password" />
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-primary w-full">
+                                ذخیره اطلاعات
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <!-- Left Box: Reservations -->
+                <div class="reservations-box">
+                    <div class="card">
+                        <!-- Translated section headings and content -->
+                        <h2>رزروهای پیش رو</h2>
+                        @foreach (var item in Model.FutureReserves)
+                        {
+                            <div id="upcoming-list" class="reservation-list">
+                                <div class="reservation-item">
+                                    <div class="res-info">
+                                        <h3>@item.ResidenceName</h3>
+                                        <p>@item.ResidenceCity • <span class="status-paid">@item.ReserveStatus</span></p>
+                                    </div>
+                                    <div class="res-price">@item.Price تومان</div>
+                                </div>
+                                <p class="res-info-text">تاریخ شروع : @item.StartDate</p>
+                                <p class="res-info-text">تاریخ پایان : @item.EndDate</p>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="card mt-4">
+                        <h2>رزروهای قبلی</h2>
+                        <div id="past-list" class="reservation-list">
+                            <div class="reservation-item past">
+                                <div class="res-info">
+                                    <h3>ویلای ساحلی</h3>
+                                    <p>مازندران</p>
+                                    <p class="res-info-text">تاریخ شروع : 20 مهر 1402</p>
+                                    <p class="res-info-text">تاریخ پایان : 30 مهر 1402</p>
+                                </div>
+                                <button class="btn-outline review-trigger">ثبت نظر</button>
                             </div>
                         </div>
-                        <button type="submit" class="btn-primary w-full">
-                            ذخیره اطلاعات
-                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="upgrade-container">
+                <button id="upgrade-btn" class="btn-secondary">
+                    ارتقا به میزبان
+                </button>
+            </div>
+        </section>
+
+        <!-- Host Section -->
+        <section id="host-section" class="section hidden">
+            <div class="host-header">
+                <div class="host-selector-group">
+                    <form asp-area="UserPanel" asp-controller="Home" asp-action="Index" method="get">
+                        <select name="residenceId" onchange="this.form.submit()">
+                            @foreach (var item in Model.HostListResidences)
+                            {
+                                if (item.ResidenceId == (int)ViewData["ResidenceId"])
+                                {
+                                    <option value="@item.ResidenceId" selected>@item.Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@item.ResidenceId">@item.Name</option>
+                                }
+                            }
+                        </select>
                     </form>
+                    <button id="delete-accommodation" class="btn-danger">حذف</button>
                 </div>
+                <button id="add-accommodation" class="btn-outline">
+                    افزودن اقامتگاه جدید
+                </button>
             </div>
-            <!-- Left Box: Reservations -->
-            <div class="reservations-box">
-                <div class="card">
-                    <!-- Translated section headings and content -->
-                    <h2>رزروهای پیش رو</h2>
-                    <div id="upcoming-list" class="reservation-list">
-                        <div class="reservation-item">
-                            <div class="res-info">
-                                <h3>کلبه کوهستانی</h3>
-                                <p>تهران • <span class="status-paid">پرداخت شده</span></p>
-                            </div>
-                            <div class="res-price">۱۲۰ دلار</div>
-                        </div>
-                        <p class="res-info-text">تاریخ شروع : 20 مهر 1402</p>
-                        <p class="res-info-text">تاریخ پایان : 30 مهر 1402</p>
-                    </div>
-                </div>
 
-                <div class="card mt-4">
-                    <h2>رزروهای قبلی</h2>
-                    <div id="past-list" class="reservation-list">
-                        <div class="reservation-item past">
-                            <div class="res-info">
-                                <h3>ویلای ساحلی</h3>
-                                <p>مازندران</p>
-                                <p class="res-info-text">تاریخ شروع : 20 مهر 1402</p>
-                                <p class="res-info-text">تاریخ پایان : 30 مهر 1402</p>
-                            </div>
-                            <button class="btn-outline review-trigger">ثبت نظر</button>
+            <div class="host-grid">
+                <!-- Accordion Menu -->
+                <div class="host-sidebar">
+                    <div class="accordion">
+                        <div class="accordion-item active" data-target="upcoming-res">
+                            رزروهای پیش رو
+                        </div>
+                        <div class="accordion-item" data-target="completed-res">
+                            رزروهای تکمیل شده
+                        </div>
+                        <div class="accordion-item" data-target="mgmt">
+                            مدیریت اقامتگاه
+                        </div>
+                        <div class="accordion-item" data-target="reviews">
+                            نظرات کاربران
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <div class="upgrade-container">
-            <button id="upgrade-btn" class="btn-secondary">
-                ارتقا به میزبان
-            </button>
-        </div>
-    </section>
-
-    <!-- Host Section -->
-    <section id="host-section" class="section hidden">
-        <div class="host-header">
-            <div class="host-selector-group">
-                <select id="accommodation-select">
-                    <option value="1">آپارتمان لوکس - تهران</option>
-                    <option value="2">خانه جنگلی - گیلان</option>
-                </select>
-                <button id="delete-accommodation" class="btn-danger">حذف</button>
-            </div>
-            <button id="add-accommodation" class="btn-outline">
-                افزودن اقامتگاه جدید
-            </button>
-        </div>
-
-        <div class="host-grid">
-            <!-- Accordion Menu -->
-            <div class="host-sidebar">
-                <div class="accordion">
-                    <div class="accordion-item active" data-target="upcoming-res">
-                        رزروهای پیش رو
-                    </div>
-                    <div class="accordion-item" data-target="completed-res">
-                        رزروهای تکمیل شده
-                    </div>
-                    <div class="accordion-item" data-target="mgmt">
-                        مدیریت اقامتگاه
-                    </div>
-                    <div class="accordion-item" data-target="reviews">
-                        نظرات کاربران
-                    </div>
+                <!-- Content Panel -->
+                <div id="dynamic-content-panel" class="card">
+                    <div class="content-placeholder">یک گزینه از منو انتخاب کنید</div>
                 </div>
             </div>
+        </section>
+    </main>
 
-            <!-- Content Panel -->
-            <div id="dynamic-content-panel" class="card">
-                <div class="content-placeholder">یک گزینه از منو انتخاب کنید</div>
+    <!-- Review Modal -->
+    <div id="review-modal" class="modal hidden">
+        <div class="modal-content card">
+            <h2>ثبت نظر</h2>
+            <div class="form-group">
+                <label>امتیاز</label>
+                <div class="rating-selector">
+                    <span data-value="1">★</span>
+                    <span data-value="2">★</span>
+                    <span data-value="3">★</span>
+                    <span data-value="4">★</span>
+                    <span data-value="5">★</span>
+                </div>
             </div>
-        </div>
-    </section>
-</main>
-
-<!-- Review Modal -->
-<div id="review-modal" class="modal hidden">
-    <div class="modal-content card">
-        <h2>ثبت نظر</h2>
-        <div class="form-group">
-            <label>امتیاز</label>
-            <div class="rating-selector">
-                <span data-value="1">★</span>
-                <span data-value="2">★</span>
-                <span data-value="3">★</span>
-                <span data-value="4">★</span>
-                <span data-value="5">★</span>
+            <div class="form-group">
+                <label>متن نظر شما</label>
+                <textarea id="review-text" rows="4"></textarea>
             </div>
-        </div>
-        <div class="form-group">
-            <label>متن نظر شما</label>
-            <textarea id="review-text" rows="4"></textarea>
-        </div>
-        <div class="modal-actions">
-            <button id="cancel-review" class="btn-outline">انصراف</button>
-            <button id="submit-review-btn" class="btn-primary">ثبت نظر</button>
+            <div class="modal-actions">
+                <button id="cancel-review" class="btn-outline">انصراف</button>
+                <button id="submit-review-btn" class="btn-primary">ثبت نظر</button>
+            </div>
         </div>
     </div>
-</div>
 
-<script src="~/js/account.js"></script>
+    <script src="~/js/account.js"></script>
 </body>
 </html>

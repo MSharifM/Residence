@@ -609,6 +609,70 @@ namespace CoffeeShop.Core.Services
             await _signInManager.RefreshSignInAsync(user);
         }
 
+        public async Task<IEnumerable<ReservesViewModel>> GetFutureUserReserves(string userName)
+        {
+            string query = $"""
+                            select distinct dateofstart as StartDate, dateofend as EndDate,amountpaid as Price,r.situation,residencename, cityname as ResidenceCity
+                            from reservation as r
+                            join client_reserve_comment as crc on r.reservationid = crc.reservationid
+                            join aspnetusers as u on crc.userid = u.id
+                            join residence as re on r.residenceid = re.residenceid
+                            join city as c on re.cityid = c.cityid
+                            where r.dateofstart > current_date() and u.username = '{userName}'
+                            order by StartDate;
+                            """;
+            var result = await _dbContextDapper.QueryAsync<ReservesViewModel>(query);
+            return result;
+        }
+
+        public async Task<ReservesViewModel> GetLastUserReserve(string userName)
+        {
+            string query = $"""
+                            select distinct dateofstart as StartDate, dateofend as EndDate,amountpaid as Price,r.situation,residencename, cityname as ResidenceCity, re.residenceid as ResidenceId
+                            from reservation as r
+                            join client_reserve_comment as crc on r.reservationid = crc.reservationid
+                            join aspnetusers as u on crc.userid = u.id
+                            join residence as re on r.residenceid = re.residenceid
+                            join city as c on re.cityid = c.cityid
+                            where r.dateofstart <= current_date() and u.username = '{userName}'
+                            order by EndDate Desc
+                            limit 1;
+                            """;
+            var result = await _dbContextDapper.QueryAsync<ReservesViewModel>(query);
+            return result.Single();
+        }
+
         #endregion UserPanel
+
+        #region HostPanel
+
+        public async Task<IEnumerable<HostListResidencesViewModel>> GetListResidencesNameForHostAsync(
+            string hostUserName)
+        {
+            string query = $"""
+                            SELECT residencename as Name, residenceid
+                            FROM residence as r
+                            join aspnetusers as u on r.userid = u.id
+                            where u.username = '{hostUserName}'
+                            """;
+            var result = await _dbContextDapper.QueryAsync<HostListResidencesViewModel>(query);
+            return result;
+        }
+
+        public async Task<IEnumerable<FutureReservesForHostViewModel>> GetFutureReservesForHostByResidenceIdAsync(
+            int residenceId)
+        {
+            string query = $"""
+                            select re.ResidenceName, r.DateOfStart as StartDate, aspu.PhoneNumber
+                            from (select * from reservation where residenceid = '{residenceId}' and DateOfStart > current_date()) as r
+                            join residence as re on r.residenceid = re.residenceid
+                            join client_reserve_comment as crc on r.reservationid = crc.reservationid
+                            join aspnetusers as aspu on aspu.id=crc.userid
+                            """;
+            var result = await _dbContextDapper.QueryAsync<FutureReservesForHostViewModel>(query);
+            return result;
+        }
+
+        #endregion HostPanel
     }
 }
