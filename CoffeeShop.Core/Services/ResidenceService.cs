@@ -47,7 +47,7 @@ namespace CoffeeShop.Core.Services
             string query = $"""
                            select CommentDescription , Rate , c.CreateDate as Date , UserName as Name
                            from comments as c natural join client_reserve_comment as crc join aspnetusers as aspu on crc.userId = aspu.Id
-                           where residenceId = {id};
+                           where residenceId = {id} and c.commentstatus = 'Ok';
                            """;
             var result = await _dbContext.QueryAsync<ResidenceCommentsViewModel>(query);
             return result;

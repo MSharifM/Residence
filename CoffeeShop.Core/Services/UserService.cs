@@ -4,8 +4,12 @@ using CoffeeShop.Core.Sender;
 using CoffeeShop.Core.Services.Interfaces;
 using CoffeeShop.DataLayer.Context;
 using CoffeeShop.DataLayer.Entities;
+using Dapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using MySqlConnector;
+using System.Data;
 using System.Security.Claims;
 
 namespace CoffeeShop.Core.Services
@@ -15,12 +19,14 @@ namespace CoffeeShop.Core.Services
         private UserManager<User> _userManager;
         private SignInManager<User> _signInManager;
         private AppDbContext _dbContext;
+        private IDbConnection _dbContextDapper;
 
-        public UserService(AppDbContext dbContext, UserManager<User> userManager, SignInManager<User> signInManager)
+        public UserService(AppDbContext dbContext, UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration)
         {
             _dbContext = dbContext;
             _userManager = userManager;
             _signInManager = signInManager;
+            _dbContextDapper = new MySqlConnection(configuration.GetConnectionString("ResidenceConnection"));
         }
 
         #region Account
@@ -51,7 +57,6 @@ namespace CoffeeShop.Core.Services
                 Email = model.Email,
                 PhoneNumber = model.PhoneNumber1,
                 PhoneNumber2 = model.PhoneNumber2,
-                Sex = model.IsMan,
             };
 
             if (await IsExistEmailAsync(model.Email) || await IsExistUserNameAsync(model.UserName))
@@ -60,11 +65,25 @@ namespace CoffeeShop.Core.Services
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(user, "User"); //TODO: role management
+                if (!string.IsNullOrEmpty(model.AccountNumber)) // Role = Host
+                {
+                    await _userManager.AddToRoleAsync(user, "Host");
+                    await AddHostToDbAsync(user.Id, model.AccountNumber);
+                }
+
                 await SendEmailConfirmationMessageAsync(user, baseUrl);
             }
 
             return result;
+        }
+
+        private async Task AddHostToDbAsync(string userId, string AccountNumber)
+        {
+            string query = $"""
+                           INSERT INTO H_host (UserId, Acc_Number) VALUES
+                           ('{userId}', '{AccountNumber}')
+                           """;
+            var result = await _dbContextDapper.QueryAsync<string>(query);
         }
 
         public bool IsUserSignIn(ClaimsPrincipal user)
@@ -575,37 +594,19 @@ namespace CoffeeShop.Core.Services
             return result;
         }
 
-        public async Task<EditProfileViewModel?> EditProfileAsync(string oldUserName, EditProfileViewModel model)
+        public async Task EditProfileAsync(string userId, UserInformationViewModel model)
         {
-            var user = await GetUserByUserNameAsync(oldUserName);
+            var user = await GetUserByIdAsync(userId);
 
-            if (user == null)
-            {
-                model.Message = "خطا";
-                return model;
-            }
-            if (await _dbContext.Users.AnyAsync(u => u.Email == model.Email && u.Id != user.Id))
-            {
-                model.Message = "خطا: ایمیل تکراری است";
-                return model;
-            }
-
-            user.NormalizedUserName = model.Email.ToUpper();
-            user.UserName = model.Email;
-            if (model.Email != user.Email)
-            {
-                user.Email = model.Email;
-                user.NormalizedEmail = model.Email.ToUpper();
-                user.EmailConfirmed = false;
-                //ToDo send confirm mail
-            }
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            user.PhoneNumber = model.Phone;
+            user.UserName = model.UserName;
+            user.NormalizedUserName = model.UserName.ToUpper().Trim();
             _dbContext.Users.Update(user);
             await _dbContext.SaveChangesAsync();
             //Update session
             await _signInManager.RefreshSignInAsync(user);
-
-            model.Message = "اطلاعات با موفقیت تغییر یافت";
-            return model;
         }
 
         #endregion UserPanel

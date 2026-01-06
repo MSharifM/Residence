@@ -50,9 +50,6 @@ namespace CoffeeShop.Core.DTOs.Account
         [Phone(ErrorMessage = "شماره نامعتبر است")]
         public string? PhoneNumber2 { get; set; }
 
-        [Display(Name = "جنسیت")]
-        public bool IsMan { get; set; }
-
         [Display(Name = " رمزعبور")]
         [MaxLength(300, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد.")]
         [MinLength(6, ErrorMessage = "{0} نمی تواند کمتر از {1} کاراکتر باشد.")]
@@ -65,6 +62,9 @@ namespace CoffeeShop.Core.DTOs.Account
         [Compare("Password", ErrorMessage = "کلمه عبور  با تکرار آن برابر نیست")]
         [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
+
+        [Display(Name = "تکرار رمزعبور")]
+        public string? AccountNumber { get; set; }
     }
 
     public class ForgotPasswordViewModel

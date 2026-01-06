@@ -67,11 +67,12 @@ const userMenuButton = document.getElementById("userMenuButton");
 const userMenuDropdown = document.getElementById("userMenuDropdown");
 const authButtons = document.getElementById("authButtons");
 const userMenuWrapper = document.getElementById("userMenuWrapper");
+const backIsLogin = document.getElementById("isLogin");
 const logoutBtn = document.getElementById("logoutBtn");
 
 // change in backend
-let isLoggedIn = false;
-
+let isLoggedIn = true;
+console.log("kfodjgd", isLoggedIn);
 function updateAuthUI() {
     if (isLoggedIn) {
         // اگر کاربر لاگین کرده

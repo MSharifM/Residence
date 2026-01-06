@@ -6,6 +6,10 @@ public partial class User : IdentityUser
 {
     public DateTime CreateDate { get; set; } = DateTime.Now;
 
+    public string? FirstName { get; set; }
+
+    public string? LastName { get; set; }
+
     public string? PhoneNumber2 { get; set; }
 
     public bool? Sex { get; set; }

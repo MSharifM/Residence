@@ -103,6 +103,8 @@ public partial class AppDbContext : IdentityDbContext<User, IdentityRole, string
                 .HasMaxLength(15)
                 .HasDefaultValueSql("''");
             entity.Property<string>(e => e.UserName).HasMaxLength(256);
+            entity.Property<string>(e => e.FirstName).HasMaxLength(70);
+            entity.Property<string>(e => e.LastName).HasMaxLength(70);
         });
 
         modelBuilder.Entity<City>(entity =>

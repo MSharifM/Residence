@@ -9,73 +9,7 @@
 </head>
 <body class="font-Dana-regular bg-gray-100 dark:bg-zinc-800">
     <!-- HEADER DESCTOP -->
-    <header class="header" id="header">
-        <div class="container">
-            <div class="header-content">
-                <!-- Logo -->
-                <div class="logo">
-                    <h1>اقامت یاب</h1>
-                </div>
-
-                <!-- Desktop Navigation -->
-                <nav class="nav-menu" id="navMenu">
-                    <ul>
-                        <li><a href="#" class="active">خانه</a></li>
-                        <li><a href="#accommodations">اقامتگاه‌ها</a></li>
-                        <li><a href="#about">درباره ما</a></li>
-                        <li><a href="#contact">تماس با ما</a></li>
-                    </ul>
-                </nav>
-
-                <!-- Auth Buttons -->
-                <div class="auth-buttons" id="authButtons">
-                    <a asp-controller="Authentication" class="login-btn">
-                        <svg xmlns="http://www.w3.org/2000/svg"
-                             fill="none"
-                             viewBox="0 0 24 24"
-                             stroke-width="1.5"
-                             stroke="currentColor"
-                             class="login-icone">
-                            <path stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H2.25" />
-                        </svg>
-                        <span class="login-title">ورود | ثبت نام</span>
-                    </a>
-                </div>
-                <!-- login members -->
-                <div class="user-menu-wrapper"
-                     id="userMenuWrapper"
-                     style="display: none">
-                    <button class="user-menu-button" id="userMenuButton">
-                        <span class="user-name">حساب کاربری</span>
-                        <span class="arrow-icon">▼</span>
-                    </button>
-                    <div class="user-menu-dropdown" id="userMenuDropdown">
-                        <a href="#" class="menu-item">
-                            <span>اطلاعات حساب کاربری</span>
-                        </a>
-                        <a href="#" class="menu-item">
-                            <span>سفرهای من</span>
-                        </a>
-                        <a href="#" class="menu-item">
-                            <span>پرسش‌های متداول</span>
-                        </a>
-                        <a href="#" class="menu-item logout-item" id="logoutBtn">
-                            <span>خروج از حساب کاربری</span>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Mobile Menu Toggle -->
-                <button class="mobile-menu-toggle" id="mobileMenuToggle">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-            </div>
-        </div>
-    </header>
+    
     <!-- MAIN -->
     <div>
         <main role="main">
@@ -156,9 +90,9 @@
             </div>
         </div>
     </footer>
-    <script src="/lib/jquery/dist/jquery.min.js"></script>
-    <script src="/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/script.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/script.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

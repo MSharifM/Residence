@@ -14,38 +14,32 @@ namespace CoffeeShop.Areas.UserPanel.Controllers
             _userService = userService;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> EditProfile()
+        public async Task<IActionResult> Index()
         {
             var user = await _userService.GetUserByUserNameAsync(User.Identity.Name);
-            if (user == null)
-                return RedirectToAction("Login", "Account");
-
-            var model = new EditProfileViewModel()
+            UserPanelViewModel model = new UserPanelViewModel();
+            model.InformationViewModel = new UserInformationViewModel()
             {
-                Email = user.Email,
+                UserName = user.UserName,
+                Phone = user.PhoneNumber,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
             };
 
+            ViewData["UserId"] = user.Id;
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditProfile(EditProfileViewModel model)
+        public async Task<IActionResult> EditProfile(string id, UserInformationViewModel model)
         {
             if (!ModelState.IsValid)
-                return View(model);
+                return Redirect($"/Home/Index");
 
-            var result = await _userService.EditProfileAsync(User.Identity.Name, model);
-            if (result == null)
-                return RedirectToAction("Login", "Account");
+            await _userService.EditProfileAsync(id, model);
 
-            return View(result);
+            return Redirect($"/Home/Index");
         }
 
         [HttpGet]

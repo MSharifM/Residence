@@ -95,13 +95,13 @@
          id="account-number-box"
          style="display: none">
         <input type="text"
-               name="account_number"
+               asp-for="AccountNumber"
                autocomplete="off"
                class="form-input"
                id="account-number-input"
                placeholder="شماره حساب"/>
         <!-- alert text -->
-        <span class="alert-text" id="account-number-alert"></span>
+        <span asp-validation-for="AccountNumber" class="alert-text" id="account-number-alert"></span>
     </div>
 
     <button type="submit" class="form-btn">ثبت‌نام</button>

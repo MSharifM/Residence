@@ -10,7 +10,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>اقامت یاب</title>
-    <link rel="stylesheet" href="/css/accommodation.css" />
+    <link rel="stylesheet" href="~/css/accommodation.css" />
 </head>
 <body>
     <!-- HEADER -->
@@ -62,7 +62,7 @@
                               d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
                     </svg>
                 </span>
-                <p class="accommodation-location">@Model.City > @Model.Street > @Model.PostalCode</p>
+                <p class="accommodation-location">@Model.City | @Model.Street | کدپستی: @Model.PostalCode</p>
             </div>
             <div class="hero-meta">
                 <span class="meta-item">ظرفیت: @Model.Capacity نفر</span>
@@ -72,7 +72,8 @@
                 <span class="meta-item">⭐ @Model.Stars (@Model.CountRate نظر)</span>
             </div>
             <div class="price-display">
-                <span class="price-amount">@Model.Price تومان</span>
+                <span class="price-amount">@Model.Price.ToString("000,000") تومان</span>
+                <p id="just-price" hidden="true">@Model.Price</p>
                 <span class="price-label">هر شب</span>
             </div>
         </div>
@@ -257,7 +258,7 @@
                     <div class="booking-box desktop-booking">
                         <h3>رزرو اقامتگاه</h3>
                         <div class="price-header">
-                            <span class="price">@Model.Price تومان</span>
+                            <span class="price">@Model.Price.ToString("000,000") تومان</span>
                             <span class="per-night">/ هر شب</span>
                         </div>
 
@@ -276,7 +277,7 @@
                             <div class="calculation-box">
                                 <div class="calc-row">
                                     <span>قیمت هر شب:</span>
-                                    <span>@Model.Price تومان</span>
+                                    <span>@Model.Price.ToString("000,000") تومان</span>
                                 </div>
                                 <div class="calc-row">
                                     <span>تعداد شب‌ها:</span>

@@ -13,6 +13,7 @@ const slides = document.querySelectorAll(".slide")
 const prevBtn = document.getElementById("prevBtn")
 const nextBtn = document.getElementById("nextBtn")
 const sliderDots = document.getElementById("sliderDots")
+const priceAmount = document.getElementById("just-price")
 
 // DOTS
 slides.forEach((_, index) => {
@@ -57,7 +58,8 @@ if (nextBtn) nextBtn.addEventListener("click", nextSlide)
 // SLIDERS
 setInterval(nextSlide, 3000)
 
-const PRICE_PER_NIGHT = 2500000
+const PRICE_PER_NIGHT = priceAmount.innerHTML
+console.log(PRICE_PER_NIGHT)
 const today = new Date().toISOString().split("T")[0]
 
 const checkInDesktop = document.getElementById("checkIn")

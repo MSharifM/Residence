@@ -11,8 +11,6 @@
 }
 
 <form asp-action="Login" method="post" asp-route-returnUrl="@ViewData["returnUrl"]" class="form login-form active">
-    <span class="alert-text">@ViewData["LoginError"]</span>
-    
     <div class="input-box">
         <input type="text"
                asp-for="Email"
@@ -38,6 +36,7 @@
 
         <!-- alert text -->
         <span asp-validation-for="Password" class="alert-text" id="login-password-alert"></span>
+    <span class="alert-text">@ViewData["LoginError"]</span>
     </div>
 
     <!-- forgot password -->

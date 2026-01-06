@@ -48,7 +48,7 @@ namespace CoffeeShop.Core.Services.Interfaces
 
         Task<IdentityResult> ChangePasswordAsync(ChangePasswordViewModel model);
 
-        Task<EditProfileViewModel?> EditProfileAsync(string oldUserName, EditProfileViewModel model);
+        Task EditProfileAsync(string userId, UserInformationViewModel model);
 
         #endregion UserPanel
     }
