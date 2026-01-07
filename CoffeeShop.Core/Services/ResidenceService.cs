@@ -16,9 +16,26 @@ namespace CoffeeShop.Core.Services
             this._dbContext = new MySqlConnection(configuration.GetConnectionString("ResidenceConnection"));
         }
 
+        #region HomePage
+
         private async Task<IEnumerable<ResidenceBoxDetailViewModel>> GetMostPopularResidenceAsync()
         {
             string query = "Select * from residence_rate order by Stars DESC limit 10";
+            var result = await _dbContext.QueryAsync<ResidenceBoxDetailViewModel>(query);
+            return result;
+        }
+
+        private async Task<IEnumerable<ResidenceBoxDetailViewModel>> GetEspecialResidenceAsync()
+        {
+            string query = $"""
+                            select rr.*
+                            from reservation as r
+                            join residence as re on r.ResidenceId = re.ResidenceId
+                            join residence_rate as rr on r.ResidenceId = rr.ResidenceId
+                            group by(r.ResidenceId)
+                            order by count(r.reservationid) desc
+                            limit 3
+                            """;
             var result = await _dbContext.QueryAsync<ResidenceBoxDetailViewModel>(query);
             return result;
         }
@@ -41,6 +58,19 @@ namespace CoffeeShop.Core.Services
             var result = await _dbContext.QueryAsync<ResidenceBoxDetailViewModel>(query);
             return result;
         }
+
+        public async Task<HomePageViewModel> GetHomePageViewModelsAsync()
+        {
+            HomePageViewModel result = new HomePageViewModel();
+            result.PopularResidencesList = await GetMostPopularResidenceAsync();
+            result.LuxResidencesList = await GetLuxuryResidenceAsync();
+            result.SuggestResidencesList = await GetSuggestedResidenceAsync();
+            result.EspecialResidencesList = await GetEspecialResidenceAsync();
+
+            return result;
+        }
+
+        #endregion HomePage
 
         private async Task<IEnumerable<ResidenceCommentsViewModel>> GetResidenceCommentsAsync(int id)
         {
@@ -113,14 +143,35 @@ namespace CoffeeShop.Core.Services
             return result;
         }
 
-        public async Task<HomePageViewModel> GetHomePageViewModelsAsync()
+        public async Task<AllResidencesViewModel> GetAllResidences(int page = 0)
         {
-            HomePageViewModel result = new HomePageViewModel();
-            result.PopularResidencesList = await GetMostPopularResidenceAsync();
-            result.LuxResidencesList = await GetLuxuryResidenceAsync();
-            result.SuggestResidencesList = await GetSuggestedResidenceAsync();
+            var residences = new AllResidencesViewModel()
+            {
+                ResidenceBoxDetail = await GetAllBoxResidences(page, 3),
+                CountPage = await CountResidencePages(3),
+            };
+            return residences;
+        }
 
+        private async Task<IEnumerable<ResidenceBoxDetailViewModel>> GetAllBoxResidences(int page = 0, int countBoxOnPage = 12)
+        {
+            string query = $"""
+                            SELECT *
+                            FROM residence_rate
+                            LIMIT {countBoxOnPage} OFFSET {countBoxOnPage * page}
+                            """;
+            var result = await _dbContext.QueryAsync<ResidenceBoxDetailViewModel>(query);
             return result;
+        }
+
+        private async Task<int> CountResidencePages(int countBoxOnPage = 12)
+        {
+            string query = $"""
+                            SELECT count(*) as Count
+                            FROM residence_rate
+                            """;
+            var residences = await _dbContext.QueryAsync<int>(query);
+            return (residences.Single() / countBoxOnPage);
         }
     }
 }

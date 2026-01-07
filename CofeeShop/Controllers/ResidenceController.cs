@@ -12,6 +12,14 @@ namespace CoffeeShop.Controllers
             _residenceService = residenceService;
         }
 
+        public async Task<IActionResult> Index(int page = 0)
+        {
+            var model = await _residenceService.GetAllResidences(page);
+
+            ViewData["CurrentPage"] = page;
+            return View(model);
+        }
+
         public async Task<IActionResult> Detail(int id)
         {
             var model = await _residenceService.GetResidenceDetailById(id);

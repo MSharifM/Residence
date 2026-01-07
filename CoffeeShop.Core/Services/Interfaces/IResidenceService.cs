@@ -7,5 +7,7 @@ namespace CoffeeShop.Core.Services.Interfaces
         Task<HomePageViewModel> GetHomePageViewModelsAsync();
 
         Task<ResidenceDetailViewModel> GetResidenceDetailById(int id);
+
+        Task<AllResidencesViewModel> GetAllResidences(int page = 0);
     }
 }

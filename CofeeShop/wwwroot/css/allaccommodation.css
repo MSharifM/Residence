@@ -1,0 +1,495 @@
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "danaRegular", sans-serif;
+    line-height: 1.6;
+    direction: rtl;
+    text-align: right;
+}
+
+/* FONTS */
+@font-face {
+    font-family: "danaRegular";
+    src: url("../fonts/Dana/woff2/DanaFaNum-Regular.woff2");
+}
+
+@font-face {
+    font-family: "danaMedium";
+    src: url("../fonts/Dana/woff2/DanaFaNum-Medium.woff2");
+}
+
+@font-face {
+    font-family: "MorabbaBold";
+    src: url("../fonts/Morabba/woff2/Morabba-Bold.woff2");
+}
+
+@font-face {
+    font-family: "MorabbaMedium";
+    src: url("../fonts/Morabba/woff2/Morabba-Medium.woff2");
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header Styles */
+.header {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 2rem;
+    z-index: 10;
+    border-radius: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+}
+
+.logo h1 {
+    font-size: 24px;
+    color: #bb1819;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+    .logo h1:hover {
+        color: #950900;
+    }
+
+.nav-menu ul {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+}
+
+.nav-menu a {
+    font-family: "danaMedium";
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    position: relative;
+}
+
+    .nav-menu a::after {
+        content: "";
+        position: absolute;
+        bottom: -5px;
+        right: 0;
+        width: 0;
+        height: 2px;
+        background: #bb1819;
+        transition: width 0.3s ease;
+    }
+
+    .nav-menu a:hover::after,
+    .nav-menu a.active::after {
+        width: 100%;
+    }
+
+    .nav-menu a:hover,
+    .nav-menu a.active {
+        color: #bb1819;
+    }
+
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.login-btn {
+    display: flex;
+    text-decoration: none;
+    align-items: center;
+    gap: 5px;
+    color: #bb1819;
+}
+
+.login-icone {
+    width: 2rem;
+    height: 2rem;
+}
+
+.login-title {
+    font-size: 18px;
+}
+
+.login-btn:hover {
+    color: #950900;
+}
+
+.mobile-menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+    .mobile-menu-toggle span {
+        width: 25px;
+        height: 3px;
+        background: #333;
+        border-radius: 3px;
+        transition: all 0.3s ease;
+    }
+
+.input-all {
+    font-family: "danaMedium";
+    width: 250px;
+    padding: 10px 20px;
+    border-radius: 25px;
+    border: 2px solid #bb1819;
+    color: #000;
+    font-size: 14px;
+    font-weight: 500;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+    .input-all::placeholder {
+        color: #aaa;
+        font-weight: 400;
+    }
+
+    .input-all:focus {
+        border-color: #950900;
+        box-shadow: 0 0 8px rgba(187, 24, 25, 0.7);
+    }
+
+/* اگر میخوای آیکون داخل input داشته باشی */
+.input-wrapper {
+    position: relative;
+}
+
+    .input-wrapper i {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #bb1819;
+        font-size: 16px;
+        pointer-events: none;
+    }
+
+/* Section Styles */
+.section-title {
+    margin-top: 3rem;
+    font-size: 32px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.section-subtitle {
+    color: #666;
+    font-size: 16px;
+    margin-bottom: 30px;
+}
+
+/* Accommodations Section */
+.accommodations {
+    padding: 80px 0;
+    background: #f9f9f9;
+}
+
+.accommodations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.accommodation-card {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+    .accommodation-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+.card-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 20px;
+}
+
+.card-title {
+    font-size: 18px;
+    margin-bottom: 8px;
+    color: #333;
+    font-weight: 600;
+}
+
+.card-location {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.card-price {
+    font-size: 18px;
+    font-weight: 700;
+    color: #ff6b6b;
+}
+
+    .card-price span {
+        font-size: 13px;
+        color: #999;
+        font-weight: 400;
+    }
+
+.card-rating {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px;
+    font-size: 18px;
+    color: #666;
+    font-family: "danaMedium", sans-serif;
+}
+
+/* استایل‌های بخش صفحه‌بندی */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 40px;
+    padding-bottom: 40px;
+}
+
+.pagination-btn {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #ddd;
+    background: #fff;
+    color: #333;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "danaMedium", sans-serif;
+    transition: all 0.3s ease;
+}
+
+    .pagination-btn:hover {
+        border-color: #bb1819;
+        color: #bb1819;
+    }
+
+    .pagination-btn.active {
+        background: #bb1819;
+        color: #fff;
+        border-color: #bb1819;
+    }
+
+    .pagination-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+/* Footer Styles */
+.footer {
+    background: #2c3e50;
+    color: #fff;
+    padding: 60px 0 20px;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+.footer-column h3 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.footer-column p {
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.8;
+}
+
+.footer-column ul {
+    list-style: none;
+}
+
+    .footer-column ul li {
+        margin-bottom: 12px;
+    }
+
+        .footer-column ul li a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+            .footer-column ul li a:hover {
+                color: #ff6b6b;
+            }
+
+.social-icons {
+    display: flex;
+    gap: 15px;
+}
+
+.social-icon {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+    .social-icon:hover {
+        transform: translateY(-3px);
+    }
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 30px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Responsive Design */
+@media (max-width: 968px) {
+    .nav-menu {
+        position: fixed;
+        top: 70px;
+        right: -100%;
+        width: 300px;
+        height: calc(100vh - 70px);
+        background: #fff;
+        box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+        transition: right 0.3s ease;
+        padding: 30px;
+    }
+
+        .nav-menu.active {
+            right: 0;
+        }
+
+        .nav-menu ul {
+            flex-direction: column;
+            gap: 20px;
+        }
+
+    .mobile-menu-toggle {
+        display: flex;
+    }
+
+    .auth-buttons {
+        display: none;
+    }
+
+    .search-bar {
+        flex-direction: column;
+    }
+
+    .btn-search {
+        align-self: stretch;
+    }
+
+    .hero-title {
+        font-size: 32px;
+    }
+
+    .hero-subtitle {
+        font-size: 16px;
+    }
+
+    .accommodations-grid,
+    .popular-grid,
+    .recommended-grid,
+    .exclusive-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+}
+
+@media (max-width: 600px) {
+    .hero-title {
+        font-size: 24px;
+    }
+
+    .section-title {
+        font-size: 24px;
+    }
+
+    .accommodations-grid,
+    .popular-grid,
+    .recommended-grid,
+    .exclusive-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+form {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 20px;
+}

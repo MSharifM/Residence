@@ -1,6 +1,4 @@
-﻿using System.Security.AccessControl;
-
-namespace CoffeeShop.Core.DTOs.Residence
+﻿namespace CoffeeShop.Core.DTOs.Residence
 {
     public class HomePageViewModel
     {
@@ -9,6 +7,8 @@ namespace CoffeeShop.Core.DTOs.Residence
         public IEnumerable<ResidenceBoxDetailViewModel>? LuxResidencesList { get; set; } = new List<ResidenceBoxDetailViewModel>();
 
         public IEnumerable<ResidenceBoxDetailViewModel>? SuggestResidencesList { get; set; } = new List<ResidenceBoxDetailViewModel>();
+
+        public IEnumerable<ResidenceBoxDetailViewModel>? EspecialResidencesList { get; set; } = new List<ResidenceBoxDetailViewModel>();
     }
 
     public class ResidenceBoxDetailViewModel
@@ -77,5 +77,12 @@ namespace CoffeeShop.Core.DTOs.Residence
         public string OptionName { get; set; }
 
         public string OptionDescription { get; set; }
+    }
+
+    public class AllResidencesViewModel
+    {
+        public IEnumerable<ResidenceBoxDetailViewModel> ResidenceBoxDetail { get; set; }
+
+        public int CountPage { get; set; }
     }
 }
