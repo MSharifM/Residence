@@ -639,12 +639,32 @@ namespace CoffeeShop.Core.Services
                             limit 1;
                             """;
             var result = await _dbContextDapper.QueryAsync<ReservesViewModel>(query);
-            return result.Single();
+            if (result.Count() != 0)
+                return result.Single();
+            else
+                return new ReservesViewModel();
         }
 
         #endregion UserPanel
 
         #region HostPanel
+
+        public async Task<bool> IsHost(string userName)
+        {
+            string query = $"""
+                            select 1
+                            from aspnetusers as aspu
+                            join h_host as h on aspu.id = h.userid
+                            where aspu.username = '{userName}'
+                            """;
+            var result = await _dbContextDapper.QueryAsync<HostListResidencesViewModel>(query);
+            if (result.Count() == 1)
+            {
+                return true;
+            }
+
+            return false;
+        }
 
         public async Task<IEnumerable<HostListResidencesViewModel>> GetListResidencesNameForHostAsync(
             string hostUserName)

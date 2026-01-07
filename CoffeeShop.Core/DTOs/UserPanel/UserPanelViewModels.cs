@@ -10,7 +10,7 @@ namespace CoffeeShop.Core.DTOs.UserPanel
 
         public ReservesViewModel LastReserve { get; set; }
 
-        public IEnumerable<HostListResidencesViewModel>? HostListResidences { get; set; }
+        public IEnumerable<HostListResidencesViewModel>? HostListResidences { get; set; } = new List<HostListResidencesViewModel>();
     }
 
     public class UserInformationViewModel

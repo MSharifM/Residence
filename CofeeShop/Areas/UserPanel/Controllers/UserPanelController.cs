@@ -28,10 +28,15 @@ namespace CoffeeShop.Areas.UserPanel.Controllers
 
             model.FutureReserves = await _userService.GetFutureUserReserves(User.Identity.Name);
             model.LastReserve = await _userService.GetLastUserReserve(User.Identity.Name);
-            model.HostListResidences = await _userService.GetListResidencesNameForHostAsync(User.Identity.Name);
+
+            var isHost = await _userService.IsHost(User.Identity.Name);
+            if (isHost)
+                model.HostListResidences = await _userService.GetListResidencesNameForHostAsync(User.Identity.Name);
 
             ViewData["UserId"] = user.Id;
             ViewData["ResidenceId"] = residenceId;
+            ViewData["IsHost"] = isHost;
+
             return View(model);
         }
 

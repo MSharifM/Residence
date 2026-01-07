@@ -1,6 +1,3 @@
-// Backend-controlled host state
-let isHost = false;
-
 // DOM Elements
 const guestSection = document.getElementById("guest-section");
 const hostSection = document.getElementById("host-section");
@@ -101,48 +98,71 @@ function showHostView() {
 }
 
 function loadHostContent(type) {
-    let html = "";
+    contentPanel.innerHTML = `<p>در حال بارگذاری...</p>`;
 
-    //ToDo: Manage data
     switch (type) {
         case "upcoming-res":
             fetch('/UserPanel/Home/GetFutureReservesForHost?ResidenceId=' + accommodationId)
                 .then(res => res.json())
-                .then(data => {
-                    console.log(data);
+                .then(futureReserves => {
+                    let html = `<h2>رزروهای پیش رو</h2>`;
+
+                    if (futureReserves && futureReserves.length > 0) {
+                        for (let i = 0; i < futureReserves.length; i++) {
+                            html += `
+                            <div class="data-row">
+                                <div>
+                                    <strong>${futureReserves[i].residenceName}</strong><br>
+                                    <small>${futureReserves[i].startDate}</small>
+                                </div>
+                                <div>${futureReserves[i].phoneNumber}</div>
+                            </div>
+                            `;
+                        }
+                    } else {
+                        html += `<p>هیچ رزرو پیش رویی یافت نشد.</p>`;
+                    }
+
+                    contentPanel.innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('خطا در دریافت رزروهای پیش رو:', error);
+                    contentPanel.innerHTML = `<p>خطا در دریافت اطلاعات</p>`;
                 });
-            html = `
-                <h2>رزروهای پیش رو</h2>
-                <div class="data-row">
-                    <div>
-                        <strong>آپارتمان لوکس</strong><br>
-                        <small>۹ دی ۱۴۰۴</small>
-                    </div>
-                    <div>+۹۸ ۹۱۱ ۱۱۱ ۱۱۱۱</div>
-                </div>
-            `;
             break;
 
         case "completed-res":
             fetch('/UserPanel/Home/GetCompletedReservesForHost?ResidenceId=' + accommodationId)
                 .then(res => res.json())
-                .then(data => {
-                    console.log(data);
+                .then(completedReserves => {
+                    let html = `<h2>رزروهای تکمیل شده</h2>`;
+
+                    if (completedReserves && completedReserves.length > 0) {
+                        for (let i = 0; i < completedReserves.length; i++) {
+                            html += `
+                            <div class="data-row">
+                                <div>
+                                    <strong>${completedReserves[i].residenceName}</strong><br>
+                                    <small>${completedReserves[i].endDate}</small>
+                                </div>
+                                <strong>${completedReserves[i].price}</strong>
+                            </div>
+                            `;
+                        }
+                    } else {
+                        html += `<p>هیچ رزرو تکمیل شده‌ای یافت نشد.</p>`;
+                    }
+
+                    contentPanel.innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('خطا در دریافت رزروهای تکمیل شده:', error);
+                    contentPanel.innerHTML = `<p>خطا در دریافت اطلاعات</p>`;
                 });
-            html = `
-                <h2>رزروهای تکمیل شده</h2>
-                <div class="data-row">
-                    <div>
-                        <strong>خانه جنگلی</strong><br>
-                        <small>۱۸ مهر - ۲۳ مهر ۱۴۰۲</small>
-                    </div>
-                    <strong>۴۵۰ دلار</strong>
-                </div>
-            `;
             break;
 
         case "mgmt":
-            html = `
+            let mgmtHtml = `
                 <h2>مدیریت اقامتگاه</h2>
                 <form id="mgmt-form" class="mt-4">
                     <div class="form-group">
@@ -180,37 +200,40 @@ function loadHostContent(type) {
                     <button type="button" onclick="alert('تغییرات ذخیره شد!')" class="btn-primary">ذخیره تغییرات</button>
                 </form>
             `;
+            contentPanel.innerHTML = mgmtHtml;
             break;
 
         case "reviews":
             fetch('/UserPanel/Home/GetResidenceCommentsForHost?ResidenceId=' + accommodationId)
                 .then(res => res.json())
-                .then(data => {
-                    console.log(data);
+                .then(comments => {
+                    let html = `<h2>نظرات کاربران</h2>`;
+
+                    if (comments && comments.length > 0) {
+                        for (let i = 0; i < comments.length; i++) {
+                            html += `
+                            <div class="review-item">
+                                <div class="review-meta">
+                                    <span>⭐ ${comments[i].rate} • ${comments[i].userName}</span>
+                                    <a href="/Residence/Detail/${accommodationId}">مشاهده صفحه</a>
+                                </div>
+                                <p class="mt-2">${comments[i].description}</p>
+                            </div>
+                            `;
+                        }
+                    } else {
+                        html += `<p>هنوز نظری ثبت نشده است.</p>`;
+                    }
+
+                    contentPanel.innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('خطا در دریافت نظرات:', error);
+                    contentPanel.innerHTML = `<p>خطا در دریافت نظرات</p>`;
                 });
-            html = `
-                <h2>نظرات کاربران</h2>
-                <div class="review-item">
-                    <div class="review-meta">
-                        <span>جان دو • ۵ ستاره</span>
-                        <a href="/accommodation/1">مشاهده صفحه</a>
-                    </div>
-                    <p class="mt-2">جای فوق‌العاده‌ای بود! برای خانواده‌ها پیشنهاد می‌شود.</p>
-                </div>
-                <div class="review-item">
-                    <div class="review-meta">
-                        <span>سارا اسمیت • ۴ ستاره</span>
-                        <a href="/accommodation/1">مشاهده صفحه</a>
-                    </div>
-                    <p class="mt-2">بسیار تمیز و در موقعیت مکانی عالی.</p>
-                </div>
-            `;
             break;
     }
-
-    contentPanel.innerHTML = html;
 }
-
 // Run init
 init();
 

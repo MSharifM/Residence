@@ -58,6 +58,8 @@ namespace CoffeeShop.Core.Services.Interfaces
 
         #region HostPanel
 
+        Task<bool> IsHost(string userName);
+
         Task<IEnumerable<HostListResidencesViewModel>> GetListResidencesNameForHostAsync(string hostUserName);
 
         Task<IEnumerable<ListFutureReservesForHostViewModel>> GetFutureReservesForHostByResidenceIdAsync(int residenceId);

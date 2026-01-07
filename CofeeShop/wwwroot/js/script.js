@@ -1,36 +1,3 @@
-// Function to create accommodation card
-//function createAccommodationCard(data) {
-//    return `
-//        <div class="accommodation-card">
-//            <img src="${data.image}" alt="${data.title}" class="card-image">
-//            <div class="card-content">
-//                <h3 class="card-title">${data.title}</h3>
-//                <p class="card-location">${data.location}</p>
-//                <div class="card-footer">
-//                    <div class="card-price">${data.price} <span>تومان / شب</span></div>
-//                    <div class="card-rating">⭐ ${data.rating}</div>
-//                </div>
-//            </div>
-//        </div>
-//    `;
-//}
-
-// Render all accommodations
-function renderAccommodations() {
-    const accommodationsGrid = document.getElementById("accommodationsGrid");
-    accommodationsGrid.innerHTML = accommodationsData
-        .map((item) => createAccommodationCard(item))
-        .join("");
-}
-
-// Render recommended accommodations
-function renderRecommended() {
-    const recommendedGrid = document.getElementById("recommendedGrid");
-    recommendedGrid.innerHTML = recommendedData
-        .map((item) => createAccommodationCard(item))
-        .join("");
-}
-
 // Mobile menu toggle
 const mobileMenuToggle = document.getElementById("mobileMenuToggle");
 const navMenu = document.getElementById("navMenu");
@@ -67,12 +34,9 @@ const userMenuButton = document.getElementById("userMenuButton");
 const userMenuDropdown = document.getElementById("userMenuDropdown");
 const authButtons = document.getElementById("authButtons");
 const userMenuWrapper = document.getElementById("userMenuWrapper");
-const backIsLogin = document.getElementById("isLogin");
 const logoutBtn = document.getElementById("logoutBtn");
 
-// change in backend
-let isLoggedIn = true;
-console.log("kfodjgd", isLoggedIn);
+console.log(isLoggedIn);
 function updateAuthUI() {
     if (isLoggedIn) {
         // اگر کاربر لاگین کرده
@@ -100,21 +64,8 @@ document.addEventListener("click", (e) => {
     }
 });
 
-if (logoutBtn) {
-    logoutBtn.addEventListener("click", (e) => {
-        e.preventDefault();
-        isLoggedIn = false;
-        updateAuthUI();
-        alert("از حساب کاربری خارج شدید");
-    });
-}
-
 // Initialize on page load
 document.addEventListener("DOMContentLoaded", () => {
-    renderAccommodations();
-    renderPopular();
-    renderRecommended();
-    renderExclusive();
     updateAuthUI();
 });
 
