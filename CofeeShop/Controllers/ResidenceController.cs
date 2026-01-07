@@ -25,5 +25,10 @@ namespace CoffeeShop.Controllers
             var model = await _residenceService.GetResidenceDetailById(id);
             return View(model);
         }
+
+        public async Task<IActionResult> Reservation()
+        {
+            return View();
+        }
     }
 }

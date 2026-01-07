@@ -1,0 +1,561 @@
+/* Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "danaRegular", sans-serif;
+  line-height: 1.6;
+  direction: rtl;
+  text-align: right;
+}
+
+/* FONTS */
+@font-face {
+  font-family: "danaRegular";
+  src: url("../fonts/Dana/woff2/DanaFaNum-Regular.woff2");
+}
+@font-face {
+  font-family: "danaMedium";
+  src: url("../fonts/Dana/woff2/DanaFaNum-Medium.woff2");
+}
+@font-face {
+  font-family: "MorabbaBold";
+  src: url("../fonts/Morabba/woff2/Morabba-Bold.woff2");
+}
+@font-face {
+  font-family: "MorabbaMedium";
+  src: url("../fonts/Morabba/woff2/Morabba-Medium.woff2");
+}
+button {
+  font-family: "MorabbaMedium";
+}
+
+.btn-reserve {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  margin: 1.5rem 0 1rem 0;
+  border-radius: 12px;
+  font-size: 1.2rem;
+  background: linear-gradient(135deg, #dc143c 0%, #8b0000 100%);
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(220, 20, 60, 0.4);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.btn-reserve:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(220, 20, 60, 0.6);
+  background: linear-gradient(135deg, #ff1744 0%, #a00000 100%);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+/* HEADER */
+.header {
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+}
+
+.logo a {
+  text-decoration: none;
+}
+
+.logo h1 {
+  font-family: "danaRegular";
+  font-size: 24px;
+  color: #950900;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.logo h1:hover {
+  color: #bb1819;
+}
+
+.nav-menu ul {
+  display: flex;
+  list-style: none;
+  gap: 30px;
+}
+
+.nav-menu a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.nav-menu a:hover {
+  color: #950900;
+}
+
+.mobile-menu-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.mobile-menu-toggle span {
+  width: 25px;
+  height: 3px;
+  background: #333;
+  border-radius: 3px;
+}
+
+/* Reservation Page Styles */
+.reservation-page {
+  padding: 60px 0;
+  background: #f9f9f9;
+  min-height: 80vh;
+}
+
+.page-title {
+  font-size: 36px;
+  color: #1a1a1a;
+  margin-bottom: 40px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.reservation-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 30px;
+  align-items: flex-start;
+}
+
+/* Right Column - User & Guest Information */
+.reservation-right {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.user-info-section,
+.guest-form-section {
+  background: #fff;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.user-info-section h2,
+.guest-form-section h2 {
+  font-size: 20px;
+  color: #1a1a1a;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.user-info-box {
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  color: #666;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.info-value {
+  color: #1a1a1a;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.btn-add-guest {
+  width: 100%;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  border-radius: 20px;
+}
+
+/* Guest Form Styles */
+.guest-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.form-group input,
+.form-group select {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #ff6b6b;
+  box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+}
+
+.btn-submit-guest {
+  width: 100%;
+  margin-top: 10px;
+}
+.btn-cta {
+  cursor: pointer;
+  font-family: "MorabbaBold";
+  background: #bb1819;
+  color: #fff;
+  padding: 15px 40px;
+  font-size: 16px;
+}
+
+.btn-cta:hover {
+  background: #950900;
+  transform: translateY(-2px);
+}
+
+/* Left Column - Reservation Summary */
+.reservation-left {
+  position: sticky;
+  top: 100px;
+}
+
+.reservation-summary {
+  background: #fff;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f0f0f0;
+}
+
+.reservation-summary h3 {
+  font-size: 20px;
+  color: #1a1a1a;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  font-size: 14px;
+}
+
+.summary-label {
+  color: #666;
+  font-weight: 500;
+}
+
+.summary-value {
+  color: #1a1a1a;
+  font-weight: 600;
+}
+
+.summary-divider {
+  height: 1px;
+  background: #eee;
+  margin: 15px 0;
+}
+
+.summary-item.price-item {
+  padding: 15px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.summary-item.price-item:last-of-type {
+  border-bottom: none;
+}
+
+.summary-item.highlight {
+  background: #fff3cd;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 10px -25px -25px -25px;
+  padding: 15px 25px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.final-price {
+  color: #ff6b6b;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.final-amount {
+  color: #ff6b6b;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .reservation-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .reservation-left {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 28px;
+    margin-bottom: 30px;
+  }
+
+  .reservation-wrapper {
+    gap: 20px;
+  }
+
+  .user-info-section,
+  .guest-form-section,
+  .reservation-summary {
+    padding: 20px;
+  }
+
+  .guest-form {
+    gap: 15px;
+  }
+
+  .summary-item {
+    font-size: 13px;
+  }
+
+  .btn-payment {
+    padding: 12px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-title {
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+
+  .reservation-wrapper {
+    gap: 15px;
+  }
+
+  .user-info-section,
+  .guest-form-section,
+  .reservation-summary {
+    padding: 15px;
+  }
+
+  .info-row,
+  .summary-item {
+    font-size: 12px;
+  }
+
+  .form-group input,
+  .form-group select {
+    padding: 10px;
+    font-size: 13px;
+  }
+}
+
+/* FOOTER */
+.footer {
+  background: #2c3e50;
+  color: #fff;
+  padding: 60px 0 20px;
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.footer-column h3 {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.footer-column p {
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.8;
+}
+
+.footer-column ul {
+  list-style: none;
+}
+
+.footer-column ul li {
+  margin-bottom: 12px;
+}
+
+.footer-column ul li a {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-column ul li a:hover {
+  color: #950900;
+}
+
+.social-icons {
+  display: flex;
+  gap: 15px;
+}
+
+.social-icon {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+  transform: translateY(-3px);
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 30px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.guest-forms-container {
+  margin-top: 2rem;
+}
+
+.guest-form-section {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  animation: slideIn 0.3s ease-out;
+}
+
+.guest-form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.guest-form-header h3 {
+  margin: 0;
+  color: #333;
+  font-size: 1.2rem;
+}
+
+.btn-remove-guest {
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.btn-remove-guest:hover {
+  background: #c82333;
+}
+
+.guest-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.btn-submit-guest {
+  grid-column: 1 / -1;
+  margin-top: 1rem;
+}

@@ -1,0 +1,105 @@
+﻿@{
+    Layout = "_ResidenceLayout";
+}
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>تکمیل رزرو - اقامتگاه یاب</title>
+    <link rel="stylesheet" href="~/css/reservation.css" />
+</head>
+<body>
+    <!-- Header Section -->
+    
+
+    <!-- Reservation Page Content -->
+    <main class="reservation-page">
+        <div class="container">
+            <h1 class="page-title">تکمیل رزرو</h1>
+
+            <div class="reservation-wrapper">
+                <!-- Right Column: User & Guest Information -->
+                <div class="reservation-right">
+                    <!-- Logged-in User Info -->
+                    <div class="user-info-section">
+                        <h2>اطلاعات کاربر</h2>
+                        <div class="user-info-box">
+                            <div class="info-row">
+                                <span class="info-label">نام :</span>
+                                <span class="info-value" id="userFirstName">علی</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">نام خانوادگی :</span>
+                                <span class="info-value" id="userLastName">محمدی</span>
+                            </div>
+                        </div>
+                        <button class="btn-add-guest" id="toggleGuestForm">
+                            افزودن مهمان دیگر
+                        </button>
+                    </div>
+
+                    <!-- Container for guest forms -->
+                    <div class="guest-forms-container" id="guestFormsContainer">
+                        <!-- Guest forms will be added here dynamically -->
+                    </div>
+                </div>
+
+                <!-- Left Column: Reservation Summary -->
+                <aside class="reservation-left">
+                    <div class="reservation-summary">
+                        <h3>خلاصه رزرو</h3>
+
+                        <div class="summary-item">
+                            <span class="summary-label">اقامتگاه:</span>
+                            <span class="summary-value" id="accommodationName">ویلا لوکس شمال</span>
+                        </div>
+
+                        <div class="summary-item">
+                            <span class="summary-label">تاریخ ورود:</span>
+                            <span class="summary-value" id="checkInDate">۱۴۰۳/۱۰/۱۵</span>
+                        </div>
+
+                        <div class="summary-item">
+                            <span class="summary-label">تاریخ خروج:</span>
+                            <span class="summary-value" id="checkOutDate">۱۴۰۳/۱۰/۲۰</span>
+                        </div>
+
+                        <div class="summary-item">
+                            <span class="summary-label">تعداد شب‌ها:</span>
+                            <span class="summary-value" id="numberOfNights">۵</span>
+                        </div>
+
+                        <div class="summary-divider"></div>
+
+                        <div class="summary-item price-item">
+                            <span class="summary-label">قیمت هر شب:</span>
+                            <span class="summary-value" id="pricePerNight">۳,۵۰۰,۰۰۰</span>
+                        </div>
+
+                        <div class="summary-item price-item">
+                            <span class="summary-label">مبلغ کل:</span>
+                            <span class="summary-value final-price" id="totalPrice">۱۷,۵۰۰,۰۰۰</span>
+                        </div>
+
+                        <!-- Guest counter -->
+                        <div class="summary-item"
+                             id="guestCounterContainer"
+                             style="display: none">
+                            <span class="summary-label">تعداد مهمانان:</span>
+                            <span class="summary-value" id="guestCount">۰</span>
+                        </div>
+
+                        <button class="btn-reserve">پرداخت</button>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Section -->
+    
+    <script src="~/js/reservation.js"></script>
+</body>
+</html>

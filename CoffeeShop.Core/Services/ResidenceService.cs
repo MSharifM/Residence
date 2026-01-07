@@ -147,8 +147,8 @@ namespace CoffeeShop.Core.Services
         {
             var residences = new AllResidencesViewModel()
             {
-                ResidenceBoxDetail = await GetAllBoxResidences(page, 3),
-                CountPage = await CountResidencePages(3),
+                ResidenceBoxDetail = await GetAllBoxResidences(page),
+                CountPage = await CountResidencePages(),
             };
             return residences;
         }
@@ -171,7 +171,7 @@ namespace CoffeeShop.Core.Services
                             FROM residence_rate
                             """;
             var residences = await _dbContext.QueryAsync<int>(query);
-            return (residences.Single() / countBoxOnPage);
+            return (int)Math.Ceiling((double)residences.Single() / countBoxOnPage);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿@model ResidenceDetailViewModel
 
 @{
-    Layout = null;
+    Layout = "_ResidenceLayout";
 }
 
 <!DOCTYPE html>
@@ -14,33 +14,6 @@
 </head>
 <body>
     <!-- HEADER -->
-    <header class="header" id="header">
-        <div class="container">
-            <div class="header-content">
-                <!-- Logo -->
-                <div class="logo">
-                    <a href="/index.html"><h1>اقامت یاب</h1></a>
-                </div>
-
-                <!-- NAVIGATION -->
-                <nav class="nav-menu" id="navMenu">
-                    <ul>
-                        <li><a href="/index.html">خانه</a></li>
-                        <li><a href="/index.html#accommodations">اقامتگاه‌ها</a></li>
-                        <li><a href="/index.html#about">درباره ما</a></li>
-                        <li><a href="/index.html#contact">تماس با ما</a></li>
-                    </ul>
-                </nav>
-
-                <!-- MOBILE MENU -->
-                <button class="mobile-menu-toggle" id="mobileMenuToggle">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-            </div>
-        </div>
-    </header>
 
     <!-- ACCOMMODATION -->
     <section class="accommodation-hero">
@@ -302,73 +275,6 @@
     </section>
 
     <!-- FOOTER -->
-    <footer class="footer" id="contact">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h3>درباره ما</h3>
-                    <p>
-                        اقامت یاب بزرگترین پلتفرم رزرو اقامتگاه در ایران است. ما به شما
-                        کمک می‌کنیم بهترین اقامتگاه را برای سفر خود پیدا کنید.
-                    </p>
-                </div>
-
-                <div class="footer-column">
-                    <h3>لینک‌های مفید</h3>
-                    <ul>
-                        <li><a href="#">درباره ما</a></li>
-                        <li><a href="#">تماس با ما</a></li>
-                        <li><a href="#">قوانین و مقررات</a></li>
-                        <li><a href="#">حریم خصوصی</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-column">
-                    <h3>پشتیبانی</h3>
-                    <ul>
-                        <li><a href="#">راهنمای رزرو</a></li>
-                        <li><a href="#">سوالات متداول</a></li>
-                        <li><a href="#">میزبان شوید</a></li>
-                        <li><a href="#">تماس با پشتیبانی</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-column">
-                    <h3>شبکه‌های اجتماعی</h3>
-                    <div class="social-icons">
-                        <a href="instagram.com" class="social-icon">
-                            <img src="~/images/outline-instagram-logo_svgstack_com_4721767299818.svg"
-                                 alt="Instagram"
-                                 width="32"
-                                 height="32" />
-                        </a>
-                        <a href="twitter.com" class="social-icon">
-                            <img src="~/images/outline-x-vector-logo_svgstack_com_5671767299843.svg"
-                                 alt="twitter"
-                                 width="32"
-                                 height="32" />
-                        </a>
-                        <a href="facebook.com" class="social-icon">
-                            <img src="~/images/facebook-icon_svgstack_com_5631767299831.svg"
-                                 alt="facebook"
-                                 width="32"
-                                 height="32" />
-                        </a>
-                        <a href="linkdin.com" class="social-icon">
-                            <img src="~/images/linkedin-logo-icon_svgstack_com_3961767299854.svg"
-                                 alt="Instagram"
-                                 width="32"
-                                 height="32" />
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="footer-bottom">
-                <p>&copy; ۱۴۰۳ اقامت یاب. تمامی حقوق محفوظ است.</p>
-            </div>
-        </div>
-    </footer>
 
     <!-- SCRIPT -->
     <script src="~/js/accommodation.js"></script>
