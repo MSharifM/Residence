@@ -33,13 +33,16 @@
 
                 <!-- Auth Buttons -->
                 <div class="auth-buttons" id="authButtons">
-                    <div class="input-wrapper">
-                        <input class="input-all"
-                               type="text"
-                               autocomplete="off"
-                               placeholder="جستجو" />
-                        <i class="fas fa-search"></i>
-                    </div>
+                    <form asp-action="Index" method="get">
+                        <div class="input-wrapper">
+                            <input class="input-all"
+                                   type="text"
+                                   name="search"
+                                   autocomplete="off"
+                                   placeholder="جستجو" />
+                            <i class="fas fa-search"></i>
+                        </div>
+                    </form>
                 </div>
                 <!-- Mobile Menu Toggle -->
                 <button class="mobile-menu-toggle" id="mobileMenuToggle">
@@ -63,7 +66,7 @@
                 {
                     <button type="submit" name="page" value="@i"
                             class="pagination-btn @(i == int.Parse(ViewData["CurrentPage"].ToString()) ? "active" : "")">
-                        @(i+1)
+                        @(i + 1)
                     </button>
                 }
             </form>

@@ -8,6 +8,6 @@ namespace CoffeeShop.Core.Services.Interfaces
 
         Task<ResidenceDetailViewModel> GetResidenceDetailById(int id);
 
-        Task<AllResidencesViewModel> GetAllResidences(int page = 0);
+        Task<AllResidencesViewModel> GetAllResidences(string? search, int page);
     }
 }

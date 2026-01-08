@@ -12,9 +12,9 @@ namespace CoffeeShop.Controllers
             _residenceService = residenceService;
         }
 
-        public async Task<IActionResult> Index(int page = 0)
+        public async Task<IActionResult> Index(string? search = "", int page = 0)
         {
-            var model = await _residenceService.GetAllResidences(page);
+            var model = await _residenceService.GetAllResidences(search, page);
 
             ViewData["CurrentPage"] = page;
             return View(model);

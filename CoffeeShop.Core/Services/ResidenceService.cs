@@ -149,21 +149,23 @@ namespace CoffeeShop.Core.Services
 
         #region AllResidences
 
-        public async Task<AllResidencesViewModel> GetAllResidences(int page = 0)
+        public async Task<AllResidencesViewModel> GetAllResidences(string? search, int page = 0)
         {
             var residences = new AllResidencesViewModel()
             {
-                ResidenceBoxDetail = await GetAllBoxResidences(page),
+                ResidenceBoxDetail = await GetAllBoxResidences(search, page),
                 CountPage = await CountResidencePages(),
             };
             return residences;
         }
 
-        private async Task<IEnumerable<ResidenceBoxDetailViewModel>> GetAllBoxResidences(int page = 0, int countBoxOnPage = 12)
+        private async Task<IEnumerable<ResidenceBoxDetailViewModel>> GetAllBoxResidences(string? searchName
+            , int page = 0, int countBoxOnPage = 12)
         {
             string query = $"""
                             SELECT *
                             FROM residence_rate
+                            where Name like '%{searchName}%'
                             LIMIT {countBoxOnPage} OFFSET {countBoxOnPage * page}
                             """;
             var result = await _dbContext.QueryAsync<ResidenceBoxDetailViewModel>(query);
