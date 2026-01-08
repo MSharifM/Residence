@@ -1,4 +1,5 @@
-﻿using CoffeeShop.Core.Services.Interfaces;
+﻿using CoffeeShop.Core.DTOs.Residence;
+using CoffeeShop.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CoffeeShop.Controllers
@@ -29,6 +30,19 @@ namespace CoffeeShop.Controllers
         public async Task<IActionResult> Reservation(DateTime startDate, DateTime endDate, string residenceId)
         {
             return View();
+        }
+
+        public async Task<IActionResult> GetResidenceDetailForHost(int residenceId)
+        {
+            var result = await _residenceService.GetResidenceDetailForHost(residenceId);
+            return Json(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditResidenceDetail(ResidenceDetailForHostPanelViewModel model, int residenceId)
+        {
+            await _residenceService.UpdateResidenceDetail(model, residenceId);
+            return RedirectToAction("Index", "/UserPanel");
         }
     }
 }

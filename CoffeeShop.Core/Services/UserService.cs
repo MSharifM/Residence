@@ -11,7 +11,6 @@ using Microsoft.Extensions.Configuration;
 using MySqlConnector;
 using System.Data;
 using System.Security.Claims;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace CoffeeShop.Core.Services
 {

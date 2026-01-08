@@ -163,45 +163,53 @@ function loadHostContent(type) {
             break;
 
         case "mgmt":
-            let mgmtHtml = `
+            fetch('/Residence/GetResidenceDetailForHost?ResidenceId=' + accommodationId)
+                .then(res => res.json())
+                .then(residenceDetial => {
+                    console.log(residenceDetial)
+                    let mgmtHtml = `
                 <h2>مدیریت اقامتگاه</h2>
-                <form id="mgmt-form" class="mt-4">
+                <form action="/Residence/EditResidenceDetail?residenceId=${accommodationId}" method="post" id="mgmt-form" class="mt-4">
                     <div class="form-group">
                         <label>نام</label>
-                        <input type="text" value="آپارتمان لوکس">
+                        <input type="text" value="${residenceDetial.name}" name="Name">
                     </div>
                     <div class="form-group">
                         <label>آدرس</label>
-                        <input type="text" value="تهران، میدان ونک">
+                        <input type="text" value="${residenceDetial.street}" name="Street">
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label>شهر</label>
-                            <input type="text" value="تهران">
+                            <label>کد پستی</label>
+                            <input type="number" value="${residenceDetial.postalCode}" name="PostalCode">
                         </div>
                         <div class="form-group">
                             <label>قیمت هر شب</label>
-                            <input type="number" value="150">
+                            <input type="number" value="${residenceDetial.price}" name="Price">
                         </div>
                     </div>
                     <div class="form-group">
                         <label>توضیحات</label>
-                        <textarea rows="3">یک آپارتمان مدرن و زیبا در قلب شهر.</textarea>
+                        <textarea rows="3" name="Description">${residenceDetial.description}</textarea>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label>وضعیت</label>
-                            <select><option>فعال</option><option>پیش‌نویس</option></select>
-                        </div>
+                    <select name="Status">
+                        <option value="true" ${residenceDetial.status === true ? 'selected' : ''}>فعال</option>
+                        <option value="false" ${residenceDetial.status === false ? 'selected' : ''}>غیرفعال</option>
+                    </select>
+                    </div>
                         <div class="form-group">
                             <label>ظرفیت</label>
-                            <input type="number" value="4">
+                            <input type="number" name="Capacity" value="${residenceDetial.capacity}">
                         </div>
                     </div>
-                    <button type="button" onclick="alert('تغییرات ذخیره شد!')" class="btn-primary">ذخیره تغییرات</button>
+                    <button type="submit" class="btn-primary">ذخیره تغییرات</button>
                 </form>
             `;
-            contentPanel.innerHTML = mgmtHtml;
+                    contentPanel.innerHTML = mgmtHtml;
+                });
             break;
 
         case "reviews":
@@ -237,7 +245,3 @@ function loadHostContent(type) {
 }
 // Run init
 init();
-
-{
-    /* <a href="/accommodation/1">مشاهده صفحه</a> */
-}

@@ -145,6 +145,36 @@ namespace CoffeeShop.Core.Services
             return result;
         }
 
+        public async Task<ResidenceDetailForHostPanelViewModel> GetResidenceDetailForHost(int residenceId)
+        {
+            string query = $"""
+                            select residencename as Name, Street, PostalCode, Price, description, Capacity, CASE
+                               WHEN Situation = 'active' THEN 1
+                               ELSE 0
+                            END AS Status
+                            from residence
+                            where residenceid = {residenceId};
+                            """;
+            var result = await _dbContext.QuerySingleAsync<ResidenceDetailForHostPanelViewModel>(query);
+            return result;
+        }
+
+        public async Task UpdateResidenceDetail(ResidenceDetailForHostPanelViewModel model, int residenceId)
+        {
+            int isActive = 2; // index 2 => inactive in mysql
+            if (model.Status)
+                isActive = 1; // index 1 => active in mysql
+
+            string query = $"""
+                            UPDATE `residencedb`.`residence`
+                            SET `residencename` = '{model.Name}', postalcode='{model.PostalCode}',
+                            street='{model.Street}',description='{model.Description}',situation={isActive},
+                            price='{model.Price}',capacity={model.Capacity}
+                            WHERE (`ResidenceId` = '{residenceId}');
+                            """;
+            await _dbContext.ExecuteAsync(query);
+        }
+
         #endregion ResidenceDetail
 
         #region AllResidences

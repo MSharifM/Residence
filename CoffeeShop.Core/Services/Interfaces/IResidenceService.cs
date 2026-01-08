@@ -9,5 +9,9 @@ namespace CoffeeShop.Core.Services.Interfaces
         Task<ResidenceDetailViewModel> GetResidenceDetailById(int id);
 
         Task<AllResidencesViewModel> GetAllResidences(string? search, int page);
+
+        Task<ResidenceDetailForHostPanelViewModel> GetResidenceDetailForHost(int residenceId);
+
+        Task UpdateResidenceDetail(ResidenceDetailForHostPanelViewModel model, int residenceId);
     }
 }
