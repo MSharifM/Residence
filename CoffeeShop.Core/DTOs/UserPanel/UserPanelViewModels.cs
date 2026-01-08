@@ -11,6 +11,8 @@ namespace CoffeeShop.Core.DTOs.UserPanel
         public ReservesViewModel LastReserve { get; set; }
 
         public IEnumerable<HostListResidencesViewModel>? HostListResidences { get; set; } = new List<HostListResidencesViewModel>();
+
+        public AddCommentViewModel Comment { get; set; }
     }
 
     public class UserInformationViewModel
@@ -51,6 +53,8 @@ namespace CoffeeShop.Core.DTOs.UserPanel
 
     public class ReservesViewModel
     {
+        public int ResidenceId { get; set; }
+
         public string ResidenceName { get; set; }
 
         public string ResidenceCity { get; set; }
@@ -71,6 +75,15 @@ namespace CoffeeShop.Core.DTOs.UserPanel
         Approved,
         Cancelled,
         InStay,
+    }
+
+    public class AddCommentViewModel
+    {
+        [Range(0, 5, ErrorMessage = "امتیاز باید بین 0 تا 5 باشد.")]
+        public int Rate { get; set; }
+
+        [MaxLength(500)]
+        public string Description { get; set; }
     }
 
     #region HostPanel

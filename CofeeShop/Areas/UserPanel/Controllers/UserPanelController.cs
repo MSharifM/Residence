@@ -14,7 +14,7 @@ namespace CoffeeShop.Areas.UserPanel.Controllers
             _userService = userService;
         }
 
-        public async Task<IActionResult> Index(int residenceId)
+        public async Task<IActionResult> Index(int residenceId = 0)
         {
             var user = await _userService.GetUserByUserNameAsync(User.Identity.Name);
             UserPanelViewModel model = new UserPanelViewModel();
@@ -28,6 +28,7 @@ namespace CoffeeShop.Areas.UserPanel.Controllers
 
             model.FutureReserves = await _userService.GetFutureUserReserves(User.Identity.Name);
             model.LastReserve = await _userService.GetLastUserReserve(User.Identity.Name);
+            model.Comment = new AddCommentViewModel(); //Prevent null error
 
             var isHost = await _userService.IsHost(User.Identity.Name);
             if (isHost)
@@ -52,6 +53,18 @@ namespace CoffeeShop.Areas.UserPanel.Controllers
             return Redirect($"/Home/Index");
         }
 
+        [HttpPost]
+        public async Task<IActionResult> AddComment(AddCommentViewModel model, int residenceId, string userId)
+        {
+            if (!ModelState.IsValid)
+                return RedirectToAction("Index");
+            var result = await _userService.AddCommentForResidence(model, residenceId, userId);
+
+            return RedirectToAction("Index");
+        }
+
+        #region HostPanel
+
         //ToDo: Manage security
         [HttpGet]
         public async Task<IActionResult> GetFutureReservesForHost(int residenceId)
@@ -73,6 +86,8 @@ namespace CoffeeShop.Areas.UserPanel.Controllers
             var reserves = await _userService.GetResidenceCommentsForHostByResidenceIdAsync(residenceId);
             return Json(reserves);
         }
+
+        #endregion HostPanel
 
         [HttpGet]
         public IActionResult ChangePassword()

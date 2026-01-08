@@ -54,6 +54,8 @@ namespace CoffeeShop.Core.Services.Interfaces
 
         Task<ReservesViewModel> GetLastUserReserve(string userName);
 
+        Task<bool> AddCommentForResidence(AddCommentViewModel model, int residenceId, string userId);
+
         #endregion UserPanel
 
         #region HostPanel

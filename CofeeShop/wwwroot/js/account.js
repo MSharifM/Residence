@@ -59,7 +59,8 @@ function setupEventListeners() {
     document.getElementById("submit-review-btn").addEventListener("click", () => {
         const text = document.getElementById("review-text").value;
         const rating = reviewModal.dataset.rating || 0;
-
+        const inputRate = document.getElementById("rateInput");
+        inputRate.value = rating;
         console.log("Submitting review:", { text, rating });
         alert("از نظر شما سپاسگزاریم!");
         reviewModal.classList.add("hidden");

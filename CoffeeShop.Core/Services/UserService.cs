@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using MySqlConnector;
 using System.Data;
 using System.Security.Claims;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace CoffeeShop.Core.Services
 {
@@ -643,6 +644,46 @@ namespace CoffeeShop.Core.Services
                 return result.Single();
             else
                 return new ReservesViewModel();
+        }
+
+        public async Task<bool> AddCommentForResidence(AddCommentViewModel model, int residenceId, string userId)
+        {
+            try
+            {
+                string query = @"
+                                INSERT INTO Comments (CommentDescription, ResidenceId, Rate, CreateDate, CommentStatus)
+                                VALUES (@Description, @ResidenceId, @Rate, @CreateDate, 'Ok');
+                                SELECT LAST_INSERT_ID();
+                               ";
+
+                var commentId = await _dbContextDapper.QuerySingleAsync<int>(query, new
+                {
+                    Description = model.Description,
+                    ResidenceId = residenceId,
+                    Rate = model.Rate,
+                    CreateDate = DateTime.Now
+                });
+
+                string queryInsertToClientReserveComment = @"
+                            INSERT INTO Admins_comment (UserID, CommentId) VALUES (@AdminId, @CommentId);
+                            INSERT INTO Client_Reserve_Comment (UserID, CommentId, ReservationId) VALUES (@UserId, @CommentId, @ResidenceId);
+                            ";
+
+                await _dbContextDapper.ExecuteAsync(queryInsertToClientReserveComment, new
+                {
+                    AdminId = 11,
+                    UserId = userId,
+                    CommentId = commentId,
+                    ResidenceId = residenceId
+                });
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return false;
+            }
+
+            return true;
         }
 
         #endregion UserPanel

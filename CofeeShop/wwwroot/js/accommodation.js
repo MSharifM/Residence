@@ -150,15 +150,6 @@ function handleReservation() {
     const checkOutDate = new Date(checkOut)
     const nights = Math.ceil((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24))
     const total = nights * PRICE_PER_NIGHT
-
-    alert(
-        `رزرو شما با موفقیت ثبت شد!\n\n` +
-        `تاریخ ورود: ${checkIn}\n` +
-        `تاریخ خروج: ${checkOut}\n` +
-        `تعداد شب‌ها: ${nights}\n` +
-        `قیمت کل: ${total.toLocaleString("fa-IR")} تومان\n\n` +
-        `تمام`,
-    )
 }
 // NOTACTIVE ACCOMMODATION
 function updateReserveButton() {

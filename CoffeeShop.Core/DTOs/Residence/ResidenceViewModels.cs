@@ -85,4 +85,51 @@
 
         public int CountPage { get; set; }
     }
+
+    public class ReserveDraftViewModel
+    {
+        public ReserveDraftViewModel()
+        {
+            CountNights = DateTime.Compare(EndDate, StartDate);
+        }
+
+        public DateTime StartDate { get; set; }
+
+        public DateTime EndDate { get; set; }
+
+        public int ResidenceId { get; set; }
+
+        public int CountNights { get; set; }
+    }
+
+    public class ReserveResidenceViewModel
+    {
+        public ReserveResidenceViewModel()
+        {
+            Price = PricePerDay * this.ReserveDraft.CountNights;
+        }
+
+        public string ResidenceName { get; set; }
+
+        public decimal PricePerDay { get; set; }
+
+        public decimal Price { get; set; }
+
+        public ReserveDraftViewModel ReserveDraft { get; set; }
+
+        public IEnumerable<ClientListViewModel> Clients { get; set; }
+    }
+
+    public class ClientListViewModel
+    {
+        public string FistName { get; set; }
+
+        public string LastName { get; set; }
+
+        public DateTime BirthDate { get; set; }
+
+        public bool IsMan { get; set; }
+
+        public string Pin { get; set; }
+    }
 }

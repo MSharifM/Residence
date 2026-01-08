@@ -72,6 +72,8 @@ namespace CoffeeShop.Core.Services
 
         #endregion HomePage
 
+        #region ResidenceDetail
+
         private async Task<IEnumerable<ResidenceCommentsViewModel>> GetResidenceCommentsAsync(int id)
         {
             string query = $"""
@@ -143,6 +145,10 @@ namespace CoffeeShop.Core.Services
             return result;
         }
 
+        #endregion ResidenceDetail
+
+        #region AllResidences
+
         public async Task<AllResidencesViewModel> GetAllResidences(int page = 0)
         {
             var residences = new AllResidencesViewModel()
@@ -173,5 +179,29 @@ namespace CoffeeShop.Core.Services
             var residences = await _dbContext.QueryAsync<int>(query);
             return (int)Math.Ceiling((double)residences.Single() / countBoxOnPage);
         }
+
+        #endregion AllResidences
+
+        #region Reservation
+
+        private async Task<IEnumerable<ClientListViewModel>> GetAllClientListForUser(string userName)
+        {
+            string query = $"""
+
+                            """;
+            var result = await _dbContext.QueryAsync<ClientListViewModel>(query);
+            return result;
+        }
+
+        private async Task<IEnumerable<ClientListViewModel>> GetResidenceDetailForReserveListForUser(string userName)
+        {
+            string query = $"""
+
+                            """;
+            var result = await _dbContext.QueryAsync<ClientListViewModel>(query);
+            return result;
+        }
+
+        #endregion Reservation
     }
 }

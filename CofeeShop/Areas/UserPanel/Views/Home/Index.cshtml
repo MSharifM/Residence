@@ -88,10 +88,10 @@
                         <div id="past-list" class="reservation-list">
                             <div class="reservation-item past">
                                 <div class="res-info">
-                                    <h3>ویلای ساحلی</h3>
-                                    <p>مازندران</p>
-                                    <p class="res-info-text">تاریخ شروع : 20 مهر 1402</p>
-                                    <p class="res-info-text">تاریخ پایان : 30 مهر 1402</p>
+                                    <h3>@Model.LastReserve.ResidenceName</h3>
+                                    <p>@Model.LastReserve.ResidenceCity</p>
+                                    <p class="res-info-text"> @Model.LastReserve.StartDate : 20 مهر 1402</p>
+                                    <p class="res-info-text"> @Model.LastReserve.EndDate : 30 مهر 1402</p>
                                 </div>
                                 <button class="btn-outline review-trigger">ثبت نظر</button>
                             </div>
@@ -161,29 +161,34 @@
     </main>
 
     <!-- Review Modal -->
-    <div id="review-modal" class="modal hidden">
-        <div class="modal-content card">
-            <h2>ثبت نظر</h2>
-            <div class="form-group">
-                <label>امتیاز</label>
-                <div class="rating-selector">
-                    <span data-value="1">★</span>
-                    <span data-value="2">★</span>
-                    <span data-value="3">★</span>
-                    <span data-value="4">★</span>
-                    <span data-value="5">★</span>
+    <form asp-controller="Home" asp-action="AddComment"
+          asp-route-residenceId="@Model.LastReserve.ResidenceId"
+          asp-route-userId="@ViewData["UserId"]" method="post">
+        <div id="review-modal" class="modal hidden">
+            <div class="modal-content card">
+                <h2>ثبت نظر</h2>
+                <div class="form-group">
+                    <label>امتیاز</label>
+                    <div class="rating-selector">
+                        <span data-value="1">★</span>
+                        <span data-value="2">★</span>
+                        <span data-value="3">★</span>
+                        <span data-value="4">★</span>
+                        <span data-value="5">★</span>
+                    </div>
+                    <input type="hidden" name="rate" id="rateInput" />
+                </div>
+                <div class="form-group">
+                    <label>متن نظر شما</label>
+                    <textarea name="description" id="review-text" rows="4"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button id="cancel-review" class="btn-outline">انصراف</button>
+                    <button type="submit" id="submit-review-btn" class="btn-primary">ثبت نظر</button>
                 </div>
             </div>
-            <div class="form-group">
-                <label>متن نظر شما</label>
-                <textarea id="review-text" rows="4"></textarea>
-            </div>
-            <div class="modal-actions">
-                <button id="cancel-review" class="btn-outline">انصراف</button>
-                <button id="submit-review-btn" class="btn-primary">ثبت نظر</button>
-            </div>
         </div>
-    </div>
+    </form>
 
     <script>
         let isHost = @(ViewData["IsHost"].ToString().ToLower());

@@ -26,7 +26,7 @@ namespace CoffeeShop.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> Reservation()
+        public async Task<IActionResult> Reservation(DateTime startDate, DateTime endDate, string residenceId)
         {
             return View();
         }
