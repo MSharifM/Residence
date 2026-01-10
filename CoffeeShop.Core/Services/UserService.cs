@@ -584,17 +584,13 @@ namespace CoffeeShop.Core.Services
 
         #region UserPanel
 
-        public async Task<IdentityResult> ChangePasswordAsync(ChangePasswordViewModel model)
+        private async Task<bool> ChangePasswordAsync(ChangePasswordViewModel model, User user)
         {
-            var user = await GetUserByUserNameAsync(model.UserName);
-            if (user is null)
-                return IdentityResult.Failed(new IdentityError { Description = "کاربر یافت نشد" });
-
             var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
-            return result;
+            return result.Succeeded;
         }
 
-        public async Task EditProfileAsync(string userId, UserInformationViewModel model)
+        public async Task<bool> EditProfileAsync(string userId, UserInformationViewModel model)
         {
             var user = await GetUserByIdAsync(userId);
 
@@ -605,8 +601,24 @@ namespace CoffeeShop.Core.Services
             user.NormalizedUserName = model.UserName.ToUpper().Trim();
             _dbContext.Users.Update(user);
             await _dbContext.SaveChangesAsync();
+
             //Update session
             await _signInManager.RefreshSignInAsync(user);
+
+            if (model.ChangePassword != null)
+            {
+                if (!string.IsNullOrEmpty(model.ChangePassword.NewPassword) ||
+                    !string.IsNullOrEmpty(model.ChangePassword.OldPassword) ||
+                    !string.IsNullOrEmpty(model.ChangePassword.RePassword))
+                {
+                    if (await ChangePasswordAsync(model.ChangePassword, user))
+                        return true;
+
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public async Task<IEnumerable<ReservesViewModel>> GetFutureUserReserves(string userName)

@@ -25,6 +25,7 @@ namespace CoffeeShop.Areas.UserPanel.Controllers
                     Phone = user.PhoneNumber,
                     FirstName = user.FirstName,
                     LastName = user.LastName,
+                    ChangePassword = new ChangePasswordViewModel(),
                 },
                 FutureReserves = await _userService.GetFutureUserReserves(User.Identity.Name),
                 LastReserve = await _userService.GetLastUserReserve(User.Identity.Name),
@@ -44,14 +45,20 @@ namespace CoffeeShop.Areas.UserPanel.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditProfile(string id, UserInformationViewModel model)
+        public async Task<IActionResult> EditProfile(string id, UserInformationViewModel model, ChangePasswordViewModel changePassword)
         {
             if (!ModelState.IsValid)
                 return Redirect($"/Home/Index");
 
-            await _userService.EditProfileAsync(id, model);
+            model.ChangePassword = changePassword;
+            var passwordChangeSucceeded = await _userService.EditProfileAsync(id, model);
+            if (passwordChangeSucceeded)
+                return Redirect($"/Home/Index");
 
-            return Redirect($"/Home/Index");
+            //TODO: Set error
+            ViewData["Error"] = "تغییر رمز موفق نبود. دوباره تلاش کنید" +
+                                "رمز فعلی اشتباه وارد شده";
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -92,29 +99,6 @@ namespace CoffeeShop.Areas.UserPanel.Controllers
         }
 
         #endregion HostPanel
-
-        [HttpGet]
-        public IActionResult ChangePassword()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
-        {
-            model.UserName = User.Identity.Name;
-
-            if (!ModelState.IsValid)
-                return View(model);
-
-            var result = await _userService.ChangePasswordAsync(model);
-            if (result.Succeeded)
-                ViewData["isChanged"] = true;
-            else
-                ModelState.AddModelError("", "رمزعبور فعلی اشتباه است");
-
-            return View(model);
-        }
 
         public async Task<IActionResult> MyStrips()
         {
