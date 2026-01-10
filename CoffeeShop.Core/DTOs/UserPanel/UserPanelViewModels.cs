@@ -123,4 +123,19 @@ namespace CoffeeShop.Core.DTOs.UserPanel
     }
 
     #endregion HostPanel
+
+    public class StripListViewModel
+    {
+        public int ResidenceId { get; set; }
+
+        public string ResidenceName { get; set; }
+
+        public string City { get; set; }
+
+        public DateTime StartDate { get; set; }
+
+        public DateTime EndDate { get; set; }
+
+        public decimal Price { get; set; }
+    }
 }

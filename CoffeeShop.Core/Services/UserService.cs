@@ -759,5 +759,18 @@ namespace CoffeeShop.Core.Services
         }
 
         #endregion HostPanel
+
+        public async Task<IEnumerable<StripListViewModel>> GetUserStrips(string userName)
+        {
+            var userId = (await GetUserByUserNameAsync(userName)).Id;
+
+            //TODO: Write the query
+            string query = $"""
+
+                            """;
+
+            var result = await _dbContextDapper.QueryAsync<StripListViewModel>(query);
+            return result;
+        }
     }
 }

@@ -111,5 +111,33 @@ namespace CoffeeShop.Areas.UserPanel.Controllers
 
             return View(model);
         }
+
+        public async Task<IActionResult> MyStrips()
+        {
+            //var models = await _userService.GetUserStrips(User.Identity.Name);
+
+            var models = new List<StripListViewModel>();
+            //{
+            //    new StripListViewModel()
+            //    {
+            //    EndDate = DateTime.Now,
+            //    StartDate = DateTime.Now,
+            //    Price = 32456754,
+            //    City = "zahedan",
+            //    ResidenceId = 1,
+            //    ResidenceName = "ahsnas",
+            //    },
+            //    new StripListViewModel()
+            //    {
+            //        EndDate = DateTime.Now,
+            //        StartDate = DateTime.Now,
+            //        Price = 32456754,
+            //        City = "zahedan",
+            //        ResidenceId = 1,
+            //        ResidenceName = "ahsnas",
+            //    }
+            //};
+            return View(models);
+        }
     }
 }

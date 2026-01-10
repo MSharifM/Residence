@@ -1,0 +1,505 @@
+/* Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "danaRegular", sans-serif;
+  line-height: 1.6;
+  direction: rtl;
+  text-align: right;
+}
+
+/* FONTS */
+@font-face {
+  font-family: "danaRegular";
+  src: url("../fonts/Dana/woff2/DanaFaNum-Regular.woff2");
+}
+@font-face {
+  font-family: "danaMedium";
+  src: url("../fonts/Dana/woff2/DanaFaNum-Medium.woff2");
+}
+@font-face {
+  font-family: "MorabbaBold";
+  src: url("../fonts/Morabba/woff2/Morabba-Bold.woff2");
+}
+@font-face {
+  font-family: "MorabbaMedium";
+  src: url("../fonts/Morabba/woff2/Morabba-Medium.woff2");
+}
+button {
+  font-family: "MorabbaMedium";
+  font-size: 0.8rem;
+}
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+/* HEADER */
+.header {
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+:root {
+  --primary-color: #e51e54;
+  --primary-hover: #c41947;
+  --secondary-color: #222222;
+  --bg-color: #f7f7f7;
+  --card-bg: #ffffff;
+  --border-color: #dddddd;
+  --text-main: #222222;
+  --text-muted: #717171;
+  --danger: #ff4444;
+}
+.btn-primary {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 14px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover);
+}
+
+.btn-secondary {
+  background: var(--secondary-color);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--secondary-color);
+  color: var(--secondary-color);
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+}
+
+.logo a {
+  text-decoration: none;
+}
+
+.logo h1 {
+  font-family: "danaRegular";
+  font-size: 24px;
+  color: #950900;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.logo h1:hover {
+  color: #bb1819;
+}
+
+.nav-menu ul {
+  display: flex;
+  list-style: none;
+  gap: 30px;
+}
+
+.nav-menu a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.nav-menu a:hover {
+  color: #950900;
+}
+
+.mobile-menu-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.mobile-menu-toggle span {
+  width: 25px;
+  height: 3px;
+  background: #333;
+  border-radius: 3px;
+}
+.trips-section {
+  padding: 80px 0;
+  background: #f9f9f9;
+  min-height: calc(100vh - 200px);
+}
+
+.trips-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.trips-title {
+  font-size: 36px;
+  color: #333;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.trips-subtitle {
+  font-size: 16px;
+  color: #666;
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  width: 90%;
+  max-width: 500px;
+}
+
+.rating-selector {
+  display: flex;
+  gap: 8px;
+  font-size: 1.5rem;
+  color: var(--border-color);
+  cursor: pointer;
+}
+
+.rating-selector span.active {
+  color: #f1c40f;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-start;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+/* Trips Container */
+.trips-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Helpers */
+.hidden {
+  display: none !important;
+}
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+/* Forms */
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+input,
+select,
+textarea {
+  font-family: "danaMedium";
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+/* Trip Row Card */
+.trip-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 150px;
+  gap: 20px;
+  align-items: center;
+}
+
+.trip-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.trip-info-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.trip-info-label {
+  font-size: 12px;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.trip-accommodation-name {
+  font-size: 18px;
+  color: #333;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.trip-location {
+  font-size: 14px;
+  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.trip-dates {
+  font-size: 15px;
+  color: #333;
+  font-weight: 500;
+}
+
+.trip-date-icon {
+  color: #ff6b6b;
+  margin-right: 5px;
+}
+
+.trip-amount {
+  display: flex;
+  justify-content: start;
+  gap: 5px;
+  align-items: center;
+}
+
+.trip-amount-value {
+  font-size: 20px;
+  color: #ff6b6b;
+  font-weight: 700;
+}
+
+.trip-amount-label {
+  font-size: 12px;
+  color: #999;
+  margin-top: 4px;
+}
+
+.trip-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-review {
+  padding: 0.8rem 1rem;
+  margin: 1.5rem 0 1rem 0;
+  border-radius: 12px;
+  font-size: 1.2rem;
+  background: linear-gradient(135deg, #dc143c 0%, #8b0000 100%);
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(220, 20, 60, 0.4);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.btn-review:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(220, 20, 60, 0.6);
+  background: linear-gradient(135deg, #ff1744 0%, #a00000 100%);
+}
+
+.btn-review:active {
+  transform: translateY(0);
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 80px 20px;
+  background: #fff;
+  border-radius: 12px;
+}
+
+.empty-icon {
+  font-size: 64px;
+  margin-bottom: 20px;
+}
+
+.empty-state h2 {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.empty-state p {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 30px;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .trip-card {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .trip-accommodation-name {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .trips-section {
+    padding: 40px 0;
+  }
+
+  .trips-title {
+    font-size: 28px;
+  }
+
+  .trip-card {
+    grid-template-columns: 1fr;
+    padding: 20px;
+    gap: 15px;
+  }
+
+  .trip-accommodation-name {
+    grid-column: 1;
+    font-size: 16px;
+  }
+
+  .trip-actions {
+    justify-content: stretch;
+  }
+
+  .btn-review {
+    width: 100%;
+  }
+}
+
+/* FOOTER */
+.footer {
+  background: #2c3e50;
+  color: #fff;
+  padding: 60px 0 20px;
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.footer-column h3 {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.footer-column p {
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.8;
+}
+
+.footer-column ul {
+  list-style: none;
+}
+
+.footer-column ul li {
+  margin-bottom: 12px;
+}
+
+.footer-column ul li a {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-column ul li a:hover {
+  color: #950900;
+}
+
+.social-icons {
+  display: flex;
+  gap: 15px;
+}
+
+.social-icon {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+  transform: translateY(-3px);
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 30px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.6);
+}

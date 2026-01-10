@@ -1,0 +1,108 @@
+﻿@model IEnumerable<StripListViewModel>
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>سفرهای من - اقامتگاه یاب</title>
+    <link rel="stylesheet" href="~/css/mystrip.css" />
+</head>
+<body>
+    <!-- Header Section -->
+    <!-- Trips Section -->
+    <section class="trips-section">
+
+        <div class="container">
+
+            <div class="trips-header">
+                <h1 class="trips-title">سفرهای من</h1>
+                <p class="trips-subtitle">لیست تمام سفرهای قبلی شما</p>
+            </div>
+
+            <div class="trips-container" id="tripsContainer">
+                @* TODO: Edit this condition *@
+                @if (!Model.Any())
+                {
+                    <!-- Empty State -->
+                    <div class="empty-state" id="emptyState">
+                        <div class="empty-icon">✈️</div>
+                        <h2>هنوز سفری انجام نداده‌اید</h2>
+                        <p>برای رزرو اقامتگاه و شروع سفر خود اینجا کلیک کنید</p>
+                        <a asp-area="" asp-controller="Residence" asp-action="Index" class="btn btn-primary">کشف اقامتگاه‌ها</a>
+                    </div>
+                }
+                else
+                {
+                    @foreach (var item in Model)
+                    {
+                        <!-- Trips Container -->
+                        <div class="trip-card">
+                            <div class="trip-info-group">
+                                <span class="trip-info-label">اقامتگاه</span>
+                                <h3 class="trip-accommodation-name">@item.ResidenceName</h3>
+                                <div class="trip-location">
+                                    <span>@item.City</span>
+                                </div>
+                            </div>
+
+                            <div class="trip-info-group">
+                                <span class="trip-info-label">تاریخ ورود</span>
+                                <div class="trip-dates">@item.StartDate</div>
+                            </div>
+
+                            <div class="trip-info-group">
+                                <span class="trip-info-label">تاریخ خروج</span>
+                                <div class="trip-dates">@item.EndDate</div>
+                            </div>
+
+                            <div class="trip-info-group">
+                                <span class="trip-info-label">مبلغ پرداختی</span>
+                                <div class="trip-amount">
+                                    <span class="trip-amount-value">@item.Price</span>
+                                    <span class="trip-amount-label">تومان</span>
+                                </div>
+                            </div>
+
+                            <div class="trip-actions">
+                                <button class="btn-outline review-trigger" data-trip-id="0">
+                                    نوشتن نظر
+                                </button>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- Review Modal -->
+    <div id="review-modal" class="modal hidden">
+        <div class="modal-content card">
+            <h2>ثبت نظر</h2>
+            <div class="form-group">
+                <label>امتیاز</label>
+                <div class="rating-selector">
+                    <span data-value="1">★</span>
+                    <span data-value="2">★</span>
+                    <span data-value="3">★</span>
+                    <span data-value="4">★</span>
+                    <span data-value="5">★</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>متن نظر شما</label>
+                <textarea id="review-text" rows="4"></textarea>
+            </div>
+            <div class="modal-actions">
+                <button id="cancel-review" class="btn-outline">انصراف</button>
+                <button id="submit-review-btn" class="btn-primary">ثبت نظر</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+
+    <script src="~/js/mystrip.js"></script>
+</body>
+</html>
