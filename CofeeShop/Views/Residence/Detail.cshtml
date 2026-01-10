@@ -227,51 +227,6 @@
                 </div>
 
                 <!-- BOX RESERVE -->
-                @* <form asp-controller="Residence" asp-action="Reservation"> *@
-                @*     <div class="booking-column"> *@
-                @*         <div class="booking-box desktop-booking"> *@
-                @*             <h3>رزرو اقامتگاه</h3> *@
-                @*             <div class="price-header"> *@
-                @*                 <span class="price">@Model.Price.ToString("000,000") تومان</span> *@
-                @*                 <span class="per-night">/ هر شب</span> *@
-                @*             </div> *@
-
-                @*             <div class="booking-form"> *@
-                @*                 <div class="date-row"> *@
-                @*                     <div class="input-group"> *@
-                @*                         <label>تاریخ ورود</label> *@
-                @*                         <input type="date" id="checkIn" class="date-input" /> *@
-                @*                     </div> *@
-                @*                     <div class="input-group"> *@
-                @*                         <label>تاریخ خروج</label> *@
-                @*                         <input type="date" id="checkOut" class="date-input" /> *@
-                @*                     </div> *@
-                @*                 </div> *@
-
-                @*                 <div class="calculation-box"> *@
-                @*                     <div class="calc-row"> *@
-                @*                         <span>قیمت هر شب:</span> *@
-                @*                         <span>@Model.Price.ToString("000,000") تومان</span> *@
-                @*                     </div> *@
-                @*                     <div class="calc-row"> *@
-                @*                         <span>تعداد شب‌ها:</span> *@
-                @*                         <span class="nights-value" id="nights">-</span> *@
-                @*                     </div> *@
-                @*                     <div class="divider"></div> *@
-                @*                     <div class="calc-row total"> *@
-                @*                         <span>قیمت کل:</span> *@
-                @*                         <span class="total-value" id="total">-</span> *@
-                @*                     </div> *@
-                @*                 </div> *@
-
-                @*                 <button class="btn-reserve" onclick="handleReservation()"> *@
-                @*                     رزرو قطعی *@
-                @*                 </button> *@
-                @*                 <p class="note">هنوز پرداختی انجام نمی‌شود</p> *@
-                @*             </div> *@
-                @*         </div> *@
-                @*     </div> *@
-                @* </form> *@
                 <form asp-controller="Residence" asp-action="Reservation" method="get">
                     <div class="booking-column">
                         <div class="booking-box desktop-booking">
@@ -295,9 +250,6 @@
 
                                 <input type="hidden" name="residenceId" value="@Model.ResidenceId" />
 
-                                <!-- تعداد شب‌ها را هم hidden بفرست -->
-                                <input type="hidden" id="nights" name="countDays" />
-
                                 <div class="calculation-box">
                                     <div class="calc-row">
                                         <span>قیمت هر شب:</span>
@@ -314,7 +266,7 @@
                                     </div>
                                 </div>
 
-                                <button type="submit" class="btn-reserve">
+                                <button type="submit" class="btn-reserve" onclick="handleReservation()">
                                     رزرو قطعی
                                 </button>
                                 <p class="note">هنوز پرداختی انجام نمی‌شود</p>
@@ -322,7 +274,6 @@
                         </div>
                     </div>
                 </form>
-
             </div>
         </div>
     </section>

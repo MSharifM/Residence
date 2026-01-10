@@ -13,5 +13,10 @@ namespace CoffeeShop.Core.Services.Interfaces
         Task<ResidenceDetailForHostPanelViewModel> GetResidenceDetailForHost(int residenceId);
 
         Task UpdateResidenceDetail(ResidenceDetailForHostPanelViewModel model, int residenceId);
+
+        Task<ReserveResidenceViewModel> GetDetailForReserve(int residenceId, string userName,
+            DateTime startDate, DateTime endDate);
+
+        Task<bool> ReserveSubmitAsync(ReserveResidenceViewModel model, int residenceId, string userId);
     }
 }

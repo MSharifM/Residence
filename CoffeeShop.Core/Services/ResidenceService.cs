@@ -216,22 +216,113 @@ namespace CoffeeShop.Core.Services
 
         #region Reservation
 
-        private async Task<IEnumerable<ClientListViewModel>> GetAllClientListForUser(string userName)
+        private async Task<List<ClientListViewModel>> GetAllClientListForReserve(string userName)
         {
             string query = $"""
-
+                            select PIN, c.FirstName, c.LastName, BirthDate, c.sex as IsMan
+                            from (select * from aspnetusers where username = 'hassandsn') as u
+                            join clientlist as c on u.id = c.userid;
                             """;
             var result = await _dbContext.QueryAsync<ClientListViewModel>(query);
+            return result.ToList();
+        }
+
+        private async Task<Tuple<string, decimal>> GetResidenceDetailForReserve(int residenceId)
+        {
+            string query = $"""
+                            select ResidenceName, price as PricePerDay
+                            from residence as r
+                            where residenceid = '{residenceId}'
+                            """;
+            var result = await _dbContext.QuerySingleAsync(query);
+            return new Tuple<string, decimal>(result.ResidenceName, result.PricePerDay);
+        }
+
+        public async Task<ReserveResidenceViewModel> GetDetailForReserve(int residenceId, string userName,
+            DateTime startDate, DateTime endDate)
+        {
+            var residence = await GetResidenceDetailForReserve(residenceId);
+            var result = new ReserveResidenceViewModel
+            (
+                residence.Item1,
+                residence.Item2,
+                new ReserveDraftViewModel(startDate, endDate),
+                await GetAllClientListForReserve(userName)
+            );
+
             return result;
         }
 
-        private async Task<IEnumerable<ClientListViewModel>> GetResidenceDetailForReserveListForUser(string userName)
+        private async Task<int> InsertIntoPayment(decimal price)
         {
-            string query = $"""
+            string query = @"
+                            INSERT INTO Payment (CreateDate, Price)
+                            VALUES (@CreateDate, @Price);
+                            SELECT LAST_INSERT_ID();
+                            ";
 
-                            """;
-            var result = await _dbContext.QueryAsync<ClientListViewModel>(query);
-            return result;
+            var paymentId = await _dbContext.QuerySingleAsync<int>(query, new
+            {
+                CreateDate = DateTime.Now,
+                Price = price,
+            });
+
+            return paymentId;
+        }
+
+        private async Task<int> InsertIntoReserve(ReserveResidenceViewModel model, int paymentId, int residenceId)
+        {
+            string query = @"
+                            INSERT INTO Reservation (ResidenceId, PayId, DateOfStart, DateOfEnd
+                                , NumberOfGuest, AmountPaid, Situation)
+                            VALUES (@ResidenceId, @PayId, @DateOfStart, @DateOfEnd, @NumberOfGuest,
+                                    @AmountPaid, 'approved');
+                            SELECT LAST_INSERT_ID();
+                           ";
+
+            var reserveId = await _dbContext.QuerySingleAsync<int>(query, new
+            {
+                ResidenceId = residenceId,
+                PayId = paymentId,
+                DateOfStart = model.ReserveDraft.StartDate,
+                DateOfEnd = model.ReserveDraft.EndDate,
+                NumberOfGuest = model.Clients.Count(),
+                AmountPaid = model.Price
+            });
+
+            return reserveId;
+        }
+
+        private async Task InsertIntoClientReserveComment(string userId, int reservationId)
+        {
+            string query = @"
+                            INSERT INTO Reservation (UserID, CommentId)
+                            VALUES (@UserID, @CommentId);
+                           ";
+
+            await _dbContext.QuerySingleAsync<int>(query, new
+            {
+                UserID = userId,
+                CommentId = reservationId,
+            });
+        }
+
+        public async Task<bool> ReserveSubmitAsync(ReserveResidenceViewModel model, int residenceId, string userId)
+        {
+            try
+            {
+                int paymentId = await InsertIntoPayment(model.Price);
+                int reserveId = await InsertIntoReserve(model, paymentId, residenceId);
+                await InsertIntoClientReserveComment(userId, reserveId);
+                // TODO: Add new clients to db
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return false;
+            }
         }
 
         #endregion Reservation

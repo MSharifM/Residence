@@ -1,4 +1,6 @@
-﻿namespace CoffeeShop.Core.DTOs.Residence
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CoffeeShop.Core.DTOs.Residence
 {
     public class HomePageViewModel
     {
@@ -88,9 +90,11 @@
 
     public class ReserveDraftViewModel
     {
-        public ReserveDraftViewModel()
+        public ReserveDraftViewModel(DateTime startDate, DateTime endDate)
         {
-            CountNights = DateTime.Compare(EndDate, StartDate);
+            StartDate = startDate;
+            EndDate = endDate;
+            CountNights = (EndDate - StartDate).Days;
         }
 
         public DateTime StartDate { get; set; }
@@ -104,9 +108,14 @@
 
     public class ReserveResidenceViewModel
     {
-        public ReserveResidenceViewModel()
+        public ReserveResidenceViewModel(string residenceName, decimal pricePerDay,
+               ReserveDraftViewModel reserveDraft, List<ClientListViewModel> clients)
         {
-            Price = PricePerDay * this.ReserveDraft.CountNights;
+            this.ResidenceName = residenceName;
+            this.PricePerDay = pricePerDay;
+            this.ReserveDraft = reserveDraft;
+            this.Clients = clients;
+            this.Price = PricePerDay * this.ReserveDraft.CountNights;
         }
 
         public string ResidenceName { get; set; }
@@ -117,19 +126,28 @@
 
         public ReserveDraftViewModel ReserveDraft { get; set; }
 
-        public IEnumerable<ClientListViewModel> Clients { get; set; }
+        public List<ClientListViewModel> Clients { get; set; }
     }
 
     public class ClientListViewModel
     {
-        public string FistName { get; set; }
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید.")]
+        [MaxLength(30, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد.")]
+        public string FirstName { get; set; }
 
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید.")]
+        [MaxLength(30, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد.")]
         public string LastName { get; set; }
 
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید.")]
+        [DataType(DataType.DateTime)]
         public DateTime BirthDate { get; set; }
 
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید.")]
         public bool IsMan { get; set; }
 
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید.")]
+        [DataType(DataType.PostalCode)]
         public string Pin { get; set; }
     }
 

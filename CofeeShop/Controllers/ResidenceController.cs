@@ -7,10 +7,12 @@ namespace CoffeeShop.Controllers
     public class ResidenceController : Controller
     {
         private readonly IResidenceService _residenceService;
+        private readonly IUserService _userService;
 
-        public ResidenceController(IResidenceService residenceService)
+        public ResidenceController(IResidenceService residenceService, IUserService userService)
         {
             _residenceService = residenceService;
+            _userService = userService;
         }
 
         public async Task<IActionResult> Index(string? search = "", int page = 0)
@@ -27,9 +29,30 @@ namespace CoffeeShop.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> Reservation(DateTime startDate, DateTime endDate, string residenceId)
+        [HttpGet]
+        public async Task<IActionResult> Reservation(DateTime startDate, DateTime endDate, int residenceId)
         {
-            return View();
+            var model = await _residenceService.GetDetailForReserve(residenceId, User.Identity.Name, startDate, endDate);
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Reservation(ReserveResidenceViewModel model, int residenceId)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            string userId = (await _userService.GetUserByUserNameAsync(User.Identity.Name)).Id;
+
+            var succeeded = await _residenceService.ReserveSubmitAsync(model, residenceId, userId);
+
+            if (succeeded)
+                return RedirectToAction("Index", "/UserPanel");
+            else
+            {
+                ViewData["Error"] = "این تاریخ از قبل رزرو شده است";
+                return View(model);
+            }
         }
 
         public async Task<IActionResult> GetResidenceDetailForHost(int residenceId)

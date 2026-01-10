@@ -1,4 +1,6 @@
-﻿@{
+﻿@model ReserveResidenceViewModel
+
+@{
     Layout = "_ResidenceLayout";
 }
 
@@ -12,8 +14,6 @@
 </head>
 <body>
     <!-- Header Section -->
-    
-
     <!-- Reservation Page Content -->
     <main class="reservation-page">
         <div class="container">
@@ -27,12 +27,8 @@
                         <h2>اطلاعات کاربر</h2>
                         <div class="user-info-box">
                             <div class="info-row">
-                                <span class="info-label">نام :</span>
-                                <span class="info-value" id="userFirstName">علی</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">نام خانوادگی :</span>
-                                <span class="info-value" id="userLastName">محمدی</span>
+                                <span class="info-label">نام کاربری :</span>
+                                <span class="info-value" id="userFirstName">@User.Identity.Name</span>
                             </div>
                         </div>
                         <button class="btn-add-guest" id="toggleGuestForm">
@@ -42,6 +38,66 @@
 
                     <!-- Container for guest forms -->
                     <div class="guest-forms-container" id="guestFormsContainer">
+                        <form id="guestFormsContainer">
+                            <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                            @for (int i = 0; i < Model.Clients.Count(); i++)
+                            {
+                                <div class="guest-form-section" id="guestForm_@(i + 1)">
+                                    <div class="guest-form-header">
+                                        <h3>مهمان @(i + 1)</h3>
+                                        <button type="button" class="btn-remove-guest" data-form-id="@(i + 1)">× حذف</button>
+                                    </div>
+                                    <div class="guest-form" id="form_guestForm_@(i + 1)">
+                                        <div class="form-group">
+                                            <label for="guestFirstName_@(i + 1)">نام مهمان</label>
+                                            <input type="text"
+                                                   id="guestFirstName_@(i + 1)"
+                                                   placeholder="نام را وارد کنید"
+                                                   required
+                                                   asp-for="Clients[i].FirstName"/>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="guestLastName_@(i + 1)">نام خانوادگی مهمان</label>
+                                            <input type="text"
+                                                   id="guestLastName_@(i + 1)"
+                                                   placeholder="نام خانوادگی را وارد کنید"
+                                                   required
+                                                   asp-for="Clients[i].LastName"/>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="guestBirthDate_@(i + 1)">تاریخ تولد</label>
+                                            <input type="date" id="guestBirthDate_@(i + 1)" asp-for="Clients[i].BirthDate"/>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="guestGender_@(i + 1)">جنسیت</label>
+                                            <select asp-for="Clients[i].IsMan" id="guestGender_@(i + 1)" required>
+                                                @*TODO: Edit this value*@
+                                                <option>مرد</option>
+                                                <option>زن</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="guestNationalId_@(i + 1)">کد ملی</label>
+                                            <input type="text"
+
+                                                   placeholder="شماره ملی را وارد کنید"
+                                                   id="guestNationalId_@(i + 1)"
+                                                   asp-for="Clients[i].Pin"/>
+                                        </div>
+                                        <span asp-validation-for="Clients[i].Pin"></span>
+
+                                        <button type="submit" class="btn btn-primary btn-submit-guest btn-reserve">
+                                            ذخیره اطلاعات مهمان
+                                        </button>
+                                    </div>
+                                </div>
+                            }
+                        </form>
+
                         <!-- Guest forms will be added here dynamically -->
                     </div>
                 </div>
@@ -53,34 +109,34 @@
 
                         <div class="summary-item">
                             <span class="summary-label">اقامتگاه:</span>
-                            <span class="summary-value" id="accommodationName">ویلا لوکس شمال</span>
+                            <span class="summary-value" id="accommodationName">@Model.ResidenceName</span>
                         </div>
 
                         <div class="summary-item">
                             <span class="summary-label">تاریخ ورود:</span>
-                            <span class="summary-value" id="checkInDate">۱۴۰۳/۱۰/۱۵</span>
+                            <span class="summary-value" id="checkInDate">@Model.ReserveDraft.StartDate</span>
                         </div>
 
                         <div class="summary-item">
                             <span class="summary-label">تاریخ خروج:</span>
-                            <span class="summary-value" id="checkOutDate">۱۴۰۳/۱۰/۲۰</span>
+                            <span class="summary-value" id="checkOutDate">@Model.ReserveDraft.EndDate</span>
                         </div>
 
                         <div class="summary-item">
                             <span class="summary-label">تعداد شب‌ها:</span>
-                            <span class="summary-value" id="numberOfNights">۵</span>
+                            <span class="summary-value" id="numberOfNights">@Model.ReserveDraft.CountNights</span>
                         </div>
 
                         <div class="summary-divider"></div>
 
                         <div class="summary-item price-item">
                             <span class="summary-label">قیمت هر شب:</span>
-                            <span class="summary-value" id="pricePerNight">۳,۵۰۰,۰۰۰</span>
+                            <span class="summary-value">@Model.PricePerDay.ToString("000,000")</span>
                         </div>
 
                         <div class="summary-item price-item">
                             <span class="summary-label">مبلغ کل:</span>
-                            <span class="summary-value final-price" id="totalPrice">۱۷,۵۰۰,۰۰۰</span>
+                            <span class="summary-value final-price">@Model.Price.ToString("000,000")</span>
                         </div>
 
                         <!-- Guest counter -->
@@ -88,7 +144,7 @@
                              id="guestCounterContainer"
                              style="display: none">
                             <span class="summary-label">تعداد مهمانان:</span>
-                            <span class="summary-value" id="guestCount">۰</span>
+                            <span class="summary-value" id="guestCount">@Model.Clients.Count()</span>
                         </div>
 
                         <button class="btn-reserve">پرداخت</button>
@@ -99,6 +155,18 @@
     </main>
 
     <!-- Footer Section -->
-    <script src="~/js/reservation.js"></script>
+    <script>
+        const countGuest = @Model.Clients.Count();
+    </script>
+    @* <script src="~/js/reservation.js"></script> *@
+
+    @section Scripts {
+        <script src="~/js/reservation.js"></script> 
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        @{
+            // await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
 </body>
 </html>
