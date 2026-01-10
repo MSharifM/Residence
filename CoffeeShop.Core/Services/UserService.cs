@@ -770,6 +770,7 @@ namespace CoffeeShop.Core.Services
                             """;
 
             var result = await _dbContextDapper.QueryAsync<StripListViewModel>(query);
+
             return result;
         }
     }

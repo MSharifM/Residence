@@ -17,18 +17,19 @@ namespace CoffeeShop.Areas.UserPanel.Controllers
         public async Task<IActionResult> Index(int residenceId = 0)
         {
             var user = await _userService.GetUserByUserNameAsync(User.Identity.Name);
-            UserPanelViewModel model = new UserPanelViewModel();
-            model.InformationViewModel = new UserInformationViewModel()
+            UserPanelViewModel model = new UserPanelViewModel()
             {
-                UserName = user.UserName,
-                Phone = user.PhoneNumber,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
+                InformationViewModel = new UserInformationViewModel()
+                {
+                    UserName = user.UserName,
+                    Phone = user.PhoneNumber,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                },
+                FutureReserves = await _userService.GetFutureUserReserves(User.Identity.Name),
+                LastReserve = await _userService.GetLastUserReserve(User.Identity.Name),
+                Comment = new AddCommentViewModel(), //Prevent null error
             };
-
-            model.FutureReserves = await _userService.GetFutureUserReserves(User.Identity.Name);
-            model.LastReserve = await _userService.GetLastUserReserve(User.Identity.Name);
-            model.Comment = new AddCommentViewModel(); //Prevent null error
 
             var isHost = await _userService.IsHost(User.Identity.Name);
             if (isHost)
@@ -57,10 +58,13 @@ namespace CoffeeShop.Areas.UserPanel.Controllers
         public async Task<IActionResult> AddComment(AddCommentViewModel model, int residenceId, string userId)
         {
             if (!ModelState.IsValid)
-                return RedirectToAction("Index");
+                return RedirectToAction("MyStrips");
             var result = await _userService.AddCommentForResidence(model, residenceId, userId);
 
-            return RedirectToAction("Index");
+            if (result)
+                return RedirectToAction("Index");
+            else
+                return RedirectToAction("MyStrips");
         }
 
         #region HostPanel
@@ -114,29 +118,10 @@ namespace CoffeeShop.Areas.UserPanel.Controllers
 
         public async Task<IActionResult> MyStrips()
         {
-            //var models = await _userService.GetUserStrips(User.Identity.Name);
+            var models = await _userService.GetUserStrips(User.Identity.Name);
 
-            var models = new List<StripListViewModel>();
-            //{
-            //    new StripListViewModel()
-            //    {
-            //    EndDate = DateTime.Now,
-            //    StartDate = DateTime.Now,
-            //    Price = 32456754,
-            //    City = "zahedan",
-            //    ResidenceId = 1,
-            //    ResidenceName = "ahsnas",
-            //    },
-            //    new StripListViewModel()
-            //    {
-            //        EndDate = DateTime.Now,
-            //        StartDate = DateTime.Now,
-            //        Price = 32456754,
-            //        City = "zahedan",
-            //        ResidenceId = 1,
-            //        ResidenceName = "ahsnas",
-            //    }
-            //};
+            ViewData["UserId"] = (await _userService.GetUserByUserNameAsync(User.Identity.Name)).Id;
+
             return View(models);
         }
     }

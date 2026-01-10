@@ -3,7 +3,6 @@ function setupReviewModal() {
     const reviewModal = document.getElementById("review-modal");
     const ratingSpans = document.querySelectorAll(".rating-selector span");
     const reviewText = document.getElementById("review-text");
-    let activeTripId = null;
 
     // باز کردن مودال
     document.addEventListener("click", (e) => {
@@ -23,33 +22,24 @@ function setupReviewModal() {
         reviewModal.classList.add("hidden");
     });
 
-    // انتخاب امتیاز
+    // Rating Selector
     ratingSpans.forEach((span) => {
-        span.addEventListener("click", () => {
-            const value = Number(span.dataset.value);
-            reviewModal.dataset.rating = value;
-
-            ratingSpans.forEach((s, i) => {
-                s.classList.toggle("active", i < value);
+        span.addEventListener("click", function () {
+            const val = Number.parseInt(this.dataset.value);
+            ratingSpans.forEach((s, idx) => {
+                s.classList.toggle("active", idx < val);
             });
+            reviewModal.dataset.rating = val;
         });
     });
 
-    // ثبت نظر
+    // Submit Review
     document.getElementById("submit-review-btn").addEventListener("click", () => {
         const rating = reviewModal.dataset.rating || 0;
-        const text = reviewText.value.trim();
+        const inputRate = document.getElementById("rateInput");
+        inputRate.value = rating;
 
-        const trip = tripsData.find((t) => t.id == activeTripId);
-
-        console.log("Submitting review:", {
-            tripId: activeTripId,
-            accommodation: trip?.accommodationName,
-            rating,
-            text,
-        });
-
-        alert(`نظر شما برای «${trip.accommodationName}» ثبت شد 🌟`);
+        alert("از نظر شما سپاسگزاریم!");
         reviewModal.classList.add("hidden");
     });
 }

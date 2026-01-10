@@ -21,7 +21,6 @@
             </div>
 
             <div class="trips-container" id="tripsContainer">
-                @* TODO: Edit this condition *@
                 @if (!Model.Any())
                 {
                     <!-- Empty State -->
@@ -70,36 +69,41 @@
                                 </button>
                             </div>
                         </div>
+
+                        <!-- Review Modal -->
+                        <form asp-controller="Home" asp-action="AddComment"
+                              asp-route-residenceId="@item.ResidenceId"
+                              asp-route-userId="@ViewData["UserId"]" method="post">
+                            <div id="review-modal" class="modal hidden">
+                                <div class="modal-content card">
+                                    <h2>ثبت نظر</h2>
+                                    <div class="form-group">
+                                        <label>امتیاز</label>
+                                        <div class="rating-selector">
+                                            <span data-value="1">★</span>
+                                            <span data-value="2">★</span>
+                                            <span data-value="3">★</span>
+                                            <span data-value="4">★</span>
+                                            <span data-value="5">★</span>
+                                        </div>
+                                        <input type="hidden" name="rate" id="rateInput" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>متن نظر شما</label>
+                                        <textarea name="description" id="review-text" rows="4"></textarea>
+                                    </div>
+                                    <div class="modal-actions">
+                                        <button id="cancel-review" class="btn-outline">انصراف</button>
+                                        <button type="submit" id="submit-review-btn" class="btn-primary">ثبت نظر</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     }
                 }
             </div>
         </div>
     </section>
-
-    <!-- Review Modal -->
-    <div id="review-modal" class="modal hidden">
-        <div class="modal-content card">
-            <h2>ثبت نظر</h2>
-            <div class="form-group">
-                <label>امتیاز</label>
-                <div class="rating-selector">
-                    <span data-value="1">★</span>
-                    <span data-value="2">★</span>
-                    <span data-value="3">★</span>
-                    <span data-value="4">★</span>
-                    <span data-value="5">★</span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label>متن نظر شما</label>
-                <textarea id="review-text" rows="4"></textarea>
-            </div>
-            <div class="modal-actions">
-                <button id="cancel-review" class="btn-outline">انصراف</button>
-                <button id="submit-review-btn" class="btn-primary">ثبت نظر</button>
-            </div>
-        </div>
-    </div>
 
     <!-- Footer Section -->
 
