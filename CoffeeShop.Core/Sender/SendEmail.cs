@@ -14,7 +14,7 @@ namespace CoffeeShop.Core.Sender
 
             MailMessage mail = new MailMessage();
             SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
-            mail.From = new MailAddress(address: username, displayName: "Coffee Shop");
+            mail.From = new MailAddress(address: username, displayName: "اقامت یاب");
             mail.To.Add(to);
             mail.Subject = subject;
             mail.Body = body;

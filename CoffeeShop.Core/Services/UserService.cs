@@ -607,8 +607,8 @@ namespace CoffeeShop.Core.Services
 
             if (model.ChangePassword != null)
             {
-                if (!string.IsNullOrEmpty(model.ChangePassword.NewPassword) ||
-                    !string.IsNullOrEmpty(model.ChangePassword.OldPassword) ||
+                if (!string.IsNullOrEmpty(model.ChangePassword.NewPassword) &&
+                    !string.IsNullOrEmpty(model.ChangePassword.OldPassword) &&
                     !string.IsNullOrEmpty(model.ChangePassword.RePassword))
                 {
                     if (await ChangePasswordAsync(model.ChangePassword, user))

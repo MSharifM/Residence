@@ -42,57 +42,50 @@
                             <div class="text-danger" asp-validation-summary="ModelOnly"></div>
                             @for (int i = 0; i < Model.Clients.Count(); i++)
                             {
-                                <div class="guest-form-section" id="guestForm_@(i + 1)">
+                                <div class="guest-form-section">
                                     <div class="guest-form-header">
-                                        <h3>مهمان @(i + 1)</h3>
-                                        <button type="button" class="btn-remove-guest" data-form-id="@(i + 1)">× حذف</button>
+                                        <h3>مهمان</h3>
+                                        <button type="button" class="btn-remove-guest">× حذف</button>
                                     </div>
-                                    <div class="guest-form" id="form_guestForm_@(i + 1)">
+                                    <div class="guest-form">
                                         <div class="form-group">
-                                            <label for="guestFirstName_@(i + 1)">نام مهمان</label>
+                                            <label>نام مهمان</label>
                                             <input type="text"
-                                                   id="guestFirstName_@(i + 1)"
-                                                   placeholder="نام را وارد کنید"
-                                                   required
-                                                   asp-for="Clients[i].FirstName"/>
+                                            placeholder="نام را وارد کنید"
+                                            required
+                                            asp-for="Clients[i].FirstName"/>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="guestLastName_@(i + 1)">نام خانوادگی مهمان</label>
+                                            <label >نام خانوادگی مهمان</label>
                                             <input type="text"
-                                                   id="guestLastName_@(i + 1)"
-                                                   placeholder="نام خانوادگی را وارد کنید"
-                                                   required
-                                                   asp-for="Clients[i].LastName"/>
+                                            placeholder="نام خانوادگی را وارد کنید"
+                                            required
+                                            asp-for="Clients[i].LastName"/>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="guestBirthDate_@(i + 1)">تاریخ تولد</label>
-                                            <input type="date" id="guestBirthDate_@(i + 1)" asp-for="Clients[i].BirthDate"/>
+                                            <label >تاریخ تولد</label>
+                                            <input type="date" asp-for="Clients[i].BirthDate"/>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="guestGender_@(i + 1)">جنسیت</label>
-                                            <select asp-for="Clients[i].IsMan" id="guestGender_@(i + 1)" required>
-                                                @*TODO: Edit this value*@
+                                            <label>جنسیت</label>
+                                            <select asp-for="Clients[i].IsMan" required>
+                                                @*TODO: Edit this value *@
                                                 <option>مرد</option>
                                                 <option>زن</option>
                                             </select>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="guestNationalId_@(i + 1)">کد ملی</label>
+                                            <label>کد ملی</label>
                                             <input type="text"
-
-                                                   placeholder="شماره ملی را وارد کنید"
-                                                   id="guestNationalId_@(i + 1)"
-                                                   asp-for="Clients[i].Pin"/>
+                                            placeholder="شماره ملی را وارد کنید"
+                                            asp-for="Clients[i].Pin"/>
                                         </div>
                                         <span asp-validation-for="Clients[i].Pin"></span>
 
-                                        <button type="submit" class="btn btn-primary btn-submit-guest btn-reserve">
-                                            ذخیره اطلاعات مهمان
-                                        </button>
                                     </div>
                                 </div>
                             }
@@ -141,8 +134,8 @@
 
                         <!-- Guest counter -->
                         <div class="summary-item"
-                             id="guestCounterContainer"
-                             style="display: none">
+                        id="guestCounterContainer"
+                        style="display: none">
                             <span class="summary-label">تعداد مهمانان:</span>
                             <span class="summary-value" id="guestCount">@Model.Clients.Count()</span>
                         </div>
@@ -157,16 +150,15 @@
     <!-- Footer Section -->
     <script>
         const countGuest = @Model.Clients.Count();
+        const guests = [];
+        
     </script>
+   
     @* <script src="~/js/reservation.js"></script> *@
 
     @section Scripts {
         <script src="~/js/reservation.js"></script> 
-        <script src="~/lib/jquery/dist/jquery.min.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-        @{
-            // await Html.RenderPartialAsync("_ValidationScriptsPartial");
-        }
+
     }
 </body>
 </html>

@@ -7,40 +7,38 @@ function createGuestForm(formId) {
     const guestNumber = guestForms.indexOf(formId) + 1;
 
     const guestFormHTML = `
-        <div class="guest-form-section" id="guestForm_${formId}">
+        <div class="guest-form-section">
             <div class="guest-form-header">
-                <h3>مهمان ${guestNumber}</h3>
-                <button type="button" class="btn-remove-guest" data-form-id="${formId}">× حذف</button>
+                <h3>مهمان </h3>
+                <button type="button" class="btn-remove-guest">× حذف</button>
             </div>
-            <div class="guest-form" id="form_guestForm_${formId}">
+            <div class="guest-form">
                 <div class="form-group">
-                    <label for="guestFirstName_${formId}">نام مهمان</label>
+                    <label>نام مهمان</label>
                     <input
                         type="text"
-                        id="guestFirstName_${formId}"
                         placeholder="نام را وارد کنید"
                         required
                     />
                 </div>
 
                 <div class="form-group">
-                    <label for="guestLastName_${formId}">نام خانوادگی مهمان</label>
+                    <label>نام خانوادگی مهمان</label>
                     <input
                         type="text"
-                        id="guestLastName_${formId}"
                         placeholder="نام خانوادگی را وارد کنید"
                         required
                     />
                 </div>
 
                 <div class="form-group">
-                    <label for="guestBirthDate_${formId}">تاریخ تولد</label>
-                    <input type="date" id="guestBirthDate_${formId}" required />
+                    <label>تاریخ تولد</label>
+                    <input type="date" required />
                 </div>
 
                 <div class="form-group">
-                    <label for="guestGender_${formId}">جنسیت</label>
-                    <select id="guestGender_${formId}" required>
+                    <label>جنسیت</label>
+                    <select required>
                         <option value="">انتخاب کنید</option>
                         <option value="male">مرد</option>
                         <option value="female">زن</option>
@@ -48,19 +46,14 @@ function createGuestForm(formId) {
                 </div>
 
                 <div class="form-group">
-                    <label for="guestNationalId_${formId}">کد ملی</label>
+                    <label>کد ملی</label>
                     <input
                         type="text"
-                        id="guestNationalId_${formId}"
                         placeholder="شماره ملی را وارد کنید"
                         required
                         pattern="\\d{10}"
                     />
                 </div>
-
-                <button class="btn btn-primary btn-submit-guest btn-reserve">
-                    ذخیره اطلاعات مهمان
-                </button>
             </div>
         </div>
     `;

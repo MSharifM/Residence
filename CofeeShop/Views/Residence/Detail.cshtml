@@ -84,35 +84,40 @@
                 <!-- DETAIL -->
                 <div class="details-column">
                     <!--  MOBILE -->
-                    <div class="booking-box mobile-booking">
-                        <h3>رزرو اقامتگاه</h3>
-                        <div class="booking-form">
-                            <div class="date-row">
-                                <div class="input-group">
-                                    <label>تاریخ ورود</label>
-                                    <input type="date" id="checkInMobile" class="date-input" />
+                    <form asp-controller="Residence" asp-action="Reservation" method="get">
+                        <div class="booking-box mobile-booking">
+                            <h3>رزرو اقامتگاه</h3>
+                            <div class="booking-form">
+                                <div class="date-row">
+                                    <div class="input-group">
+                                        <label>تاریخ ورود</label>
+                                        <input type="date" id="checkInMobile" name="startDate" class="date-input" />
+                                    </div>
+                                    <div class="input-group">
+                                        <label>تاریخ خروج</label>
+                                        <input type="date" id="checkOutMobile" name="endDate" class="date-input" />
+                                    </div>
                                 </div>
-                                <div class="input-group">
-                                    <label>تاریخ خروج</label>
-                                    <input type="date" id="checkOutMobile" class="date-input" />
+
+                                <input type="hidden" name="residenceId" value="@Model.ResidenceId" />
+
+                                <div class="calculation-box">
+                                    <div class="calc-row">
+                                        <span>تعداد شب‌ها:</span>
+                                        <span class="nights-value" id="nightsMobile">-</span>
+                                    </div>
+                                    <div class="calc-row total">
+                                        <span>قیمت کل:</span>
+                                        <span class="total-value" id="totalMobile">-</span>
+                                    </div>
                                 </div>
+                                <button class="btn-reserve" onclick="handleReservation()">
+                                    رزرو قطعی
+                                </button>
+                                <p class="note">هنوز پرداختی انجام نمی‌شود</p>
                             </div>
-                            <div class="calculation-box">
-                                <div class="calc-row">
-                                    <span>تعداد شب‌ها:</span>
-                                    <span class="nights-value" id="nightsMobile">-</span>
-                                </div>
-                                <div class="calc-row total">
-                                    <span>قیمت کل:</span>
-                                    <span class="total-value" id="totalMobile">-</span>
-                                </div>
-                            </div>
-                            <button class="btn-reserve" onclick="handleReservation()">
-                                رزرو قطعی
-                            </button>
-                            <p class="note">هنوز پرداختی انجام نمی‌شود</p>
                         </div>
-                    </div>
+                    </form>
 
                     <!-- EXP -->
                     <div class="section-box">

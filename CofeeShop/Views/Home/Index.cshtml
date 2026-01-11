@@ -132,9 +132,11 @@
             <div class="exclusive-grid" id="exclusiveGrid">
                 <partial name="_BoxResidenceView" model="@((Residences: Model.LuxResidencesList, Category: "exclusive"))" />
             </div>
+            <a asp-controller="Residence" asp-action="Index">
             <div class="cta-center">
-                <button class="btn btn-cta">مشاهده همه اقامتگاه‌های لوکس</button>
+                <button class="btn btn-cta">مشاهده همه اقامتگاه‌ها</button>
             </div>
+            </a>
         </div>
     </section>
 
