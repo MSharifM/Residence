@@ -85,12 +85,12 @@ namespace CoffeeShop.Core.Services
             return result;
         }
 
-        private async Task<IEnumerable<string>> GetResidenceImagesAsync(int id)
+        private async Task<IEnumerable<string>> GetResidenceImagesAsync(int residenceId)
         {
             string query = $"""
                            select imagename as ImageName
                            from residence as r natural join images
-                           where r.residenceId = {id}
+                           where r.residenceId = {residenceId}
                            """;
             var result = await _dbContext.QueryAsync<string>(query);
             return result;
@@ -175,6 +175,19 @@ namespace CoffeeShop.Core.Services
             await _dbContext.ExecuteAsync(query);
         }
 
+        public async Task<List<string>> GetResidenceImagesForEditAsync(int residenceId)
+        {
+            var images = (await GetResidenceImagesAsync(residenceId)).ToList();
+            string query = $"""
+                            select mainimage
+                            from residence
+                            where residenceid = {residenceId}
+                            """;
+            var result = await _dbContext.QuerySingleAsync<string>(query);
+            images.Add(result);
+            return images;
+        }
+
         #endregion ResidenceDetail
 
         #region AllResidences
@@ -183,8 +196,8 @@ namespace CoffeeShop.Core.Services
         {
             var residences = new AllResidencesViewModel()
             {
-                ResidenceBoxDetail = await GetAllBoxResidences(search, page),
-                CountPage = await CountResidencePages(),
+                ResidenceBoxDetail = await GetAllBoxResidences(search, page, 3),
+                CountPage = await CountResidencePages(search, 3),
             };
             return residences;
         }
@@ -202,11 +215,12 @@ namespace CoffeeShop.Core.Services
             return result;
         }
 
-        private async Task<int> CountResidencePages(int countBoxOnPage = 12)
+        private async Task<int> CountResidencePages(string? searchName, int countBoxOnPage = 12)
         {
             string query = $"""
                             SELECT count(*) as Count
                             FROM residence_rate
+                            where Name like '%{searchName}%'
                             """;
             var residences = await _dbContext.QueryAsync<int>(query);
             return (int)Math.Ceiling((double)residences.Single() / countBoxOnPage);
@@ -220,7 +234,7 @@ namespace CoffeeShop.Core.Services
         {
             string query = $"""
                             select PIN, c.FirstName, c.LastName, BirthDate, c.sex as IsMan
-                            from (select * from aspnetusers where username = 'hassandsn') as u
+                            from (select * from aspnetusers where username = '{userName}') as u
                             join clientlist as c on u.id = c.userid;
                             """;
             var result = await _dbContext.QueryAsync<ClientListViewModel>(query);

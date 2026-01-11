@@ -8,10 +8,12 @@ namespace CoffeeShop.Areas.UserPanel.Controllers
     public class HomeController : Controller
     {
         private IUserService _userService;
+        private IResidenceService _residenceService;
 
-        public HomeController(IUserService userService)
+        public HomeController(IUserService userService, IResidenceService residenceService)
         {
             _userService = userService;
+            _residenceService = residenceService;
         }
 
         public async Task<IActionResult> Index(int residenceId = 0)
@@ -47,9 +49,6 @@ namespace CoffeeShop.Areas.UserPanel.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditProfile(string id, UserInformationViewModel model, ChangePasswordViewModel changePassword)
         {
-            if (!ModelState.IsValid)
-                return Redirect($"/Home/Index");
-
             model.ChangePassword = changePassword;
             var passwordChangeSucceeded = await _userService.EditProfileAsync(id, model);
             if (passwordChangeSucceeded)
@@ -107,6 +106,12 @@ namespace CoffeeShop.Areas.UserPanel.Controllers
             ViewData["UserId"] = (await _userService.GetUserByUserNameAsync(User.Identity.Name)).Id;
 
             return View(models);
+        }
+
+        public async Task<IActionResult> EditResidenceImages(int residenceId)
+        {
+            var model = await _residenceService.GetResidenceImagesForEditAsync(residenceId);
+            return View(model.ToList());
         }
     }
 }

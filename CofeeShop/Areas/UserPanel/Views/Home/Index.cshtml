@@ -75,7 +75,7 @@
                                         <h3>@item.ResidenceName</h3>
                                         <p>@item.ResidenceCity • <span class="status-paid">@item.ReserveStatus</span></p>
                                     </div>
-                                    <div class="res-price">@item.Price تومان</div>
+                                    <div class="res-price">@item.Price.ToString("000,000") تومان</div>
                                 </div>
                                 <p class="res-info-text">تاریخ شروع : @item.StartDate</p>
                                 <p class="res-info-text">تاریخ پایان : @item.EndDate</p>
@@ -90,8 +90,8 @@
                                 <div class="res-info">
                                     <h3>@Model.LastReserve.ResidenceName</h3>
                                     <p>@Model.LastReserve.ResidenceCity</p>
-                                    <p class="res-info-text"> @Model.LastReserve.StartDate : 20 مهر 1402</p>
-                                    <p class="res-info-text"> @Model.LastReserve.EndDate : 30 مهر 1402</p>
+                                    <p class="res-info-text">تاریخ شروع : @Model.LastReserve.StartDate</p>
+                                    <p class="res-info-text">تاریخ پایان : @Model.LastReserve.EndDate</p>
                                 </div>
                                 <button class="btn-outline review-trigger">ثبت نظر</button>
                             </div>

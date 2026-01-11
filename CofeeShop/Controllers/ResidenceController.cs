@@ -20,6 +20,8 @@ namespace CoffeeShop.Controllers
             var model = await _residenceService.GetAllResidences(search, page);
 
             ViewData["CurrentPage"] = page;
+            ViewData["Search"] = search;
+
             return View(model);
         }
 

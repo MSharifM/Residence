@@ -10,7 +10,7 @@
                 <h3 class="card-title">@item.Name</h3>
                 <p class="card-location">@item.City</p>
                 <div class="card-footer">
-                    <div class="card-price">@item.Price <span>تومان / شب</span></div>
+                    <div class="card-price">@item.Price.ToString("000,000") <span>تومان / شب</span></div>
                     <div class="card-rating">⭐ @item.Stars</div>
                 </div>
             </div>

@@ -774,12 +774,17 @@ namespace CoffeeShop.Core.Services
 
         public async Task<IEnumerable<StripListViewModel>> GetUserStrips(string userName)
         {
-            var userId = (await GetUserByUserNameAsync(userName)).Id;
-
             //TODO: Write the query
             string query = $"""
-
-                            """;
+                             select distinct dateofstart as StartDate, dateofend as EndDate,amountpaid as Price,r.situation,residencename, cityname as City, re.residenceid as ResidenceId
+                             from reservation as r
+                             join client_reserve_comment as crc on r.reservationid = crc.reservationid
+                             join aspnetusers as u on crc.userid = u.id
+                             join residence as re on r.residenceid = re.residenceid
+                             join city as c on re.cityid = c.cityid
+                             where u.username = '{userName}'
+                             order by EndDate Desc
+                             """;
 
             var result = await _dbContextDapper.QueryAsync<StripListViewModel>(query);
 

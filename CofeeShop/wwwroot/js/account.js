@@ -167,7 +167,13 @@ function loadHostContent(type) {
                 .then(residenceDetial => {
                     console.log(residenceDetial)
                     let mgmtHtml = `
-                <h2>مدیریت اقامتگاه</h2>
+                <div class="flex-manage">
+                    <h2>مدیریت اقامتگاه</h2>
+                    <a href="/UserPanel/Home/EditResidenceImages?ResidenceId=${accommodationId}">
+                        <button class="btn-outline">ویرایش تصاویر
+                        </button>
+                    </a>
+                </div>
                 <form action="/Residence/EditResidenceDetail?residenceId=${accommodationId}" method="post" id="mgmt-form" class="mt-4">
                     <div class="form-group">
                         <label>نام</label>

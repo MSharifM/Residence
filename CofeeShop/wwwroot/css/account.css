@@ -175,6 +175,7 @@ textarea {
     font-weight: 600;
     cursor: pointer;
     transition: background 0.2s;
+    width: 100%;
 }
 
     .btn-primary:hover {
@@ -393,3 +394,12 @@ select[data-asp-for] {
     -moz-appearance: none;
     appearance: none;
 }
+
+.flex-manage {
+    display: flex;
+    justify-content: space-between;
+}
+
+    .flex-manage a {
+        text-decoration: none;
+    }
