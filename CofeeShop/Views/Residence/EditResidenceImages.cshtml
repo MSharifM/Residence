@@ -1,4 +1,4 @@
-﻿@model List<string>
+﻿@model EditResidenceImagesViewModel
 
 @{
     Layout = null;
@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="~/css/editimages.css" />
 </head>
 <body>
-<!-- Header Section -->
+    <!-- Header Section -->
     <header class="header" id="header">
         <div class="container">
             <div class="header-content">
@@ -49,48 +49,48 @@
             <!-- Page Title and Accommodation Name -->
             <div class="page-header">
                 <h1 class="page-title">ویرایش عکس‌های اقامتگاه</h1>
-                <p class="accommodation-name" id="accommodationName">نام اقامتگاه</p>
+                <p class="accommodation-name" id="accommodationName">@Model.ResidenceName</p>
             </div>
 
             <!-- Image Slider Section -->
-            <div class="slider-section">
-                <h2 class="section-subtitle">تصاویر فعلی</h2>
-                <div class="image-slider">
-                    <button class="slider-btn slider-prev" id="sliderPrev">❮</button>
-                    <div class="slider-container">
-                        <div class="slider-wrapper" id="sliderWrapper">
-                            <img src="~/residence_images/@Model[Model.Count()-1]" alt="تصویر @Model[0]">
-                            <button class="delete-btn" onclick="deleteImage(@Model[0])">حذف عکس</button>
-                            @for (int i = 0; i < Model.Count() - 1; i++)
-                            {
-                                <img src="~/residence_images/otherImages/@Model[i]" alt="تصویر @i">
-                                <button class="delete-btn" onclick="deleteImage(@i)">حذف عکس</button>
-                            }
-                        </div>
-                    </div>
-                    <button class="slider-btn slider-next" id="sliderNext">❯</button>
-                </div>
-            </div>
+            <form asp-controller="Residence" asp-action="EditResidenceImages" method="post" enctype="multipart/form-data">
+                <div class="slider-section">
 
-            <!-- Add New Image Section -->
-            <div class="add-image-section">
-                <div class="add-image-box">
-                    <input type="file"
-                           id="imageInput"
-                           accept="image/*"
-                           style="display: none" />
-                    <button class="btn btn-add-image" id="addImageBtn">
-                        <span class="plus-icon">+</span>
-                        افزودن عکس جدید
-                    </button>
-                    <p class="add-image-hint">
-                        فقط فایل‌های تصویری (JPG, PNG, GIF) پذیرفته می‌شوند
-                    </p>
+                    <h2 class="section-subtitle">تصاویر فعلی</h2>
+                    <div class="image-slider">
+                        <button class="slider-btn slider-prev" id="sliderPrev">❮</button>
+                        <div class="slider-container">
+                            <input hidden="true" asp-for="ResidenceName" />
+                            <input hidden="true" asp-for="ResidenceId" />
+                            <div class="slider-wrapper" id="sliderWrapper">
+                                <!-- Images will be inserted here by JavaScript -->
+                            </div>
+                        </div>
+                        <button class="slider-btn slider-next" id="sliderNext">❯</button>
+                    </div>
                 </div>
-            </div>
-            <button type="submit" class="btn btn-add-image btn-submit">
-                ذخیره اطلاعات
-            </button>
+
+                <!-- Add New Image Section -->
+                <div class="add-image-section">
+                    <div class="add-image-box">
+                        <input type="file"
+                               id="imageInput"
+                               accept="image/*"
+                               style="display: none" />
+                        <button type="button" class="btn btn-add-image" id="addImageBtn">
+                            <span class="plus-icon">+</span>
+                            افزودن عکس جدید
+                        </button>
+                        <p class="add-image-hint">
+                            فقط فایل‌های تصویری (JPG, PNG, GIF) پذیرفته می‌شوند
+                        </p>
+                    </div>
+                </div>
+                <button type="submit" onclick="beforeSubmit()" class="btn btn-add-image btn-submit">
+                    ذخیره اطلاعات
+                </button>
+            </form>
+
         </div>
     </section>
 
@@ -162,6 +162,13 @@
             </div>
         </div>
     </footer>
+    <script>
+        const accommodationData = {
+        name: "@Html.Raw(Model.ResidenceName)",
+        images: @Html.Raw(Json.Serialize(Model.ExistingImages))
+        };
+    </script>
+
     <script src="~/js/editresidenceiamges.js"></script>
 </body>
 </html>

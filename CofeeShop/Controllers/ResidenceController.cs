@@ -36,7 +36,7 @@ namespace CoffeeShop.Controllers
         {
             var model = await _residenceService.GetDetailForReserve(residenceId, User.Identity.Name, startDate, endDate);
             ViewData["ResidenceId"] = residenceId;
-           
+
             return View(model);
         }
 
@@ -72,7 +72,16 @@ namespace CoffeeShop.Controllers
         public async Task<IActionResult> EditResidenceImages(int residenceId)
         {
             var model = await _residenceService.GetResidenceImagesForEditAsync(residenceId);
-            return View(model.ToList());
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditResidenceImages(EditResidenceImagesViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            return RedirectToAction("Index");
         }
     }
 }

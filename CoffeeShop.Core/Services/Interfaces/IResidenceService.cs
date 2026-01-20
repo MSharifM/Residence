@@ -19,6 +19,6 @@ namespace CoffeeShop.Core.Services.Interfaces
 
         Task<bool> ReserveSubmitAsync(ReserveResidenceViewModel model, int residenceId, string userId);
 
-        Task<List<string>> GetResidenceImagesForEditAsync(int residenceId);
+        Task<EditResidenceImagesViewModel> GetResidenceImagesForEditAsync(int residenceId);
     }
 }

@@ -1,6 +1,5 @@
 ﻿using CoffeeShop.Core.DTOs.Residence;
 using CoffeeShop.Core.Services.Interfaces;
-using CoffeeShop.DataLayer.Entities;
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using MySqlConnector;
@@ -176,17 +175,28 @@ namespace CoffeeShop.Core.Services
             await _dbContext.ExecuteAsync(query);
         }
 
-        public async Task<List<string>> GetResidenceImagesForEditAsync(int residenceId)
+        public async Task<EditResidenceImagesViewModel> GetResidenceImagesForEditAsync(int residenceId)
         {
             var images = (await GetResidenceImagesAsync(residenceId)).ToList();
-            string query = $"""
-                            select mainimage
-                            from residence
-                            where residenceid = {residenceId}
-                            """;
-            var result = await _dbContext.QuerySingleAsync<string>(query);
-            images.Add(result);
-            return images;
+
+            string query = @"
+                            SELECT MainImage, ResidenceName
+                            FROM residence
+                            WHERE residenceid = @ResidenceId
+                            ";
+
+            var result = await _dbContext.QuerySingleAsync(query, new { ResidenceId = residenceId });
+
+            images.Add(result.MainImage);
+
+            var model = new EditResidenceImagesViewModel()
+            {
+                ResidenceId = residenceId,
+                ResidenceName = result.ResidenceName,
+                ExistingImages = images
+            };
+
+            return model;
         }
 
         #endregion ResidenceDetail

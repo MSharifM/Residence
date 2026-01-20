@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
 namespace CoffeeShop.Core.DTOs.Residence
 {
@@ -181,5 +182,18 @@ namespace CoffeeShop.Core.DTOs.Residence
         public bool Status { get; set; }
 
         public int Capacity { get; set; }
+    }
+
+    public class EditResidenceImagesViewModel
+    {
+        public int ResidenceId { get; set; }
+
+        public string ResidenceName { get; set; }
+
+        public List<string> ExistingImages { get; set; } = new();
+
+        public List<string>? RemovedImages { get; set; } = new();
+
+        public List<IFormFile>? NewImages { get; set; } = new();
     }
 }
