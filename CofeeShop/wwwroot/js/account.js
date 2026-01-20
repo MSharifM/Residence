@@ -169,7 +169,7 @@ function loadHostContent(type) {
                     let mgmtHtml = `
                 <div class="flex-manage">
                     <h2>مدیریت اقامتگاه</h2>
-                    <a href="/UserPanel/Home/EditResidenceImages?ResidenceId=${accommodationId}">
+                    <a href="/Residence/EditResidenceImages?ResidenceId=${accommodationId}">
                         <button class="btn-outline">ویرایش تصاویر
                         </button>
                     </a>

@@ -35,15 +35,14 @@ namespace CoffeeShop.Controllers
         public async Task<IActionResult> Reservation(DateTime startDate, DateTime endDate, int residenceId)
         {
             var model = await _residenceService.GetDetailForReserve(residenceId, User.Identity.Name, startDate, endDate);
+            ViewData["ResidenceId"] = residenceId;
+           
             return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> Reservation(ReserveResidenceViewModel model, int residenceId)
         {
-            if (!ModelState.IsValid)
-                return View(model);
-
             string userId = (await _userService.GetUserByUserNameAsync(User.Identity.Name)).Id;
 
             var succeeded = await _residenceService.ReserveSubmitAsync(model, residenceId, userId);
@@ -68,6 +67,12 @@ namespace CoffeeShop.Controllers
         {
             await _residenceService.UpdateResidenceDetail(model, residenceId);
             return RedirectToAction("Index", "/UserPanel");
+        }
+
+        public async Task<IActionResult> EditResidenceImages(int residenceId)
+        {
+            var model = await _residenceService.GetResidenceImagesForEditAsync(residenceId);
+            return View(model.ToList());
         }
     }
 }

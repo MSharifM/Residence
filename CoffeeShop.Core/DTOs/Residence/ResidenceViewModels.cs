@@ -90,6 +90,10 @@ namespace CoffeeShop.Core.DTOs.Residence
 
     public class ReserveDraftViewModel
     {
+        public ReserveDraftViewModel()
+        {
+        }
+
         public ReserveDraftViewModel(DateTime startDate, DateTime endDate)
         {
             StartDate = startDate;
@@ -108,6 +112,13 @@ namespace CoffeeShop.Core.DTOs.Residence
 
     public class ReserveResidenceViewModel
     {
+        public ReserveResidenceViewModel()
+        {
+            Clients = new List<ClientListViewModel>();
+            NewClients = new List<ClientListViewModel>();
+            RemovedClientIndices = new List<int>();
+        }
+
         public ReserveResidenceViewModel(string residenceName, decimal pricePerDay,
                ReserveDraftViewModel reserveDraft, List<ClientListViewModel> clients)
         {
@@ -127,6 +138,10 @@ namespace CoffeeShop.Core.DTOs.Residence
         public ReserveDraftViewModel ReserveDraft { get; set; }
 
         public List<ClientListViewModel> Clients { get; set; }
+
+        public List<ClientListViewModel> NewClients { get; set; } = new List<ClientListViewModel>();
+
+        public List<int> RemovedClientIndices { get; set; } = new List<int>();
     }
 
     public class ClientListViewModel
@@ -140,7 +155,7 @@ namespace CoffeeShop.Core.DTOs.Residence
         public string LastName { get; set; }
 
         [Required(ErrorMessage = "لطفا {0} را وارد کنید.")]
-        [DataType(DataType.DateTime)]
+        [DataType(DataType.Date)]
         public DateTime BirthDate { get; set; }
 
         [Required(ErrorMessage = "لطفا {0} را وارد کنید.")]

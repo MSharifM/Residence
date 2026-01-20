@@ -176,4 +176,3 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 window.addEventListener("DOMContentLoaded", updateReserveButton);
-someElement.addEventListener("change", updateReserveButton);

@@ -107,11 +107,5 @@ namespace CoffeeShop.Areas.UserPanel.Controllers
 
             return View(models);
         }
-
-        public async Task<IActionResult> EditResidenceImages(int residenceId)
-        {
-            var model = await _residenceService.GetResidenceImagesForEditAsync(residenceId);
-            return View(model.ToList());
-        }
     }
 }

@@ -31,18 +31,24 @@
                                 <span class="info-value" id="userFirstName">@User.Identity.Name</span>
                             </div>
                         </div>
-                        <button class="btn-add-guest" id="toggleGuestForm">
+                        <button class="btn-add-guest" id="toggleGuestForm" onclick="addNewOption()">
                             افزودن مهمان دیگر
                         </button>
                     </div>
 
                     <!-- Container for guest forms -->
-                    <div class="guest-forms-container" id="guestFormsContainer">
-                        <form id="guestFormsContainer">
+                    <div class="guest-forms-container">
+                        <form id="guestFormsContainer" asp-controller="Residence" asp-action="Reservation" method="post">
                             <div class="text-danger" asp-validation-summary="ModelOnly"></div>
                             @for (int i = 0; i < Model.Clients.Count(); i++)
                             {
-                                <div class="guest-form-section">
+                                <input type="hidden" name="residenceId" value="@ViewData["ResidenceId"]" />
+                                <input type="hidden" asp-for="ReserveDraft.StartDate" />
+                                <input type="hidden" asp-for="ReserveDraft.EndDate" />
+                                <input type="hidden" asp-for="Price" />
+                                
+                                <span class="text-danger" data-valmsg-for="Clients[0].Text" data-valmsg-replace="true"></span>
+                                <div class="guest-form-section" data-index="@i">
                                     <div class="guest-form-header">
                                         <h3>مهمان</h3>
                                         <button type="button" class="btn-remove-guest">× حذف</button>
@@ -51,46 +57,47 @@
                                         <div class="form-group">
                                             <label>نام مهمان</label>
                                             <input type="text"
-                                            placeholder="نام را وارد کنید"
-                                            required
-                                            asp-for="Clients[i].FirstName"/>
+                                                   placeholder="نام را وارد کنید"
+                                                   required
+                                                   readonly
+                                                   asp-for="Clients[i].FirstName"/>
                                         </div>
 
                                         <div class="form-group">
-                                            <label >نام خانوادگی مهمان</label>
+                                            <label>نام خانوادگی مهمان</label>
                                             <input type="text"
-                                            placeholder="نام خانوادگی را وارد کنید"
-                                            required
-                                            asp-for="Clients[i].LastName"/>
+                                                   placeholder="نام خانوادگی را وارد کنید"
+                                                   required
+                                                   readonly
+                                                   asp-for="Clients[i].LastName" />
                                         </div>
 
                                         <div class="form-group">
-                                            <label >تاریخ تولد</label>
-                                            <input type="date" asp-for="Clients[i].BirthDate"/>
+                                            <label>تاریخ تولد</label>
+                                            <input type="date" readonly asp-for="Clients[i].BirthDate" />
                                         </div>
 
                                         <div class="form-group">
                                             <label>جنسیت</label>
+                                            @* ToDo: change select to input or lable for readonly *@
                                             <select asp-for="Clients[i].IsMan" required>
-                                                @*TODO: Edit this value *@
-                                                <option>مرد</option>
-                                                <option>زن</option>
+                                                <option value="true" selected="@(Model.Clients[i].IsMan ? "selected" : null)">مرد</option>
+                                                <option value="false" selected="@(!Model.Clients[i].IsMan ? "selected" : null)">زن</option>
                                             </select>
                                         </div>
 
                                         <div class="form-group">
                                             <label>کد ملی</label>
                                             <input type="text"
-                                            placeholder="شماره ملی را وارد کنید"
-                                            asp-for="Clients[i].Pin"/>
+                                                   placeholder="شماره ملی را وارد کنید"
+                                                   required
+                                                   readonly
+                                                   asp-for="Clients[i].Pin" />
                                         </div>
-                                        <span asp-validation-for="Clients[i].Pin"></span>
-
                                     </div>
                                 </div>
                             }
                         </form>
-
                         <!-- Guest forms will be added here dynamically -->
                     </div>
                 </div>
@@ -134,8 +141,8 @@
 
                         <!-- Guest counter -->
                         <div class="summary-item"
-                        id="guestCounterContainer"
-                        style="display: none">
+                             id="guestCounterContainer"
+                             style="display: none">
                             <span class="summary-label">تعداد مهمانان:</span>
                             <span class="summary-value" id="guestCount">@Model.Clients.Count()</span>
                         </div>
@@ -150,15 +157,9 @@
     <!-- Footer Section -->
     <script>
         const countGuest = @Model.Clients.Count();
-        const guests = [];
-        
     </script>
-   
-    @* <script src="~/js/reservation.js"></script> *@
 
-    @section Scripts {
-        <script src="~/js/reservation.js"></script> 
+    <script src="~/js/reservation.js"></script>
 
-    }
 </body>
 </html>

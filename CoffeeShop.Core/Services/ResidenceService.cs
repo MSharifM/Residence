@@ -1,5 +1,6 @@
 ﻿using CoffeeShop.Core.DTOs.Residence;
 using CoffeeShop.Core.Services.Interfaces;
+using CoffeeShop.DataLayer.Entities;
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using MySqlConnector;
@@ -270,14 +271,14 @@ namespace CoffeeShop.Core.Services
         private async Task<int> InsertIntoPayment(decimal price)
         {
             string query = @"
-                            INSERT INTO Payment (CreateDate, Price)
-                            VALUES (@CreateDate, @Price);
+                            INSERT INTO Payment (CreatePay, Price)
+                            VALUES (@CreatePay, @Price);
                             SELECT LAST_INSERT_ID();
                             ";
 
             var paymentId = await _dbContext.QuerySingleAsync<int>(query, new
             {
-                CreateDate = DateTime.Now,
+                CreatePay = DateTime.Now,
                 Price = price,
             });
 
@@ -288,7 +289,7 @@ namespace CoffeeShop.Core.Services
         {
             string query = @"
                             INSERT INTO Reservation (ResidenceId, PayId, DateOfStart, DateOfEnd
-                                , NumberOfGuest, AmountPaid, Situation)
+                                , NumberOfGuests, AmountPaid, Situation)
                             VALUES (@ResidenceId, @PayId, @DateOfStart, @DateOfEnd, @NumberOfGuest,
                                     @AmountPaid, 'approved');
                             SELECT LAST_INSERT_ID();
@@ -310,15 +311,65 @@ namespace CoffeeShop.Core.Services
         private async Task InsertIntoClientReserveComment(string userId, int reservationId)
         {
             string query = @"
-                            INSERT INTO Reservation (UserID, CommentId)
-                            VALUES (@UserID, @CommentId);
+                            INSERT INTO Reservation (UserID, CommentId, ReservationId)
+                            VALUES (@UserID, @CommentId, @ReservationId);
                            ";
 
             await _dbContext.QuerySingleAsync<int>(query, new
             {
                 UserID = userId,
-                CommentId = reservationId,
+                CommentId = 0, //TODO: Edit this
+                ReservationId = reservationId
             });
+        }
+
+        private async Task InsertNewClients(List<ClientListViewModel> newClients, string userId)
+        {
+            foreach (var item in newClients)
+            {
+                string query = @"
+                            INSERT INTO ClientList (UserId, PIN, FirstName, LastName, BirthDate, Sex)
+                            VALUES (@UserId, @PIN, @FirstName, @LastName, @BirthDate, @Sex)
+                            ";
+
+                await _dbContext.ExecuteAsync(query, new
+                {
+                    UserID = userId,
+                    PIN = item.Pin,
+                    FirstName = item.FirstName,
+                    LastName = item.LastName,
+                    BirthDate = item.BirthDate,
+                    Sex = item.IsMan
+                });
+            }
+        }
+
+        private async Task InsertIntoClientListReserve(ReserveResidenceViewModel model, int reservationId, string userId)
+        {
+            //Remove additional clients
+            var clients = model.Clients;
+            foreach (var item in model.RemovedClientIndices)
+            {
+                clients.RemoveAt(item);
+            }
+
+            clients.AddRange(model.NewClients);
+
+            //Insert clients into ClientList_Reserve table
+            foreach (var item in clients)
+            {
+                string query = @"
+                            INSERT INTO ClientList_Reserve (ReservationId, UserId, PIN)
+                            VALUES (@ReservationId, @UserId, @PIN)
+                            ";
+
+                await _dbContext.ExecuteAsync(query, new
+                {
+                    ReservationId = reservationId,
+                    UserId = userId,
+                    PIN = item.Pin
+                });
+            }
         }
 
         public async Task<bool> ReserveSubmitAsync(ReserveResidenceViewModel model, int residenceId, string userId)
@@ -327,8 +378,10 @@ namespace CoffeeShop.Core.Services
             {
                 int paymentId = await InsertIntoPayment(model.Price);
                 int reserveId = await InsertIntoReserve(model, paymentId, residenceId);
-                await InsertIntoClientReserveComment(userId, reserveId);
-                // TODO: Add new clients to db
+                //await InsertIntoClientReserveComment(userId, reserveId); //TODO: Edit this method
+                await InsertNewClients(model.NewClients, userId);
+                await InsertIntoClientListReserve(model, reserveId, userId);
+                //TODO: Convert to transaction
 
                 return true;
             }
