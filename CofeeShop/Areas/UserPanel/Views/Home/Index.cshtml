@@ -128,9 +128,11 @@
                     </form>
                     <button id="delete-accommodation" class="btn-danger">حذف</button>
                 </div>
-                <button id="add-accommodation" class="btn-outline">
-                    افزودن اقامتگاه جدید
-                </button>
+                <a asp-area="" asp-controller="Residence" asp-action="AddResidence">
+                    <button id="add-accommodation" class="btn-outline">
+                        افزودن اقامتگاه جدید
+                    </button>
+                </a>
             </div>
 
             <div class="host-grid">

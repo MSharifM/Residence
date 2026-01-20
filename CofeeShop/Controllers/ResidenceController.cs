@@ -83,5 +83,10 @@ namespace CoffeeShop.Controllers
 
             return RedirectToAction("Index");
         }
+
+        public async Task<IActionResult> AddResidence()
+        {
+            return View();
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CoffeeShop.Core.DTOs.Residence
 {
@@ -195,5 +196,28 @@ namespace CoffeeShop.Core.DTOs.Residence
         public List<string>? RemovedImages { get; set; } = new();
 
         public List<IFormFile>? NewImages { get; set; } = new();
+    }
+
+    public class AddResidenceViewModel
+    {
+        public string ResidenceName { get; set; }
+
+        public string Address { get; set; }
+
+        public string Street { get; set; }
+
+        public string PostalCode { get; set; }
+
+        public decimal PricePerDate { get; set; }
+
+        public string? Description { get; set; }
+
+        public bool IsActive { get; set; }
+
+        public int Capacity { get; set; }
+
+        public SelectList Cities { get; set; }
+
+        public List<string> Options { get; set; }
     }
 }
