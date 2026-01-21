@@ -72,6 +72,7 @@ namespace CoffeeShop.Controllers
         public async Task<IActionResult> EditResidenceImages(int residenceId)
         {
             var model = await _residenceService.GetResidenceImagesForEditAsync(residenceId);
+
             return View(model);
         }
 
@@ -81,7 +82,9 @@ namespace CoffeeShop.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            return RedirectToAction("Index");
+            await _residenceService.EditImageResidence(model.NewImages, model.ResidenceId, model.RemovedImages);
+
+            return RedirectToAction("EditResidenceImages", new { residenceId = model.ResidenceId });
         }
 
         public async Task<IActionResult> AddResidence()

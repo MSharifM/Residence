@@ -193,7 +193,7 @@ namespace CoffeeShop.Core.DTOs.Residence
 
         public List<string> ExistingImages { get; set; } = new();
 
-        public List<string>? RemovedImages { get; set; } = new();
+        public List<int>? RemovedImages { get; set; } = new();
 
         public List<IFormFile>? NewImages { get; set; } = new();
     }

@@ -4,6 +4,10 @@ using Dapper;
 using Microsoft.Extensions.Configuration;
 using MySqlConnector;
 using System.Data;
+using System.Xml;
+using CoffeeShop.Core.Generator;
+using Microsoft.AspNetCore.Http;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace CoffeeShop.Core.Services
 {
@@ -177,8 +181,6 @@ namespace CoffeeShop.Core.Services
 
         public async Task<EditResidenceImagesViewModel> GetResidenceImagesForEditAsync(int residenceId)
         {
-            var images = (await GetResidenceImagesAsync(residenceId)).ToList();
-
             string query = @"
                             SELECT MainImage, ResidenceName
                             FROM residence
@@ -187,7 +189,9 @@ namespace CoffeeShop.Core.Services
 
             var result = await _dbContext.QuerySingleAsync(query, new { ResidenceId = residenceId });
 
+            List<string> images = new List<string>();
             images.Add(result.MainImage);
+            images.AddRange((await GetResidenceImagesAsync(residenceId)).ToList());
 
             var model = new EditResidenceImagesViewModel()
             {
@@ -197,6 +201,82 @@ namespace CoffeeShop.Core.Services
             };
 
             return model;
+        }
+
+        private async Task DeleteResidenceImage(string imageName)
+        {
+            string query = @"
+                            delete from images where imagename = @ImageName ;
+                            ";
+
+            string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/residence_images/otherImages/", imageName);
+            File.Delete(imagePath);
+
+            await _dbContext.ExecuteAsync(query, param: new { ImageName = imageName });
+        }
+
+        private async Task<string?> SaveImageFile(IFormFile file, bool isMain = false)
+        {
+            if (file != null)
+            {
+                string imageName = NameGenerator.GenerateUniqCode() + Path.GetExtension(file.FileName);
+
+                string imagePath = "";
+                if (isMain)
+                    imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/residence_images/", imageName);
+                else
+                    imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/residence_images/otherImages/", imageName);
+
+                await using (var stream = new FileStream(imagePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                return imageName;
+            }
+
+            return null;
+        }
+
+        private async Task AddResidenceImage(IFormFile image, int residenceId)
+        {
+            string query = @"
+                            INSERT INTO Images (ResidenceId, ImageName)
+                            VALUES (@ResidenceId, @ImageName)
+                            ";
+
+            string? imageName;
+            try
+            {
+                imageName = await SaveImageFile(image);
+                if (imageName is null) return;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return;
+            }
+
+            await _dbContext.ExecuteAsync(query, new
+            {
+                ResidenceId = residenceId,
+                ImageName = imageName,
+            });
+        }
+
+        public async Task EditImageResidence(List<IFormFile>? newResidenceImages, int residenceId, List<int>? removedResidencesIndex)
+        {
+            var images = (await GetResidenceImagesAsync(residenceId)).ToList();
+            foreach (var item in removedResidencesIndex)
+            {
+                await DeleteResidenceImage(images[item - 1]); // -1 because in image list started by main image
+            }
+
+            foreach (var item in newResidenceImages)
+            {
+                //TODO: refactor: Convert to 1 query
+                await AddResidenceImage(item, residenceId);
+            }
         }
 
         #endregion ResidenceDetail
@@ -328,7 +408,6 @@ namespace CoffeeShop.Core.Services
             await _dbContext.QuerySingleAsync<int>(query, new
             {
                 UserID = userId,
-                CommentId = 0, //TODO: Edit this
                 ReservationId = reservationId
             });
         }
@@ -388,7 +467,7 @@ namespace CoffeeShop.Core.Services
             {
                 int paymentId = await InsertIntoPayment(model.Price);
                 int reserveId = await InsertIntoReserve(model, paymentId, residenceId);
-                //await InsertIntoClientReserveComment(userId, reserveId); //TODO: Edit this method
+                await InsertIntoClientReserveComment(userId, reserveId);
                 await InsertNewClients(model.NewClients, userId);
                 await InsertIntoClientListReserve(model, reserveId, userId);
                 //TODO: Convert to transaction

@@ -1,4 +1,5 @@
 ﻿using CoffeeShop.Core.DTOs.Residence;
+using Microsoft.AspNetCore.Http;
 
 namespace CoffeeShop.Core.Services.Interfaces
 {
@@ -20,5 +21,7 @@ namespace CoffeeShop.Core.Services.Interfaces
         Task<bool> ReserveSubmitAsync(ReserveResidenceViewModel model, int residenceId, string userId);
 
         Task<EditResidenceImagesViewModel> GetResidenceImagesForEditAsync(int residenceId);
+
+        Task EditImageResidence(List<IFormFile>? newResidenceImages, int residenceId, List<int>? removedResidences);
     }
 }
