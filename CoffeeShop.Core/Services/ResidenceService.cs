@@ -281,6 +281,17 @@ namespace CoffeeShop.Core.Services
             });
         }
 
+        private async Task UpdateMainImage(int residenceId, string imageName)
+        {
+            string query = $"""
+                            UPDATE residence
+                            SET `MainImage` = '{imageName}'
+                            WHERE (`ResidenceId` = '{residenceId}');
+                            """;
+
+            await _dbContext.ExecuteAsync(query);
+        }
+
         public async Task EditImageResidence(List<IFormFile>? newResidenceImages, int residenceId, List<int>? removedResidencesIndex)
         {
             var images = (await GetResidenceImagesAsync(residenceId)).ToList();
@@ -294,9 +305,10 @@ namespace CoffeeShop.Core.Services
             {
                 if (newResidenceImages != null && newResidenceImages.Any())
                 {
-                    //Save first image as main image
-                    await SaveImageFile(newResidenceImages.First(), true);
+                    //Save the first image as main image
+                    var imageName = await SaveImageFile(newResidenceImages.First(), true);
                     newResidenceImages.RemoveAt(0);
+                    if (imageName != null) await UpdateMainImage(residenceId, imageName);
                 }
             }
 
