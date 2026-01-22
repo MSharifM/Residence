@@ -129,10 +129,13 @@
                     <button id="delete-accommodation" class="btn-danger">حذف</button>
                 </div>
                 <a asp-area="" asp-controller="Residence" asp-action="AddResidence">
-                    <button id="add-accommodation" class="btn-outline">
+                    <button id="add-accommodation" class="btn-outline margin">
                         افزودن اقامتگاه جدید
                     </button>
                 </a>
+                <button id="numberaccuont" class="btn-outline">
+                    تغییر شماره حساب
+                </button>
             </div>
 
             <div class="host-grid">
@@ -150,6 +153,11 @@
                         </div>
                         <div class="accordion-item" data-target="reviews">
                             نظرات کاربران
+                        </div>
+                        <div id="salary-target"
+                             class="accordion-item"
+                             data-target="salary">
+                            محاسبه درآمد کل
                         </div>
                     </div>
                 </div>
@@ -191,6 +199,28 @@
             </div>
         </div>
     </form>
+
+    <!-- NUMBER ACCOUNT -->
+    <div class="modal2 hidden">
+        <div class="modal-content card">
+            <form>
+                <input type="text" placeholder="شماره حساب" />
+                <button class="btn-reserve" type="submit">تایید</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- SALARY -->
+    <div class="modal3 hidden">
+        <div class="modal-content card">
+            <h2 class="title">سود و عملکرد اقامتگاه های شما</h2>
+            <div class="salary-content"></div>
+            <div class="total-salary">
+                <h3>درآمد کل</h3>
+                <span id="salary-total"></span>
+            </div>
+        </div>
+    </div>
 
     <script>
         let isHost = @(ViewData["IsHost"].ToString().ToLower());

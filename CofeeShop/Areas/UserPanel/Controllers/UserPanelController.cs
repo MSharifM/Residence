@@ -97,6 +97,13 @@ namespace CoffeeShop.Areas.UserPanel.Controllers
             return Json(reserves);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetHostSalary()
+        {
+            var model = await _userService.GetHostSalary(User.Identity.Name);
+            return Json(model);
+        }
+
         #endregion HostPanel
 
         public async Task<IActionResult> MyStrips()

@@ -7,8 +7,29 @@ const accordionItems = document.querySelectorAll(".accordion-item");
 const contentPanel = document.getElementById("dynamic-content-panel");
 const reviewModal = document.getElementById("review-modal");
 const ratingSpans = document.querySelectorAll(".rating-selector span");
+const numberModal = document.querySelector(".modal2");
+const salaryModal = document.querySelector(".modal3");
+const btnSubmit = document.querySelector(".btn-reserve");
+const btnaccuont = document.getElementById("numberaccuont");
+const salarytarget = document.getElementById("salary-target");
 let accommodationId = document.getElementById("accommodation-select").value;
 
+const modalcontent = document.querySelector(".modal-content");
+
+const numberModalContent = numberModal.querySelector(".modal-content");
+const salaryModalContent = salaryModal.querySelector(".modal-content");
+
+numberModal.addEventListener("click", (e) => {
+    if (numberModalContent.contains(e.target)) return;
+    numberModal.classList.add("hidden");
+});
+
+salaryModal.addEventListener("click", (e) => {
+    if (salaryModalContent.contains(e.target)) return;
+    salaryModal.classList.add("hidden");
+});
+
+const salarycontent = document.querySelector(".salary-content");
 // Initialization
 function init() {
     if (isHost) {
@@ -25,10 +46,23 @@ function init() {
 }
 
 function setupEventListeners() {
+    btnSubmit.addEventListener("click", () => {
+        numberModal.classList.add("hidden");
+    });
+    btnaccuont.addEventListener("click", (event) => {
+        event.stopPropagation();
+        shownumberView();
+    });
+    salarytarget.addEventListener("click", () => {
+        salaryModal.classList.remove("hidden");
+    });
+
     // Upgrade button
-    upgradeBtn.addEventListener("click", () => {
+    upgradeBtn.addEventListener("click", (event) => {
         isHost = true;
+        event.stopPropagation();
         showHostView();
+        shownumberView();
         loadHostContent("upcoming-res");
     });
 
@@ -84,16 +118,17 @@ function setupEventListeners() {
                 select.remove(select.selectedIndex);
             }
         });
-
-    // Add Accommodation
-    document.getElementById("add-accommodation").addEventListener("click", () => {
-        alert("در حال باز کردن مراحل افزودن اقامتگاه جدید...");
-    });
 }
 
 function showHostView() {
     upgradecontainer.classList.add("hidden");
     hostSection.classList.remove("hidden");
+    upgradeBtn.classList.add("hidden");
+}
+
+function shownumberView() {
+    upgradecontainer.classList.add("hidden");
+    numberModal.classList.remove("hidden");
     upgradeBtn.classList.add("hidden");
 }
 
@@ -165,15 +200,17 @@ function loadHostContent(type) {
             fetch('/Residence/GetResidenceDetailForHost?ResidenceId=' + accommodationId)
                 .then(res => res.json())
                 .then(residenceDetial => {
-                    console.log(residenceDetial)
                     let mgmtHtml = `
-                <div class="flex-manage">
-                    <h2>مدیریت اقامتگاه</h2>
-                    <a href="/Residence/EditResidenceImages?ResidenceId=${accommodationId}">
-                        <button class="btn-outline">ویرایش تصاویر
-                        </button>
-                    </a>
-                </div>
+                    <div class="flex-manage">
+                        <h2>مدیریت اقامتگاه</h2>
+                        <a href="/Residence/EditResidenceImages?ResidenceId=${accommodationId}">
+                            <button class="btn-outline">ویرایش تصاویر
+                            </button>
+                        </a>
+                    </div>
+                    `
+                    if (residenceDetial != null) {
+                        mgmtHtml += `
                 <form action="/Residence/EditResidenceDetail?residenceId=${accommodationId}" method="post" id="mgmt-form" class="mt-4">
                     <div class="form-group">
                         <label>نام</label>
@@ -213,6 +250,10 @@ function loadHostContent(type) {
                     <button type="submit" class="btn-primary">ذخیره تغییرات</button>
                 </form>
             `;
+                    }
+                    else {
+                        mgmtHtml += `<p>اطلاعات یافت نشد</p>`;
+                    }
                     contentPanel.innerHTML = mgmtHtml;
                 });
             break;
@@ -246,7 +287,52 @@ function loadHostContent(type) {
                     contentPanel.innerHTML = `<p>خطا در دریافت نظرات</p>`;
                 });
             break;
+
+        case "salary":
+            loadSalaryContent();
     }
 }
 // Run init
 init();
+
+function loadSalaryContent() {
+    let slarydata = "";
+
+    fetch('/UserPanel/Home/GetHostSalary')
+        .then(res => res.json())
+        .then(Data => {
+            console.log(Data);
+            let sum = 0;
+            Data.forEach((item) => {
+                slarydata += `
+                  <div class="data-row">
+                    <div>
+                      <strong>${item.residenceName}</strong><br/>
+                      <small>${item.fixedDate}</small>
+                    </div>
+                    <strong class="price-salary">${item.salary.toLocaleString('fa-IR')}</strong>
+                  </div>
+                `;
+                sum = sum + item.salary;
+            });
+
+            salarycontent.innerHTML = slarydata;
+
+            contentPanel.innerHTML =
+                `
+                   <div class="salary-content"></div>
+                        <div class="total-salary">
+                            <h3>درآمد کل</h3>
+                            <span>${sum.toLocaleString('fa-IR')} تومان</span>
+                        </div>
+                    </div>
+                `;
+
+            const salaryTotal = document.getElementById("salary-total");
+            salaryTotal.innerHTML = `${sum.toLocaleString('fa-IR')} تومان`;
+        })
+        .catch(error => {
+            console.error('خطا در دریافت اطلاعات درآمد:', error);
+            contentPanel.innerHTML = `<p>خطا در دریافت اطلاعات</p>`;
+        });
+}

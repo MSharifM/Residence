@@ -108,6 +108,19 @@ namespace CoffeeShop.Core.DTOs.UserPanel
         public int Rate { get; set; }
     }
 
+    public class ListResidenceSalaryViewModel
+    {
+        public string ResidenceName { get; set; }
+
+        public int Year { get; set; }
+
+        public int Month { get; set; }
+
+        public string FixedDate { get; set; } // It must be converted to like this: 22 - March //
+
+        public decimal Salary { get; set; }
+    }
+
     #endregion HostPanel
 
     public class StripListViewModel

@@ -1,4 +1,5 @@
-﻿using CoffeeShop.Core.DTOs.Account;
+﻿using CoffeeShop.Core.Convertor;
+using CoffeeShop.Core.DTOs.Account;
 using CoffeeShop.Core.DTOs.UserPanel;
 using CoffeeShop.Core.Sender;
 using CoffeeShop.Core.Services.Interfaces;
@@ -80,9 +81,9 @@ namespace CoffeeShop.Core.Services
         private async Task AddHostToDbAsync(string userId, string AccountNumber)
         {
             string query = $"""
-                           INSERT INTO H_host (UserId, Acc_Number) VALUES
-                           ('{userId}', '{AccountNumber}')
-                           """;
+                            INSERT INTO H_host (UserId, Acc_Number) VALUES
+                            ('{userId}', '{AccountNumber}')
+                            """;
             var result = await _dbContextDapper.QueryAsync<string>(query);
         }
 
@@ -113,9 +114,9 @@ namespace CoffeeShop.Core.Services
             #region Send email
 
             SendEmail.Send(
-            to: user.Email,
-            subject: "فعالسازی حساب کاربری - ResidenceYab",
-            body: $@"<!DOCTYPE html>
+                to: user.Email,
+                subject: "فعالسازی حساب کاربری - ResidenceYab",
+                body: $@"<!DOCTYPE html>
 <html lang=""fa"" dir=""rtl"">
 <head>
     <meta charset=""UTF-8"">
@@ -746,7 +747,7 @@ namespace CoffeeShop.Core.Services
         }
 
         public async Task<IEnumerable<ListCompletedReservesForHostViewModel>> GetCompletedReservesForHostByResidenceIdAsync(
-            int residenceId)
+                int residenceId)
         {
             string query = $"""
                             select re.ResidenceName , r.DateOfEnd as EndDate ,r.AmountPaid as Price
@@ -758,7 +759,7 @@ namespace CoffeeShop.Core.Services
         }
 
         public async Task<IEnumerable<ListResidenceCommentsForHostViewModel>> GetResidenceCommentsForHostByResidenceIdAsync(
-            int residenceId)
+                int residenceId)
         {
             string query = $"""
                             select aspu.UserName , c.CommentDescription as Description , c.Rate
@@ -770,11 +771,37 @@ namespace CoffeeShop.Core.Services
             return result;
         }
 
+        public async Task<List<ListResidenceSalaryViewModel>> GetHostSalary(string userName)
+        {
+            string query = $"""
+                            select  ResidenceName, YEAR(createPay)  AS year, MONTH(createPay) AS month, SUM(p.price*0.1) as Salary
+                            from H_host as h
+                            join aspnetusers as u on h.UserId = u.Id
+                            join residence as re on re.UserId = h.UserId
+                            join reservation as r on r.ResidenceId = re.ResidenceId
+                            join payment as p on p.PayId = r.PayId
+                            where u.username = @userName
+                            group by residenceName, YEAR(createPay), MONTH(createPay)
+                            """;
+
+            var result = await _dbContextDapper.QueryAsync<ListResidenceSalaryViewModel>(query, new { userName });
+
+            var fixedResult = result.Select(p => new ListResidenceSalaryViewModel
+            {
+                ResidenceName = p.ResidenceName,
+                Year = p.Year,
+                Month = p.Month,
+                Salary = p.Salary,
+                FixedDate = $"{p.Year} - {p.Month.ToMonthName()}"
+            }).ToList();
+
+            return fixedResult;
+        }
+
         #endregion HostPanel
 
         public async Task<IEnumerable<StripListViewModel>> GetUserStrips(string userName)
         {
-            //TODO: Write the query
             string query = $"""
                              select distinct dateofstart as StartDate, dateofend as EndDate,amountpaid as Price,r.situation,residencename, cityname as City, re.residenceid as ResidenceId
                              from reservation as r

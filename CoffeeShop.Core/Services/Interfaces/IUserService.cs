@@ -68,6 +68,8 @@ namespace CoffeeShop.Core.Services.Interfaces
 
         Task<IEnumerable<ListResidenceCommentsForHostViewModel>> GetResidenceCommentsForHostByResidenceIdAsync(int residenceId);
 
+        Task<List<ListResidenceSalaryViewModel>> GetHostSalary(string userName);
+
         #endregion HostPanel
 
         Task<IEnumerable<StripListViewModel>> GetUserStrips(string userName);
