@@ -63,6 +63,7 @@ namespace CoffeeShop.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditResidenceDetail(ResidenceDetailForHostPanelViewModel model, int residenceId)
         {
             await _residenceService.UpdateResidenceDetail(model, residenceId);
@@ -77,6 +78,7 @@ namespace CoffeeShop.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditResidenceImages(EditResidenceImagesViewModel model)
         {
             if (!ModelState.IsValid)
@@ -100,7 +102,10 @@ namespace CoffeeShop.Controllers
         public async Task<IActionResult> AddResidence(AddResidenceViewModel model)
         {
             if (!ModelState.IsValid)
+            {
+                ViewData["Options"] = await _residenceService.GetAllOptions();
                 return View(model);
+            }
 
             model.UserId = (await _userService.GetUserByUserNameAsync(User.Identity.Name)).Id;
             var residenceId = await _residenceService.AddResidence(model);

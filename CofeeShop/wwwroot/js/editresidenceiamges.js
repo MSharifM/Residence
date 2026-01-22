@@ -39,8 +39,8 @@ function renderSlider(addImage = false) {
     accommodationData.images.forEach((imageSrc, index) => {
         const slide = document.createElement("div");
         slide.className = "slider-slide";
-        //TODO: Edit this conditon to display existing images
-        if (addImage) {
+
+        if (imageSrc.startsWith("data:")) { // it is new image
             slide.innerHTML = `
                 <img src="${imageSrc}" alt = "preview" />
                              `;
@@ -48,13 +48,13 @@ function renderSlider(addImage = false) {
         else {
             if (index === 0) {
                 slide.innerHTML = `
-          <img src="/residence_images/${imageSrc}" alt="تصویر اصلی">
+          <img src="${imageSrc}" alt="تصویر اصلی">
           <input hidden="true" type="text" name="ExistingImages[${index}]" value="${imageSrc}"/>
       `;
             }
             else {
                 slide.innerHTML = `
-          <img src="/residence_images/otherImages/${imageSrc}" alt="تصویر ${index + 1}">
+          <img src="${imageSrc}" alt="تصویر ${index + 1}">
             <button type="button" class="delete-btn" onclick="deleteImage(${index})">
                 حذف عکس
             </button>

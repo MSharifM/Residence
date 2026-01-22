@@ -1,15 +1,11 @@
 ﻿using CoffeeShop.Core.DTOs.Residence;
+using CoffeeShop.Core.Generator;
 using CoffeeShop.Core.Services.Interfaces;
 using Dapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using MySqlConnector;
 using System.Data;
-using System.Xml;
-using CoffeeShop.Core.Generator;
-using Microsoft.AspNetCore.Http;
-using static System.Net.Mime.MediaTypeNames;
-using CoffeeShop.DataLayer.Entities;
-using System.IO;
 
 namespace CoffeeShop.Core.Services
 {
@@ -83,10 +79,10 @@ namespace CoffeeShop.Core.Services
         private async Task<IEnumerable<ResidenceCommentsViewModel>> GetResidenceCommentsAsync(int id)
         {
             string query = $"""
-                           select CommentDescription , Rate , c.CreateDate as Date , UserName as Name
-                           from comments as c natural join client_reserve_comment as crc join aspnetusers as aspu on crc.userId = aspu.Id
-                           where residenceId = {id} and c.commentstatus = 'Ok';
-                           """;
+                            select CommentDescription , Rate , c.CreateDate as Date , UserName as Name
+                            from comments as c natural join client_reserve_comment as crc join aspnetusers as aspu on crc.userId = aspu.Id
+                            where residenceId = {id} and c.commentstatus = 'Ok';
+                            """;
             var result = await _dbContext.QueryAsync<ResidenceCommentsViewModel>(query);
             return result;
         }
@@ -94,10 +90,10 @@ namespace CoffeeShop.Core.Services
         private async Task<IEnumerable<string>> GetResidenceImagesAsync(int residenceId)
         {
             string query = $"""
-                           select imagename as ImageName
-                           from residence as r natural join images
-                           where r.residenceId = {residenceId}
-                           """;
+                            select imagename as ImageName
+                            from residence as r natural join images
+                            where r.residenceId = {residenceId}
+                            """;
             var result = await _dbContext.QueryAsync<string>(query);
             return result;
         }
@@ -105,10 +101,10 @@ namespace CoffeeShop.Core.Services
         private async Task<IEnumerable<ResidenceOptionsViewModel>> GetResidenceOptionsAsync(int id)
         {
             string query = $"""
-                           SELECT Option_Name as OptionName, Option_Description as OptionDescription
-                           FROM option_residence as opr natural join h_option
-                           where opr.ResidenceId = {id};
-                           """;
+                            SELECT Option_Name as OptionName, Option_Description as OptionDescription
+                            FROM option_residence as opr natural join h_option
+                            where opr.ResidenceId = {id};
+                            """;
             var result = await _dbContext.QueryAsync<ResidenceOptionsViewModel>(query);
             return result;
         }
@@ -116,31 +112,31 @@ namespace CoffeeShop.Core.Services
         public async Task<ResidenceDetailViewModel> GetResidenceDetailById(int id)
         {
             string query = $"""
-                           SELECT
-                           	    r.ResidenceId as ResidenceId,
-                                r.ResidenceName AS Name,
-                                r.PostalCode as PostalCode,
-                                c2.CityName AS City,
-                                Street ,
-                                Capacity ,
-                                avg_comments.Stars AS Stars,
-                                avg_comments.count AS CountRate,
-                                r.MainImage AS MainImage,
-                                r.Price AS Price,
-                                Description ,
-                                CASE
-                                   WHEN r.Situation = 'active' THEN 1
-                                   ELSE 0
-                                END AS IsActive
-                           FROM Residence r
-                           JOIN City c2 ON r.CityId = c2.CityId
-                           LEFT JOIN (
-                                SELECT c.ResidenceId, AVG(c.Rate) AS Stars , count(c.Rate) as count
-                                FROM Comments AS c
-                                GROUP BY c.ResidenceId
-                           ) AS avg_comments ON r.ResidenceId = avg_comments.ResidenceId
-                           where r.residenceId = {id}
-                           """;
+                            SELECT
+                            	    r.ResidenceId as ResidenceId,
+                                 r.ResidenceName AS Name,
+                                 r.PostalCode as PostalCode,
+                                 c2.CityName AS City,
+                                 Street ,
+                                 Capacity ,
+                                 avg_comments.Stars AS Stars,
+                                 avg_comments.count AS CountRate,
+                                 r.MainImage AS MainImage,
+                                 r.Price AS Price,
+                                 Description ,
+                                 CASE
+                                    WHEN r.Situation = 'active' THEN 1
+                                    ELSE 0
+                                 END AS IsActive
+                            FROM Residence r
+                            JOIN City c2 ON r.CityId = c2.CityId
+                            LEFT JOIN (
+                                 SELECT c.ResidenceId, AVG(c.Rate) AS Stars , count(c.Rate) as count
+                                 FROM Comments AS c
+                                 GROUP BY c.ResidenceId
+                            ) AS avg_comments ON r.ResidenceId = avg_comments.ResidenceId
+                            where r.residenceId = {id}
+                            """;
             var residence = await _dbContext.QueryAsync<ResidenceDetailViewModel>(query);
             var result = residence.Single();
 
@@ -164,6 +160,10 @@ namespace CoffeeShop.Core.Services
             var result = await _dbContext.QuerySingleAsync<ResidenceDetailForHostPanelViewModel>(query);
             return result;
         }
+
+        #endregion ResidenceDetail
+
+        #region Add And Update Residence
 
         public async Task UpdateResidenceDetail(ResidenceDetailForHostPanelViewModel model, int residenceId)
         {
@@ -192,8 +192,11 @@ namespace CoffeeShop.Core.Services
             var result = await _dbContext.QuerySingleAsync(query, new { ResidenceId = residenceId });
 
             List<string> images = new List<string>();
-            images.Add(result.MainImage);
-            images.AddRange((await GetResidenceImagesAsync(residenceId)).ToList());
+            if (result.MainImage != "no_photo.jpg")
+                images.Add("/residence_images/" + result.MainImage);
+
+            var otherImages = (await GetResidenceImagesAsync(residenceId)).ToList();
+            images.AddRange((otherImages.Select(item => "/residence_images/otherImages/" + item)));
 
             var model = new EditResidenceImagesViewModel()
             {
@@ -240,6 +243,18 @@ namespace CoffeeShop.Core.Services
             return null;
         }
 
+        private async Task<string> GetResidenceMainImage(int residenceId)
+        {
+            string query = $"""
+                            select mainImage from residence
+                            where residenceId = {residenceId}
+                            """;
+
+            var mainImage = await _dbContext.QuerySingleAsync<string>(query);
+
+            return mainImage;
+        }
+
         private async Task AddResidenceImage(IFormFile image, int residenceId)
         {
             string query = @"
@@ -269,16 +284,28 @@ namespace CoffeeShop.Core.Services
         public async Task EditImageResidence(List<IFormFile>? newResidenceImages, int residenceId, List<int>? removedResidencesIndex)
         {
             var images = (await GetResidenceImagesAsync(residenceId)).ToList();
-            foreach (var item in removedResidencesIndex)
+            if (removedResidencesIndex != null)
+                foreach (var item in removedResidencesIndex)
+                {
+                    await DeleteResidenceImage(images[item - 1]); // -1 because in image list started by main image
+                }
+
+            if (await GetResidenceMainImage(residenceId) == "no_photo.jpg")
             {
-                await DeleteResidenceImage(images[item - 1]); // -1 because in image list started by main image
+                if (newResidenceImages != null && newResidenceImages.Any())
+                {
+                    //Save first image as main image
+                    await SaveImageFile(newResidenceImages.First(), true);
+                    newResidenceImages.RemoveAt(0);
+                }
             }
 
-            foreach (var item in newResidenceImages)
-            {
-                //TODO: refactor: Convert to 1 query
-                await AddResidenceImage(item, residenceId);
-            }
+            if (newResidenceImages != null)
+                foreach (var item in newResidenceImages)
+                {
+                    //TODO: refactor: Convert to 1 query
+                    await AddResidenceImage(item, residenceId);
+                }
         }
 
         public async Task<List<string>> GetAllOptions()
@@ -350,7 +377,7 @@ namespace CoffeeShop.Core.Services
             return residenceId;
         }
 
-        #endregion ResidenceDetail
+        #endregion Add And Update Residence
 
         #region AllResidences
 
