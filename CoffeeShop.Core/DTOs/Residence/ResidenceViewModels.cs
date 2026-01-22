@@ -200,24 +200,35 @@ namespace CoffeeShop.Core.DTOs.Residence
 
     public class AddResidenceViewModel
     {
+        [Required]
+        [MaxLength(50, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد.")]
         public string ResidenceName { get; set; }
 
-        public string Address { get; set; }
+        [Required]
+        [MaxLength(50, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد.")]
+        public string Type { get; set; }
 
+        [Required]
+        [MaxLength(50, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد.")]
         public string Street { get; set; }
 
+        [Required]
         public string PostalCode { get; set; }
 
         public decimal PricePerDate { get; set; }
 
+        [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد.")]
         public string? Description { get; set; }
 
         public bool IsActive { get; set; }
 
         public int Capacity { get; set; }
 
-        public SelectList Cities { get; set; }
+        [Required]
+        public string CityName { get; set; }
 
-        public List<string> Options { get; set; }
+        public List<string>? Options { get; set; }
+
+        public string? UserId { get; set; }
     }
 }

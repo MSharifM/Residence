@@ -8,6 +8,8 @@ using System.Xml;
 using CoffeeShop.Core.Generator;
 using Microsoft.AspNetCore.Http;
 using static System.Net.Mime.MediaTypeNames;
+using CoffeeShop.DataLayer.Entities;
+using System.IO;
 
 namespace CoffeeShop.Core.Services
 {
@@ -277,6 +279,75 @@ namespace CoffeeShop.Core.Services
                 //TODO: refactor: Convert to 1 query
                 await AddResidenceImage(item, residenceId);
             }
+        }
+
+        public async Task<List<string>> GetAllOptions()
+        {
+            string query = @"
+                            select option_name from h_option;
+                            ";
+
+            var options = await _dbContext.QueryAsync<string>(query);
+
+            return options.ToList();
+        }
+
+        private async Task<int> GetCityIdByName(string cityName)
+        {
+            string query = @"
+                            select cityId from city where cityName = @CityName;
+                            ";
+
+            int cityId = await _dbContext.QuerySingleAsync<int>(query, new { CityName = cityName });
+
+            return cityId;
+        }
+
+        private async Task InsertResidenceOptions(int residenceId, List<string> options)
+        {
+            string query = @"
+                            INSERT INTO Option_Residence (ResidenceId, Option_Name)
+                            VALUES (@ResidenceId, @OptionName)
+                            ";
+
+            //TODO: refactor: Convert to 1 query
+            foreach (var item in options)
+            {
+                await _dbContext.ExecuteAsync(query, new
+                {
+                    ResidenceId = residenceId,
+                    OptionName = item,
+                });
+            }
+        }
+
+        public async Task<int> AddResidence(AddResidenceViewModel model)
+        {
+            string query = @"
+                            INSERT INTO Residence (UserId, CityId, Capacity, Street, PostalCode, ResidenceName, ResidenceType, Star, Situation, CreateDate, MainImage, Description, Price)
+                            VALUES (@UserId, @CityId, @Capacity, @Street, @PostalCode, @ResidenceName, @ResidenceType, '5', @Situation, @CreateDate, 'no_photo.jpg', @Description, @Price);
+                            SELECT LAST_INSERT_ID();
+                            ";
+
+            int residenceId = await _dbContext.QuerySingleAsync<int>(query, new
+            {
+                UserId = model.UserId,
+                CityId = await GetCityIdByName(model.CityName),
+                Capacity = model.Capacity,
+                Street = model.Street,
+                PostalCode = model.PostalCode,
+                ResidenceName = model.ResidenceName,
+                ResidenceType = model.Type,
+                Situation = model.IsActive,
+                CreateDate = DateTime.Now,
+                Description = model.Description,
+                Price = model.PricePerDate,
+            });
+
+            if (model.Options != null && model.Options.Any())
+                await InsertResidenceOptions(residenceId, model.Options);
+
+            return residenceId;
         }
 
         #endregion ResidenceDetail

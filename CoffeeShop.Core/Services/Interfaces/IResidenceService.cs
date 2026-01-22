@@ -23,5 +23,9 @@ namespace CoffeeShop.Core.Services.Interfaces
         Task<EditResidenceImagesViewModel> GetResidenceImagesForEditAsync(int residenceId);
 
         Task EditImageResidence(List<IFormFile>? newResidenceImages, int residenceId, List<int>? removedResidences);
+
+        Task<List<string>> GetAllOptions();
+
+        Task<int> AddResidence(AddResidenceViewModel model);
     }
 }

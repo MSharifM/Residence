@@ -87,9 +87,26 @@ namespace CoffeeShop.Controllers
             return RedirectToAction("EditResidenceImages", new { residenceId = model.ResidenceId });
         }
 
+        [HttpGet]
         public async Task<IActionResult> AddResidence()
         {
+            ViewData["Options"] = await _residenceService.GetAllOptions();
+
             return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddResidence(AddResidenceViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            model.UserId = (await _userService.GetUserByUserNameAsync(User.Identity.Name)).Id;
+            var residenceId = await _residenceService.AddResidence(model);
+
+            //Redirect to EditResidenceImages to add photos
+            return RedirectToAction("EditResidenceImages", new { residenceId = residenceId });
         }
     }
 }
