@@ -285,6 +285,9 @@
 
     <!-- FOOTER -->
     <!-- SCRIPT -->
+    <script>
+        const disabledRanges = @Html.Raw(Json.Serialize(Model.ReservedDates));
+    </script>
     <script src="~/js/accommodation.js"></script>
 </body>
 </html>

@@ -121,6 +121,16 @@ function calculatePrice() {
     } else {
         resetCalculation()
     }
+    if (checkIn && checkOut) {
+        if (isRangeOverlapping(checkIn, checkOut)) {
+            alert("بازه انتخابی با تاریخ‌های غیرفعال تداخل دارد");
+            [checkOutDesktop, checkOutMobile].forEach((input) => {
+                if (input) input.value = "";
+            });
+            resetCalculation();
+            return;
+        }
+    }
 }
 
 function resetCalculation() {
@@ -168,6 +178,41 @@ function updateReserveButton() {
         btnReserve.classList.remove("notactive");
         btnReserve.classList.add("btn-reserve");
     }
+}
+
+// DATES
+console.log(disabledRanges);
+function isDateInDisabledRange(dateStr) {
+    const selected = new Date(dateStr);
+
+    return disabledRanges.some((range) => {
+        const from = new Date(range.startDate);
+        const to = new Date(range.endDate);
+
+        return selected >= from && selected <= to;
+    });
+}
+const dateInputs = document.querySelectorAll(".date-input");
+
+dateInputs.forEach((input) => {
+    input.addEventListener("change", function () {
+        if (isDateInDisabledRange(this.value)) {
+            alert("این تاریخ در بازه رزرو قرار دارد");
+            this.value = "";
+            resetCalculation();
+        }
+    });
+});
+function isRangeOverlapping(checkIn, checkOut) {
+    const start = new Date(checkIn);
+    const end = new Date(checkOut);
+
+    return disabledRanges.some((range) => {
+        const from = new Date(range.startDate);
+        const to = new Date(range.endDate);
+
+        return start <= to && end >= from;
+    });
 }
 
 // اجرای تابع بعد از لود صفحه

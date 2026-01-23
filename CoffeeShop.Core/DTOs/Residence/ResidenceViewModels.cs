@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CoffeeShop.Core.DTOs.Residence
 {
@@ -63,6 +62,8 @@ namespace CoffeeShop.Core.DTOs.Residence
         public IEnumerable<string> ImageNames { get; set; }
 
         public IEnumerable<ResidenceOptionsViewModel> Options { get; set; }
+
+        public List<ReservedDatesViewModel> ReservedDates { get; set; }
     }
 
     public class ResidenceCommentsViewModel
@@ -88,6 +89,13 @@ namespace CoffeeShop.Core.DTOs.Residence
         public IEnumerable<ResidenceBoxDetailViewModel> ResidenceBoxDetail { get; set; }
 
         public int CountPage { get; set; }
+    }
+
+    public class ReservedDatesViewModel
+    {
+        public DateTime StartDate { get; set; }
+
+        public DateTime EndDate { get; set; }
     }
 
     public class ReserveDraftViewModel

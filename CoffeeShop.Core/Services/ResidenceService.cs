@@ -109,6 +109,19 @@ namespace CoffeeShop.Core.Services
             return result;
         }
 
+        private async Task<List<ReservedDatesViewModel>> GetListReservedDates(int residenceId)
+        {
+            string query = $"""
+                            select dateofstart as startDate, dateofend as endDate
+                            from reservation as r
+                            where residenceId = {residenceId}
+                            """;
+
+            var result = await _dbContext.QueryAsync<ReservedDatesViewModel>(query);
+
+            return result.ToList();
+        }
+
         public async Task<ResidenceDetailViewModel> GetResidenceDetailById(int id)
         {
             string query = $"""
@@ -143,6 +156,7 @@ namespace CoffeeShop.Core.Services
             result.Comments = await GetResidenceCommentsAsync(id);
             result.ImageNames = await GetResidenceImagesAsync(id);
             result.Options = await GetResidenceOptionsAsync(id);
+            result.ReservedDates = await GetListReservedDates(id);
 
             return result;
         }
