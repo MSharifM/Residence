@@ -147,7 +147,7 @@ namespace CoffeeShop.Core.Services
             return result;
         }
 
-        public async Task<ResidenceDetailForHostPanelViewModel> GetResidenceDetailForHost(int residenceId)
+        public async Task<ResidenceDetailForHostPanelViewModel?> GetResidenceDetailForHost(int residenceId)
         {
             string query = $"""
                             select residencename as Name, Street, PostalCode, Price, description, Capacity, CASE
@@ -157,7 +157,7 @@ namespace CoffeeShop.Core.Services
                             from residence
                             where residenceid = {residenceId};
                             """;
-            var result = await _dbContext.QuerySingleAsync<ResidenceDetailForHostPanelViewModel>(query);
+            var result = await _dbContext.QueryFirstOrDefaultAsync<ResidenceDetailForHostPanelViewModel>(query);
             return result;
         }
 

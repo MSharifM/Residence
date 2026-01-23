@@ -1,10 +1,12 @@
 ﻿using CoffeeShop.Core.DTOs.UserPanel;
 using CoffeeShop.Core.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CoffeeShop.Areas.UserPanel.Controllers
 {
     [Area("UserPanel")]
+    [Authorize]
     public class HomeController : Controller
     {
         private IUserService _userService;
@@ -34,13 +36,13 @@ namespace CoffeeShop.Areas.UserPanel.Controllers
                 Comment = new AddCommentViewModel(), //Prevent null error
             };
 
-            var isHost = await _userService.IsHost(User.Identity.Name);
-            if (isHost)
+            var hostAccountNumber = await _userService.IsHost(User.Identity.Name);
+            if (!string.IsNullOrEmpty(hostAccountNumber))
                 model.HostListResidences = await _userService.GetListResidencesNameForHostAsync(User.Identity.Name);
 
             ViewData["UserId"] = user.Id;
             ViewData["ResidenceId"] = residenceId;
-            ViewData["IsHost"] = isHost;
+            ViewData["HostAccountNumber"] = hostAccountNumber;
 
             return View(model);
         }
@@ -102,6 +104,16 @@ namespace CoffeeShop.Areas.UserPanel.Controllers
         {
             var model = await _userService.GetHostSalary(User.Identity.Name);
             return Json(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddOrUpdateHostAccountNumber(string accountNumber)
+        {
+            if (!string.IsNullOrEmpty(accountNumber))
+                await _userService.AddOrUpdateHostAccountNumber(accountNumber, User.Identity.Name);
+
+            return RedirectToAction("Index");
         }
 
         #endregion HostPanel

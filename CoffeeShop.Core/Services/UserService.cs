@@ -702,21 +702,17 @@ namespace CoffeeShop.Core.Services
 
         #region HostPanel
 
-        public async Task<bool> IsHost(string userName)
+        public async Task<string?> IsHost(string userName)
         {
             string query = $"""
-                            select 1
-                            from aspnetusers as aspu
-                            join h_host as h on aspu.id = h.userid
-                            where aspu.username = '{userName}'
+                            select acc_number
+                            from (select id from aspnetusers as aspu where aspu.username = '{userName}') as u
+                            join h_host as h on u.id = h.userid
                             """;
-            var result = await _dbContextDapper.QueryAsync<HostListResidencesViewModel>(query);
-            if (result.Count() == 1)
-            {
-                return true;
-            }
 
-            return false;
+            string? result = await _dbContextDapper.QueryFirstOrDefaultAsync<string>(query);
+
+            return result;
         }
 
         public async Task<IEnumerable<HostListResidencesViewModel>> GetListResidencesNameForHostAsync(
@@ -796,6 +792,23 @@ namespace CoffeeShop.Core.Services
             }).ToList();
 
             return fixedResult;
+        }
+
+        public async Task AddOrUpdateHostAccountNumber(string number, string userName)
+        {
+            var userId = (await GetUserByUserNameAsync(userName)).Id;
+
+            string query = @"
+                            INSERT INTO h_host (userid, acc_number)
+                            VALUES (@UserId, @Acc_Number)
+                            ON DUPLICATE KEY UPDATE acc_number = @Acc_Number;
+                            ";
+
+            await _dbContextDapper.ExecuteAsync(query, new
+            {
+                UserId = userId,
+                Acc_Number = number,
+            });
         }
 
         #endregion HostPanel

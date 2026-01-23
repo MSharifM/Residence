@@ -203,8 +203,8 @@
     <!-- NUMBER ACCOUNT -->
     <div class="modal2 hidden">
         <div class="modal-content card">
-            <form>
-                <input type="text" placeholder="شماره حساب" />
+            <form asp-area="UserPanel" asp-controller="Home" asp-action="AddOrUpdateHostAccountNumber" method="post">
+                <input required name="accountNumber" value="@(ViewData["HostAccountNumber"])" type="text" placeholder="شماره حساب" />
                 <button class="btn-reserve" type="submit">تایید</button>
             </form>
         </div>
@@ -223,7 +223,7 @@
     </div>
 
     <script>
-        let isHost = @(ViewData["IsHost"].ToString().ToLower());
+        let isHost = @((ViewData["HostAccountNumber"] != null).ToString().ToLower());
     </script>
     <script src="~/js/account.js"></script>
 </body>

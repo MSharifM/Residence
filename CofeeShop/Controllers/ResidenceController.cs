@@ -1,5 +1,6 @@
 ﻿using CoffeeShop.Core.DTOs.Residence;
 using CoffeeShop.Core.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CoffeeShop.Controllers
@@ -32,6 +33,7 @@ namespace CoffeeShop.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Reservation(DateTime startDate, DateTime endDate, int residenceId)
         {
             var model = await _residenceService.GetDetailForReserve(residenceId, User.Identity.Name, startDate, endDate);
@@ -41,6 +43,7 @@ namespace CoffeeShop.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Reservation(ReserveResidenceViewModel model, int residenceId)
         {
             string userId = (await _userService.GetUserByUserNameAsync(User.Identity.Name)).Id;
@@ -48,14 +51,13 @@ namespace CoffeeShop.Controllers
             var succeeded = await _residenceService.ReserveSubmitAsync(model, residenceId, userId);
 
             if (succeeded)
-                return RedirectToAction("Index", "/UserPanel");
-            else
-            {
-                ViewData["Error"] = "این تاریخ از قبل رزرو شده است";
-                return View(model);
-            }
+                return RedirectToAction("Index", "Home", new { area = "UserPanel" });
+
+            ViewData["Error"] = "این تاریخ از قبل رزرو شده است";
+            return View(model);
         }
 
+        [Authorize]
         public async Task<IActionResult> GetResidenceDetailForHost(int residenceId)
         {
             var result = await _residenceService.GetResidenceDetailForHost(residenceId);
@@ -63,21 +65,29 @@ namespace CoffeeShop.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditResidenceDetail(ResidenceDetailForHostPanelViewModel model, int residenceId)
         {
             await _residenceService.UpdateResidenceDetail(model, residenceId);
-            return RedirectToAction("Index", "/UserPanel");
+
+            return RedirectToAction("Index", "Home", new { area = "UserPanel" });
         }
 
+        [Authorize]
         public async Task<IActionResult> EditResidenceImages(int residenceId)
         {
+            var isHost = await _userService.IsHost(User.Identity.Name);
+            if (string.IsNullOrEmpty(isHost))
+                return RedirectToAction("Index", "Home", new { area = "UserPanel" });
+
             var model = await _residenceService.GetResidenceImagesForEditAsync(residenceId);
 
             return View(model);
         }
 
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditResidenceImages(EditResidenceImagesViewModel model)
         {
@@ -90,14 +100,20 @@ namespace CoffeeShop.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> AddResidence()
         {
+            var isHost = await _userService.IsHost(User.Identity.Name);
+            if (string.IsNullOrEmpty(isHost))
+                return RedirectToAction("Index", "Home", new { area = "UserPanel" });
+
             ViewData["Options"] = await _residenceService.GetAllOptions();
 
             return View();
         }
 
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddResidence(AddResidenceViewModel model)
         {
