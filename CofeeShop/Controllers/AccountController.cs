@@ -23,6 +23,7 @@ namespace CoffeeShop.Controllers
             var model = new AuthenticationViewModel();
 
             ViewData["ResetPassword"] = resetPassword;
+            ViewData["returnUrl"] = returnUrl;
 
             return View(model);
         }

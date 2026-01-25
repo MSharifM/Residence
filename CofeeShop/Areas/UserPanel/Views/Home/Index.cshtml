@@ -227,8 +227,17 @@
         </div>
     </div>
 
+    <!-- NEED LOGIN -->
+    <div class="modal4">
+        <div class="modal-content card">
+            <strong class="erorr-strong">خطا</strong>
+            <p>لطفا از قسمت حساب کاربری نقش خود را به میزبان ارتقا دهید</p>
+        </div>
+    </div>
+
     <script>
         let isHost = @((ViewData["HostAccountNumber"] != null).ToString().ToLower());
+        let needUpgradeRole = @(ViewData["NeedUpgradeRole"].ToString().ToLower());
     </script>
     <script src="~/js/account.js"></script>
 </body>

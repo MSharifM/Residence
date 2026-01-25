@@ -18,7 +18,7 @@ namespace CoffeeShop.Areas.UserPanel.Controllers
             _residenceService = residenceService;
         }
 
-        public async Task<IActionResult> Index(int residenceId = 0)
+        public async Task<IActionResult> Index(int residenceId = 0, bool needUpgradeRole = false)
         {
             var user = await _userService.GetUserByUserNameAsync(User.Identity.Name);
             UserPanelViewModel model = new UserPanelViewModel()
@@ -43,6 +43,7 @@ namespace CoffeeShop.Areas.UserPanel.Controllers
             ViewData["UserId"] = user.Id;
             ViewData["ResidenceId"] = residenceId;
             ViewData["HostAccountNumber"] = hostAccountNumber;
+            ViewData["NeedUpgradeRole"] = needUpgradeRole;
 
             return View(model);
         }

@@ -203,7 +203,7 @@ namespace CoffeeShop.Core.Services
                             WHERE residenceid = @ResidenceId
                             ";
 
-            var result = await _dbContext.QuerySingleAsync(query, new { ResidenceId = residenceId });
+            var result = await _dbContext.QueryFirstOrDefaultAsync(query, new { ResidenceId = residenceId });
 
             List<string> images = new List<string>();
             if (result.MainImage != "no_photo.jpg")

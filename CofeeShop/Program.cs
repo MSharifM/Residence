@@ -4,6 +4,7 @@ using CoffeeShop.DataLayer.Context;
 using Microsoft.EntityFrameworkCore;
 using CoffeeShop.DataLayer.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +33,13 @@ builder.Services.AddTransient<IResidenceService, ResidenceService>();
 builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Authentication";
+    options.AccessDeniedPath = "/Account/AccessDenied";
+    options.ReturnUrlParameter = CookieAuthenticationDefaults.ReturnUrlParameter;
+});
 
 var app = builder.Build();
 

@@ -203,14 +203,18 @@ function loadHostContent(type) {
                     let mgmtHtml = `
                     <div class="flex-manage">
                         <h2>مدیریت اقامتگاه</h2>
-                        <a href="/Residence/EditResidenceImages?ResidenceId=${accommodationId}">
-                            <button class="btn-outline">ویرایش تصاویر
-                            </button>
                         </a>
                     </div>
                     `
                     if (residenceDetial != null) {
                         mgmtHtml += `
+                     <div class="flex-manage">
+                        <h2>مدیریت اقامتگاه</h2>
+                        <a href="/Residence/EditResidenceImages?ResidenceId=${accommodationId}">
+                            <button class="btn-outline">ویرایش تصاویر
+                            </button>
+                        </a>
+                    </div>
                 <form action="/Residence/EditResidenceDetail?residenceId=${accommodationId}" method="post" id="mgmt-form" class="mt-4">
                     <div class="form-group">
                         <label>نام</label>
@@ -335,4 +339,18 @@ function loadSalaryContent() {
             console.error('خطا در دریافت اطلاعات درآمد:', error);
             contentPanel.innerHTML = `<p>خطا در دریافت اطلاعات</p>`;
         });
+}
+
+const modalError = document.querySelector(".modal4");
+
+function showError() {
+    modalError.classList.add("show");
+
+    setTimeout(() => {
+        modalError.classList.remove("show");
+    }, 2500);
+}
+
+if (needUpgradeRole) {
+    showError();
 }
