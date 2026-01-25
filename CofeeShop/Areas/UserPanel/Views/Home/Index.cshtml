@@ -87,13 +87,16 @@
                         <h2>رزروهای قبلی</h2>
                         <div id="past-list" class="reservation-list">
                             <div class="reservation-item past">
-                                <div class="res-info">
-                                    <h3>@Model.LastReserve.ResidenceName</h3>
-                                    <p>@Model.LastReserve.ResidenceCity</p>
-                                    <p class="res-info-text">تاریخ شروع : @Model.LastReserve.StartDate</p>
-                                    <p class="res-info-text">تاریخ پایان : @Model.LastReserve.EndDate</p>
-                                </div>
-                                <button class="btn-outline review-trigger">ثبت نظر</button>
+                                @if (!string.IsNullOrEmpty(Model.LastReserve.ResidenceName))
+                                {
+                                    <div class="res-info">
+                                        <h3>@Model.LastReserve.ResidenceName</h3>
+                                        <p>@Model.LastReserve.ResidenceCity</p>
+                                        <p class="res-info-text">تاریخ شروع : @Model.LastReserve.StartDate</p>
+                                        <p class="res-info-text">تاریخ پایان : @Model.LastReserve.EndDate</p>
+                                    </div>
+                                    <button class="btn-outline review-trigger">ثبت نظر</button>
+                                }
                             </div>
                         </div>
                     </div>
@@ -126,7 +129,9 @@
                             }
                         </select>
                     </form>
-                    <button id="delete-accommodation" class="btn-danger">حذف</button>
+                    <form asp-area="" asp-controller="Residence" asp-action="DeleteResidence" asp-route-id="@((int)ViewData["ResidenceId"])">
+                        <button id="delete-accommodation" class="btn-danger">حذف</button>
+                    </form>
                 </div>
                 <a asp-area="" asp-controller="Residence" asp-action="AddResidence">
                     <button id="add-accommodation" class="btn-outline margin">
@@ -193,7 +198,7 @@
                     <textarea name="description" id="review-text" rows="4"></textarea>
                 </div>
                 <div class="modal-actions">
-                    <button id="cancel-review" class="btn-outline">انصراف</button>
+                    <button type="button" id="cancel-review" class="btn-outline">انصراف</button>
                     <button type="submit" id="submit-review-btn" class="btn-primary">ثبت نظر</button>
                 </div>
             </div>

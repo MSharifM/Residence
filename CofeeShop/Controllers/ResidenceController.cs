@@ -129,5 +129,15 @@ namespace CoffeeShop.Controllers
             //Redirect to EditResidenceImages to add photos
             return RedirectToAction("EditResidenceImages", new { residenceId = residenceId });
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteResidence(int id)
+        {
+            var userId = (await _userService.GetUserByUserNameAsync(User.Identity.Name)).Id;
+            await _residenceService.DeleteResidence(id, userId);
+
+            return RedirectToAction("Index", "Home", new { area = "UserPanel" });
+        }
     }
 }

@@ -27,5 +27,7 @@ namespace CoffeeShop.Core.Services.Interfaces
         Task<List<string>> GetAllOptions();
 
         Task<int> AddResidence(AddResidenceViewModel model);
+
+        Task DeleteResidence(int residenceId, string userId);
     }
 }

@@ -141,7 +141,7 @@ namespace CoffeeShop.Core.Services
                                     WHEN r.Situation = 'active' THEN 1
                                     ELSE 0
                                  END AS IsActive
-                            FROM Residence r
+                            FROM Residence as r
                             JOIN City c2 ON r.CityId = c2.CityId
                             LEFT JOIN (
                                  SELECT c.ResidenceId, AVG(c.Rate) AS Stars , count(c.Rate) as count
@@ -177,7 +177,7 @@ namespace CoffeeShop.Core.Services
 
         #endregion ResidenceDetail
 
-        #region Add And Update Residence
+        #region Manage Residence For Host
 
         public async Task UpdateResidenceDetail(ResidenceDetailForHostPanelViewModel model, int residenceId)
         {
@@ -403,7 +403,17 @@ namespace CoffeeShop.Core.Services
             return residenceId;
         }
 
-        #endregion Add And Update Residence
+        public async Task DeleteResidence(int residenceId, string userId)
+        {
+            string query = $"""
+                            delete from residence
+                            where residenceId = '{residenceId}' and userId = '{userId}';
+                            """;
+
+            await _dbContext.ExecuteAsync(query);
+        }
+
+        #endregion Manage Residence For Host
 
         #region AllResidences
 
@@ -411,8 +421,8 @@ namespace CoffeeShop.Core.Services
         {
             var residences = new AllResidencesViewModel()
             {
-                ResidenceBoxDetail = await GetAllBoxResidences(search, page, 3),
-                CountPage = await CountResidencePages(search, 3),
+                ResidenceBoxDetail = await GetAllBoxResidences(search, page, 6),
+                CountPage = await CountResidencePages(search, 6),
             };
             return residences;
         }
