@@ -625,40 +625,52 @@ namespace CoffeeShop.Core.Services
         public async Task<IEnumerable<ReservesViewModel>> GetFutureUserReserves(string userName)
         {
             string query = $"""
-                            select distinct dateofstart as StartDate, dateofend as EndDate,amountpaid as Price,r.situation,residencename, cityname as ResidenceCity
+                            select distinct
+                                r.dateofstart as StartDate,
+                                r.dateofend as EndDate,
+                                r.amountpaid as Price,
+                                re.residencename as ResidenceName,
+                                c.cityname as ResidenceCity,
+                                case r.situation
+                                    when 'unpaid' then 'Unpaid'
+                                    when 'pending_approval' then 'PendingApproval'
+                                    when 'approved' then 'Approved'
+                                    when 'cancelled' then 'Cancelled'
+                                    when 'in_stay' then 'InStay'
+                                end as ReserveStatus
                             from reservation as r
                             join client_reserve_comment as crc on r.reservationid = crc.reservationid
                             join aspnetusers as u on crc.userid = u.id
                             join residence as re on r.residenceid = re.residenceid
                             join city as c on re.cityid = c.cityid
-                            where r.dateofstart > current_date() and u.username = '{userName}'
+                            where r.dateofstart >= current_date()
+                              and u.username = @UserName
                             order by StartDate;
                             """;
-            var result = await _dbContextDapper.QueryAsync<ReservesViewModel>(query);
+
+            var result = await _dbContextDapper.QueryAsync<ReservesViewModel>(query, new { UserName = userName });
             return result;
         }
 
-        public async Task<ReservesViewModel> GetLastUserReserve(string userName)
+        public async Task<ReservesViewModel?> GetLastUserReserve(string userName)
         {
             string query = $"""
-                            select distinct dateofstart as StartDate, dateofend as EndDate,amountpaid as Price,r.situation,residencename, cityname as ResidenceCity, re.residenceid as ResidenceId
+                            select distinct dateofstart as StartDate, dateofend as EndDate,amountpaid as Price,r.situation,residencename, cityname as ResidenceCity, re.residenceid as ResidenceId, r.reservationId
                             from reservation as r
                             join client_reserve_comment as crc on r.reservationid = crc.reservationid
                             join aspnetusers as u on crc.userid = u.id
                             join residence as re on r.residenceid = re.residenceid
                             join city as c on re.cityid = c.cityid
-                            where r.dateofstart <= current_date() and u.username = '{userName}'
+                            where r.dateofstart < current_date() and u.username = @UserName
                             order by EndDate Desc
                             limit 1;
                             """;
-            var result = await _dbContextDapper.QueryAsync<ReservesViewModel>(query);
-            if (result.Count() != 0)
-                return result.Single();
-            else
-                return new ReservesViewModel();
+            var result = await _dbContextDapper.QueryFirstOrDefaultAsync<ReservesViewModel>(query, new { UserName = userName });
+
+            return result;
         }
 
-        public async Task<bool> AddCommentForResidence(AddCommentViewModel model, int residenceId, string userId)
+        public async Task<bool> AddCommentForResidence(AddCommentViewModel model, int residenceId, string userId, int reservationId)
         {
             try
             {
@@ -677,16 +689,15 @@ namespace CoffeeShop.Core.Services
                 });
 
                 string queryInsertToClientReserveComment = @"
-                            INSERT INTO Admins_comment (UserID, CommentId) VALUES (@AdminId, @CommentId);
-                            INSERT INTO Client_Reserve_Comment (UserID, CommentId, ReservationId) VALUES (@UserId, @CommentId, @ResidenceId);
+                            INSERT INTO Admins_comment (UserID, CommentId) VALUES (11, @CommentId);
+                            update Client_Reserve_Comment set CommentId = @CommentId where userId = @UserId and ReservationId = @reservationId;
                             ";
 
                 await _dbContextDapper.ExecuteAsync(queryInsertToClientReserveComment, new
                 {
-                    AdminId = 11,
                     UserId = userId,
                     CommentId = commentId,
-                    ResidenceId = residenceId
+                    ReservationId = reservationId
                 });
             }
             catch (Exception e)
@@ -813,10 +824,10 @@ namespace CoffeeShop.Core.Services
 
         #endregion HostPanel
 
-        public async Task<IEnumerable<StripListViewModel>> GetUserStrips(string userName)
+        public async Task<List<StripListViewModel>> GetUserStrips(string userName)
         {
             string query = $"""
-                             select distinct dateofstart as StartDate, dateofend as EndDate,amountpaid as Price,r.situation,residencename, cityname as City, re.residenceid as ResidenceId
+                             select distinct dateofstart as StartDate, dateofend as EndDate,amountpaid as Price,r.situation,residencename, cityname as City, re.residenceid as ResidenceId, r.reservationId
                              from reservation as r
                              join client_reserve_comment as crc on r.reservationid = crc.reservationid
                              join aspnetusers as u on crc.userid = u.id
@@ -828,7 +839,7 @@ namespace CoffeeShop.Core.Services
 
             var result = await _dbContextDapper.QueryAsync<StripListViewModel>(query);
 
-            return result;
+            return result.ToList();
         }
     }
 }

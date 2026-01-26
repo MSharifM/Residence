@@ -535,11 +535,11 @@ namespace CoffeeShop.Core.Services
         private async Task InsertIntoClientReserveComment(string userId, int reservationId)
         {
             string query = @"
-                            INSERT INTO Reservation (UserID, CommentId, ReservationId)
-                            VALUES (@UserID, @CommentId, @ReservationId);
+                            INSERT INTO Client_Reserve_Comment (UserID, ReservationId)
+                            VALUES (@UserID, @ReservationId);
                            ";
 
-            await _dbContext.QuerySingleAsync<int>(query, new
+            await _dbContext.ExecuteAsync(query, new
             {
                 UserID = userId,
                 ReservationId = reservationId

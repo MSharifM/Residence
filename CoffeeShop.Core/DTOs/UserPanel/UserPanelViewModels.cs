@@ -8,7 +8,7 @@ namespace CoffeeShop.Core.DTOs.UserPanel
 
         public IEnumerable<ReservesViewModel> FutureReserves { get; set; }
 
-        public ReservesViewModel LastReserve { get; set; }
+        public ReservesViewModel? LastReserve { get; set; }
 
         public IEnumerable<HostListResidencesViewModel>? HostListResidences { get; set; } = new List<HostListResidencesViewModel>();
 
@@ -40,6 +40,8 @@ namespace CoffeeShop.Core.DTOs.UserPanel
     public class ReservesViewModel
     {
         public int ResidenceId { get; set; }
+
+        public int ReservationId { get; set; }
 
         public string ResidenceName { get; set; }
 
@@ -126,6 +128,8 @@ namespace CoffeeShop.Core.DTOs.UserPanel
     public class StripListViewModel
     {
         public int ResidenceId { get; set; }
+
+        public int ReservationId { get; set; }
 
         public string ResidenceName { get; set; }
 

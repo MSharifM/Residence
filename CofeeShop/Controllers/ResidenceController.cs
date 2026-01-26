@@ -47,6 +47,12 @@ namespace CoffeeShop.Controllers
         [HttpPost]
         public async Task<IActionResult> Reservation(ReserveResidenceViewModel model, int residenceId)
         {
+            if (!(model.NewClients.Any() || model.Clients.Any()))
+            {
+                ViewData["ResidenceId"] = residenceId;
+                return View(model);
+            }
+
             string userId = (await _userService.GetUserByUserNameAsync(User.Identity.Name)).Id;
 
             var succeeded = await _residenceService.ReserveSubmitAsync(model, residenceId, userId);
@@ -55,10 +61,12 @@ namespace CoffeeShop.Controllers
                 return RedirectToAction("Index", "Home", new { area = "UserPanel" });
 
             ViewData["Error"] = "این تاریخ از قبل رزرو شده است";
+            ViewData["ResidenceId"] = residenceId;
+
             return View(model);
         }
 
-        [Authorize]
+        [HttpGet]
         public async Task<IActionResult> GetResidenceDetailForHost(int residenceId)
         {
             var result = await _residenceService.GetResidenceDetailForHost(residenceId);

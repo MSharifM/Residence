@@ -40,13 +40,14 @@
                     <div class="guest-forms-container">
                         <form id="guestFormsContainer" asp-controller="Residence" asp-action="Reservation" method="post">
                             <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+
+                            <input type="hidden" name="residenceId" value="@((int)ViewData["ResidenceId"])" />
+                            <input type="hidden" asp-for="ReserveDraft.StartDate" />
+                            <input type="hidden" asp-for="ReserveDraft.EndDate" />
+                            <input type="hidden" asp-for="Price" />
+
                             @for (int i = 0; i < Model.Clients.Count(); i++)
                             {
-                                <input type="hidden" name="residenceId" value="@ViewData["ResidenceId"]" />
-                                <input type="hidden" asp-for="ReserveDraft.StartDate" />
-                                <input type="hidden" asp-for="ReserveDraft.EndDate" />
-                                <input type="hidden" asp-for="Price" />
-                                
                                 <span class="text-danger" data-valmsg-for="Clients[0].Text" data-valmsg-replace="true"></span>
                                 <div class="guest-form-section" data-index="@i">
                                     <div class="guest-form-header">
@@ -60,7 +61,7 @@
                                                    placeholder="نام را وارد کنید"
                                                    required
                                                    readonly
-                                                   asp-for="Clients[i].FirstName"/>
+                                                   asp-for="Clients[i].FirstName" />
                                         </div>
 
                                         <div class="form-group">

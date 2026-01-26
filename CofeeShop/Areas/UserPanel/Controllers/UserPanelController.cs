@@ -64,16 +64,18 @@ namespace CoffeeShop.Areas.UserPanel.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddComment(AddCommentViewModel model, int residenceId, string userId)
+        public async Task<IActionResult> AddComment(AddCommentViewModel model, int residenceId, int reservationId)
         {
             if (!ModelState.IsValid)
                 return RedirectToAction("MyStrips");
-            var result = await _userService.AddCommentForResidence(model, residenceId, userId);
+
+            var userId = (await _userService.GetUserByUserNameAsync(User.Identity.Name)).Id;
+            var result = await _userService.AddCommentForResidence(model, residenceId, userId, reservationId);
 
             if (result)
                 return RedirectToAction("Index");
-            else
-                return RedirectToAction("MyStrips");
+
+            return RedirectToAction("MyStrips");
         }
 
         #region HostPanel
@@ -122,8 +124,6 @@ namespace CoffeeShop.Areas.UserPanel.Controllers
         public async Task<IActionResult> MyStrips()
         {
             var models = await _userService.GetUserStrips(User.Identity.Name);
-
-            ViewData["UserId"] = (await _userService.GetUserByUserNameAsync(User.Identity.Name)).Id;
 
             return View(models);
         }

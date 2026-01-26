@@ -50,9 +50,9 @@ namespace CoffeeShop.Core.Services.Interfaces
 
         Task<IEnumerable<ReservesViewModel>> GetFutureUserReserves(string userName);
 
-        Task<ReservesViewModel> GetLastUserReserve(string userName);
+        Task<ReservesViewModel?> GetLastUserReserve(string userName);
 
-        Task<bool> AddCommentForResidence(AddCommentViewModel model, int residenceId, string userId);
+        Task<bool> AddCommentForResidence(AddCommentViewModel model, int residenceId, string userId, int reservationId);
 
         #endregion UserPanel
 
@@ -74,6 +74,6 @@ namespace CoffeeShop.Core.Services.Interfaces
 
         #endregion HostPanel
 
-        Task<IEnumerable<StripListViewModel>> GetUserStrips(string userName);
+        Task<List<StripListViewModel>> GetUserStrips(string userName);
     }
 }
