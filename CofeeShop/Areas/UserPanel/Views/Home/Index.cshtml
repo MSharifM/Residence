@@ -77,8 +77,8 @@
                                     </div>
                                     <div class="res-price">@item.Price.ToString("000,000") تومان</div>
                                 </div>
-                                <p class="res-info-text">تاریخ شروع : @item.StartDate</p>
-                                <p class="res-info-text">تاریخ پایان : @item.EndDate</p>
+                                <p class="res-info-text">تاریخ شروع : @item.StartDate.ToShortDateString()</p>
+                                <p class="res-info-text">تاریخ پایان : @item.EndDate.ToShortDateString()</p>
                             </div>
                         }
                     </div>
@@ -92,8 +92,8 @@
                                     <div class="res-info">
                                         <h3>@Model.LastReserve.ResidenceName</h3>
                                         <p>@Model.LastReserve.ResidenceCity</p>
-                                        <p class="res-info-text">تاریخ شروع : @Model.LastReserve.StartDate</p>
-                                        <p class="res-info-text">تاریخ پایان : @Model.LastReserve.EndDate</p>
+                                        <p class="res-info-text">تاریخ شروع : @Model.LastReserve.StartDate.ToShortDateString()</p>
+                                        <p class="res-info-text">تاریخ پایان : @Model.LastReserve.EndDate.ToShortDateString()</p>
                                     </div>
                                     <button class="btn-outline review-trigger">ثبت نظر</button>
                                 }
@@ -179,8 +179,8 @@
     @if (Model.LastReserve != null)
     {
         <form asp-controller="Home" asp-action="AddComment"
-              asp-route-residenceId="@Model.LastReserve.ResidenceId"
-              asp-route-reservationId="@Model.LastReserve.ReservationId" method="post">
+              asp-route-residenceId="@Model?.LastReserve.ResidenceId"
+              asp-route-reservationId="@Model?.LastReserve.ReservationId" method="post">
             <div id="review-modal" class="modal hidden">
                 <div class="modal-content card">
                     <h2>ثبت نظر</h2>
@@ -206,6 +206,11 @@
                 </div>
             </div>
         </form>
+    }
+    else
+    {
+        <button type="button" hidden="true" id="cancel-review" class="btn-outline">انصراف</button>
+        <button type="submit" hidden="true" id="submit-review-btn" class="btn-primary">ثبت نظر</button>
     }
 
     <!-- NUMBER ACCOUNT -->

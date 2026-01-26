@@ -499,3 +499,11 @@ textarea {
 .modal-content p {
     margin-top: 1rem;
 }
+
+header {
+    margin-bottom: 2rem;
+}
+
+footer {
+    margin-top: 2rem;
+}

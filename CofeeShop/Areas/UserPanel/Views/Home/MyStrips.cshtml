@@ -51,12 +51,12 @@
 
                             <div class="trip-info-group">
                                 <span class="trip-info-label">تاریخ ورود</span>
-                                <div class="trip-dates">@Model[i].StartDate</div>
+                                <div class="trip-dates">@Model[i].StartDate.ToShortDateString()</div>
                             </div>
 
                             <div class="trip-info-group">
                                 <span class="trip-info-label">تاریخ خروج</span>
-                                <div class="trip-dates">@Model[i].EndDate</div>
+                                <div class="trip-dates">@Model[i].EndDate.ToShortDateString()</div>
                             </div>
 
                             <div class="trip-info-group">

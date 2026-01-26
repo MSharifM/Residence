@@ -781,7 +781,7 @@ namespace CoffeeShop.Core.Services
         public async Task<List<ListResidenceSalaryViewModel>> GetHostSalary(string userName)
         {
             string query = $"""
-                            select  ResidenceName, YEAR(createPay)  AS year, MONTH(createPay) AS month, SUM(p.price*0.1) as Salary
+                            select  ResidenceName, YEAR(createPay)  AS year, MONTH(createPay) AS month, SUM(p.price*0.9) as Salary
                             from H_host as h
                             join aspnetusers as u on h.UserId = u.Id
                             join residence as re on re.UserId = h.UserId
